@@ -1,12 +1,23 @@
 import { Model, DataTypes } from "sequelize";
-export default class Product extends Model {
+export default class Comments extends Model {
   static init(sequelize) {
     return super.init({
-      project_id: {
+      comment_id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: DataTypes.INTEGER
+      },
+      project_id: {
+        allowNull: false,
+        type: DataTypes.INTEGER
+      },
+      user_id: {
+        allowNull: false,
+        type: DataTypes.INTEGER,
+      },
+      contents: {
+        type: DataTypes.STRING
       },
       createdAt: {
         allowNull: false,
@@ -18,13 +29,11 @@ export default class Product extends Model {
       }
     }, {
       sequelize,
-      modelName: 'Projects',
-      tableName: 'projects',
-      timestamps: true,
-      underscored: false,
-    })
+      modelName: 'Comments',
+    });
   }
+
   static associate(db) {
-    db.Projects.hasMany(db.Comments, { foreignKey: 'project_id', sourceKey: "project_id" });
-  };
-};
+    db.Comments.belongsto(db.Projects, { foreignKey: 'project_id', sourceKey: "project_id" });
+  }
+}

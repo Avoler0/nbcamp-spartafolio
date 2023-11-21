@@ -1,12 +1,12 @@
 import { Model, DataTypes } from "sequelize";
 export default class Product extends Model {
-  static init(sequelize){
+  static init(sequelize) {
     return super.init({
       user_id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type:DataTypes.INTEGER
+        type: DataTypes.INTEGER
       },
       createdAt: {
         allowNull: false,
@@ -21,7 +21,10 @@ export default class Product extends Model {
       modelName: 'Users',
       tableName: 'users',
       timestamps: true,
-			underscored: false,
+      underscored: false,
     })
   }
-}
+  static associate(db) {
+    db.Users.belongsTo(db.Comments, { foreignKey: 'user_id', sourceKey: "user_id" });
+  };
+};
