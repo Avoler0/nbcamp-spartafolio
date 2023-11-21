@@ -23,5 +23,7 @@ export default class Product extends Model {
       timestamps: true,
 			underscored: false,
     })
-  }
+  }  
+
+  
 }
