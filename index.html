@@ -1,0 +1,40 @@
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script type="module" defer>
+    const input = document.querySelector('#fileSys input')
+
+    input.addEventListener('change',(event)=>{
+      console.log(event.files);
+    })
+    document.querySelector('#fileSys').addEventListener('submit',async (event)=>{
+      event.preventDefault();
+      const input = document.querySelector('#fileSys input')
+      const formData = new FormData();
+      console.log(input.files[0])
+      formData.append('image',input.files[0]);
+      
+
+      await fetch('http://localhost:3000/api/profile',{
+        method:'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: JSON.stringify({
+          image:formData,
+        })
+      })
+      .then((res) => res.json())
+      .then((res)=>{
+        console.log('전송',res)
+      })
+    })
+  </script>
+</head>
+<body>
+  <form id="fileSys" encType="multipart/form-data">
+    <input type="file" />
+    <button>전송</button>
+  </form>
+</body>
+</html>
