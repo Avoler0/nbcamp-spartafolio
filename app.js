@@ -36,8 +36,6 @@ app.get('/project-regist',(req,res)=>{
     res.end();
   });
 })
-  
-app.use('/api', [emailRouter, profileRouter, commentsRouter]);
 
 app.listen(port, () => {
   console.log(port, '포트로 서버가 열렸어요!');
