@@ -19,12 +19,12 @@ export default class Users extends Model {
     }, {
       sequelize,
       modelName: 'Users',
-      tableName: 'users',
+      tableName: 'Users',
       timestamps: true,
 			underscored: false,
     })
   }
   static associate(db) {
-    db.Users.hasMany(db.Projects, {foreignKey: 'user_id', sourceKey: "user_id"});
+    db.Users.hasMany(db.Projects, {targetKey: 'user_id', foreignKey: "user_id"});
   }
 }

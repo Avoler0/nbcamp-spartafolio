@@ -35,12 +35,12 @@ export default class Projects extends Model {
     }, {
       sequelize,
       modelName: 'Projects',
-      tableName: 'projects',
+      tableName: 'Projects',
       timestamps: true,
 			underscored: false,
     })
   }
   static associate(db) {
-    db.Projects.belongsTo(db.Users, {foreignKey: 'user_id', sourceKey: "user_id"});
+    db.Projects.belongsTo(db.Users, {targetKey: 'user_id', foreignKey: "user_id"});
   }
 }
