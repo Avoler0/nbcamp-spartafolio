@@ -6,7 +6,11 @@ export default class Projects extends Model {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type:DataTypes.INTEGER
+        foreignKey: true,
+        type: DataTypes.INTEGER
+      },
+      title:{
+        type: DataTypes.STRING
       },
       user_id: {
         allowNull: false,
@@ -25,11 +29,11 @@ export default class Projects extends Model {
         type: DataTypes.STRING
       },
       createdAt: {
-        allowNull: false,
+        allowNull: true,
         type: DataTypes.DATE
       },
       updatedAt: {
-        allowNull: false,
+        allowNull: true,
         type: DataTypes.DATE
       }
     }, {
@@ -37,10 +41,12 @@ export default class Projects extends Model {
       modelName: 'Projects',
       tableName: 'Projects',
       timestamps: true,
-			underscored: false,
+      underscored: false,
     })
   }
   static associate(db) {
+    db.Projects.hasMany(db.Comments, { targetKey: 'project_id', foreignKey: "project_id" });
     db.Projects.belongsTo(db.Users, {targetKey: 'user_id', foreignKey: "user_id"});
   }
 }
+

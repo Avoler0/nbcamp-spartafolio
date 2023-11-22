@@ -6,7 +6,7 @@ dotenv.config();
 
 const profileRouter = express.Router();
 
-profileRouter.post('/profile',upload.single('image'), (req, res) => {
+profileRouter.post('/profile', upload.single('profile'), (req, res) => {
    console.log(req.file);
    res.json({ url: req.file });
 });
