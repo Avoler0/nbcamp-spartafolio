@@ -11,6 +11,7 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 app.use(express.json());
+
 app.use('/images',express.static(path.join(__dirname + './src/front/images')))
 app.use('/html',express.static(path.join(__dirname + './src/front')))
 app.use('/css',express.static(path.join(__dirname + './src/front/css')))
@@ -21,6 +22,14 @@ app.use('/api',[projectRouter,emailRouter,profileRouter]);
 
 app.get('/',(req,res)=>{
   fs.readFile('./src/front/index.html', function(err, data) {
+    res.writeHead(200, {'Content-Type': 'text/html; charset=utf-8'});
+    res.write(data);
+    res.end();
+  });
+})
+
+app.get('/project-regist',(req,res)=>{
+  fs.readFile('./src/front/project-register.html', function(err, data) {
     res.writeHead(200, {'Content-Type': 'text/html; charset=utf-8'});
     res.write(data);
     res.end();

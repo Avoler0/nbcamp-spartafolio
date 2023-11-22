@@ -1,0 +1,76 @@
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sparta Folio - Project Registration</title>
+  <link rel="stylesheet" type="text/css" href="/css/default.css" />
+  <link rel="stylesheet" type="text/css" href="/css/header.css" />
+  <link rel="stylesheet" type="text/css" href="/css/index.css" />
+  <link rel="stylesheet" type="text/css" href="/css/project-regist.css" />
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script type="module" src="/script/index.js" defer></script>
+  <script type="module" src="/script/header.js" defer></script>
+  <script>
+    $(document).ready(() => {
+      $('header').load('/html/header.html')
+    })
+  </script>
+</head>
+<body>
+  <header></header>
+  <main>
+    <div id="project-regist">
+      <div class="guide-title">
+        <div>당신의 프로젝트를 등록하고 자랑해보세요 !</div>
+      </div>
+      <div>
+        <span class="form-title">* 기본 정보(썸네일)</span>
+        <label class="input-wrap">
+          <span>* Project Title</span>
+          <input type="text" />
+        </label>
+        <label class="input-wrap">
+          <span>* Team Name</span>
+          <input type="text" />
+        </label>
+        <label class="input-wrap">
+          <span>* Over View</span>
+          <input type="text" />
+        </label>
+        <label class="input-wrap">
+          <span>* Tech Stack</span>
+          <input type="text" />
+        </label>
+        <label class="input-wrap">
+          <span>* GitHub Address</span>
+          <input type="text" />
+        </label>
+      </div>
+      <div>
+        <span class="form-title">* 프로젝트 내용</span>
+          <label class="input-wrap">
+            <span>* Core Function</span>
+            <input type="text" />
+          </label>
+          <label class="input-wrap">
+            <span>* Demo Site</span>
+            <input type="text" />
+          </label>
+          <label class="input-wrap">
+            <span>* Contents</span>
+            <textarea type="text" ></textarea>
+          </label>
+          <label class="input-wrap">
+            <span>* Additional</span>
+            <input type="text" />
+          </label>
+        </div>
+        <div class="btn-wrap">
+          <button class="cancel-btn">취소하기</button>
+          <button class="submit-btn">등록하기</button>
+        </div>
+      </div>
+    </div>
+  </main>
+</body>
+</html>
