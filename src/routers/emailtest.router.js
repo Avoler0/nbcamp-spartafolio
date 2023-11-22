@@ -9,6 +9,7 @@ const emailRouter = express();
 
 emailRouter.post('/email',async (req,res)=>{
   const { authEmail } = req.body;
+
   const authNumber = Math.floor(Math.random() * (10000 - 1000)) + 1000;
 
   if(!authEmail) return res.status(400).json({

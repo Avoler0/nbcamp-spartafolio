@@ -1,36 +1,31 @@
-'use strict';
-const {
-  Model
-} = require('sequelize');
-module.exports = (sequelize, DataTypes) => {
-  class Users extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
-    static associate(models) {
-      // define association here
-    }
+import { Model, DataTypes } from "sequelize";
+export default class Users extends Model {
+  static init(sequelize) {
+    return super.init({
+      user_id: {
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true,
+        foreignKey: true,
+        type: DataTypes.INTEGER
+      },
+      createdAt: {
+        allowNull: false,
+        type: DataTypes.DATE
+      },
+      updatedAt: {
+        allowNull: false,
+        type: DataTypes.DATE
+      }
+    }, {
+      sequelize,
+      modelName: 'Users',
+      tableName: 'Users',
+      timestamps: true,
+      underscored: false,
+    })
   }
-  Users.init({
-    user_id: {
-      allowNull: false,
-      autoIncrement: true,
-      primaryKey: true,
-      type:DataTypes.INTEGER
-    },
-    createdAt: {
-      allowNull: false,
-      type: DataTypes.DATE
-    },
-    updatedAt: {
-      allowNull: false,
-      type: DataTypes.DATE
-    }
-  }, {
-    sequelize,
-    modelName: 'Users',
-  });
-  return Users;
+  static associate(db) {
+    db.Users.hasMany(db.Comments, { targetKey: 'user_id', foreignKey: "user_id" });
+  };
 };

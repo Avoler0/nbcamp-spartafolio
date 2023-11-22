@@ -1,26 +1,14 @@
+import dotenv from 'dotenv';
 
-require("dotenv").config();
+dotenv.config();
 
-module.exports = {
-  "development": {
-    "username": process.env.DB_ID,
-    "password": process.env.DB_PW,
-    "database": "sparta-folio",
-    "host": "127.0.0.1",
-    "dialect": "mysql"
-  },
-  "test": {
-    "username": "root",
-    "password": null,
-    "database": "database_test",
-    "host": "127.0.0.1",
-    "dialect": "mysql"
-  },
-  "production": {
-    "username": "root",
-    "password": null,
-    "database": "database_production",
-    "host": "127.0.0.1",
-    "dialect": "mysql"
-  }
+const sequelizeConfig = {
+  "username": process.env.DB_ID,
+  "password": process.env.DB_PW,
+  "database": "sparta_folio",
+  "host": "express-database.ca9iqludhqox.ap-northeast-2.rds.amazonaws.com",
+  "dialect": "mysql"
 }
+
+
+export default sequelizeConfig;
