@@ -1,11 +1,12 @@
 import { Model, DataTypes } from "sequelize";
-export default class Product extends Model {
+export default class Projects extends Model {
   static init(sequelize) {
     return super.init({
       project_id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
+        foreignKey: true,
         type: DataTypes.INTEGER
       },
       createdAt: {
@@ -19,12 +20,12 @@ export default class Product extends Model {
     }, {
       sequelize,
       modelName: 'Projects',
-      tableName: 'projects',
+      tableName: 'Projects',
       timestamps: true,
       underscored: false,
     })
   }
   static associate(db) {
-    db.Projects.hasMany(db.Comments, { foreignKey: 'project_id', sourceKey: "project_id" });
+    db.Projects.hasMany(db.Comments, { targetKey: 'project_id', foreignKey: "project_id" });
   };
 };

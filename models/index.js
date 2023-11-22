@@ -1,7 +1,8 @@
 import Sequelize from 'sequelize';
 import sequelizeConfig from "../config/config.js";
-import User from "./users.js";
-import Product from "./products.js";
+import Users from "./users.js";
+import Projects from "./projects.js";
+import Comments from "./comments.js"
 
 const env = process.env.NODE_ENV || 'development';
 const db = {};
@@ -10,13 +11,17 @@ const sequelize = new Sequelize(sequelizeConfig.database, sequelizeConfig.userna
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
-db.User = User;
-db.Product = Product;
+db.Users = Users;
+db.Projects = Projects;
+db.Comments = Comments;
 
-User.init(sequelize);
-Product.init(sequelize);
+Users.init(sequelize);
+Projects.init(sequelize);
+Comments.init(sequelize);
 
-User.associate(db);
-Product.associate(db);
+Users.associate(db);
+Projects.associate(db);
+Comments.associate(db);
+
 
 export default db;
