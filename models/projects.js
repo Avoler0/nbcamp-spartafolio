@@ -1,6 +1,6 @@
 import { Model, DataTypes } from "sequelize";
 export default class Projects extends Model {
-  static init(sequelize){
+  static init(sequelize) {
     return super.init({
       project_id: {
         allowNull: false,
@@ -8,9 +8,6 @@ export default class Projects extends Model {
         primaryKey: true,
         foreignKey: true,
         type: DataTypes.INTEGER
-      },
-      title:{
-        type: DataTypes.STRING
       },
       user_id: {
         allowNull: false,
@@ -46,7 +43,7 @@ export default class Projects extends Model {
   }
   static associate(db) {
     db.Projects.hasMany(db.Comments, { targetKey: 'project_id', foreignKey: "project_id" });
-    db.Projects.belongsTo(db.Users, {targetKey: 'user_id', foreignKey: "user_id"});
+    db.Projects.belongsTo(db.Users, { targetKey: 'user_id', foreignKey: "user_id" });
   }
 }
 

@@ -11,7 +11,7 @@ const createComments = async (req, res) => {
     };
 
     const existingProject = await Projects.findByPk(1);
-    const existingUser = await Users.findByPk(2);
+    const existingUser = await Users.findByPk(1);
 
 
     await Comments.create({

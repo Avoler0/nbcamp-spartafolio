@@ -15,9 +15,13 @@ module.exports = {
         rehferences: {
           model: 'users',
           key: 'user_id',
-        },  
+        },
       },
-      name: {
+      like: {
+        allowNull: false,
+        type: Sequelize.INTEGER
+      },
+      title: {
         allowNull: false,
         type: Sequelize.STRING
       },
