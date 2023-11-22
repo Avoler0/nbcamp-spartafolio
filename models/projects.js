@@ -1,6 +1,6 @@
 import { Model, DataTypes } from "sequelize";
 export default class Projects extends Model {
-  static init(sequelize) {
+  static init(sequelize){
     return super.init({
       project_id: {
         allowNull: false,
@@ -9,12 +9,15 @@ export default class Projects extends Model {
         foreignKey: true,
         type: DataTypes.INTEGER
       },
+      title:{
+        type: DataTypes.STRING
+      },
       createdAt: {
-        allowNull: false,
+        allowNull: true,
         type: DataTypes.DATE
       },
       updatedAt: {
-        allowNull: false,
+        allowNull: true,
         type: DataTypes.DATE
       }
     }, {

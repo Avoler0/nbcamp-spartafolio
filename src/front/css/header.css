@@ -1,0 +1,73 @@
+header{
+  width: 1680px;
+  margin: 0 auto;
+}
+
+#header{
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 2rem;
+}
+
+
+.h-left{
+  display: flex;
+  align-items: center;
+}
+
+.h-left span{
+  margin-right: 3rem;
+}
+
+.h-left .logo-title{
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.h-left .logo-title a{
+  color: #000;
+}
+
+.h-left .nav-item a{
+  color: #D64553;
+  font-size: 15px;
+}
+
+.h-right{
+  display: flex;
+}
+
+.h-right .login-btn{
+  margin-right: 1.2rem;
+}
+
+.h-right .login-btn button{
+  border: 1px solid #D64553;
+  border-radius: .4rem;
+  color: #D64553;
+}
+
+.h-right .login-btn button:hover{
+  border: 1px solid #c75b66;
+  background-color: #f1eaea;
+  cursor: pointer;
+}
+
+.h-right .signup-btn button{
+  border: 1px solid #D64553;
+  background-color: #D64553;
+  border-radius: .4rem;
+  color: #fff;
+}
+
+.h-right .signup-btn button:hover{
+  background-color: #a45e65;
+  cursor: pointer;
+}
+
+.h-right button{
+  padding: 10px 45px;
+  border: none;
+  background-color: transparent;
+  font-size: 15px;
+}

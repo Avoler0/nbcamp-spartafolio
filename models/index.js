@@ -23,5 +23,4 @@ Users.associate(db);
 Projects.associate(db);
 Comments.associate(db);
 
-
 export default db;

@@ -1,0 +1,16 @@
+body{
+  margin: 0;
+}
+
+a {
+  text-decoration: none;
+}
+
+ul,li,ol{
+  list-style: none;
+}
+
+img{
+  width: 100%;
+  height: 100%;
+}

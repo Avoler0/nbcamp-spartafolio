@@ -10,5 +10,4 @@ const sequelizeConfig = {
   "dialect": "mysql"
 }
 
-
 export default sequelizeConfig;
