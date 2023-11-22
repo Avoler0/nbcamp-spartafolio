@@ -12,6 +12,22 @@ export default class Projects extends Model {
       title:{
         type: DataTypes.STRING
       },
+      user_id: {
+        allowNull: false,
+        type: DataTypes.INTEGER,
+      },
+      like: {
+        allowNull: false,
+        type: DataTypes.INTEGER
+      },
+      title: {
+        allowNull: false,
+        type: DataTypes.STRING
+      },
+      description: {
+        allowNull: false,
+        type: DataTypes.STRING
+      },
       createdAt: {
         allowNull: true,
         type: DataTypes.DATE
@@ -30,5 +46,7 @@ export default class Projects extends Model {
   }
   static associate(db) {
     db.Projects.hasMany(db.Comments, { targetKey: 'project_id', foreignKey: "project_id" });
-  };
-};
+    db.Projects.belongsTo(db.Users, {targetKey: 'user_id', foreignKey: "user_id"});
+  }
+}
+

@@ -12,6 +12,8 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+
 
 app.use('/images',express.static(path.join(__dirname + './src/front/images')))
 app.use('/html',express.static(path.join(__dirname + './src/front')))

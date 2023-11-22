@@ -1,6 +1,6 @@
 import { Model, DataTypes } from "sequelize";
 export default class Users extends Model {
-  static init(sequelize) {
+  static init(sequelize){
     return super.init({
       user_id: {
         allowNull: false,
@@ -27,5 +27,6 @@ export default class Users extends Model {
   }
   static associate(db) {
     db.Users.hasMany(db.Comments, { targetKey: 'user_id', foreignKey: "user_id" });
-  };
-};
+    db.Users.hasMany(db.Projects, {targetKey: 'user_id', foreignKey: "user_id"});
+  }
+}
