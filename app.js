@@ -32,6 +32,11 @@ app.get('/',(req,res)=>{
 app.get('/project-regist',(req,res)=>{
   fs.readFile('./src/front/project-register.html', function(err, data) {
     res.writeHead(200, {'Content-Type': 'text/html; charset=utf-8'});
+    res.write(data);
+    res.end();
+  });
+})
+  
 app.use('/api', [emailRouter, profileRouter, commentsRouter]);
 
 app.listen(port, () => {
