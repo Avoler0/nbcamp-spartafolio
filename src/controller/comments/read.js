@@ -1,14 +1,23 @@
-import db from '../../../models/comments.js';
-
+import db from '../../../models/index.js';
 const { Comments } = db;
 
-// 댓글 달기 (Create)
+// 댓글 확인하기 (Read))
 const readComments = async (req, res) => {
-  const { project_id } = req.params
+  try {
+    const { projectId } = req.params;
+    console.log('projectId: ', projectId);
 
-  const comments = Comments.filter((comment) => comment.project_id === project_id);
+    const comments = await Comments.findAll({
+      where: {
+        project_id: projectId, // 특정 project에 있는 댓글들을 다 가져온다 !
+      },
+    });
 
-  res.status(201).json({ message: "댓글이 입력되었습니다." });
+    res.status(200).json(comments);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: '서버 오류' });
+  }
 };
 
-export default createComments;
+export default readComments;
