@@ -5,6 +5,7 @@ import profileRouter from './src/routers/profiletest.router.js';
 import path from 'path'
 import { fileURLToPath } from "url";   // 👈 추가
 import projectRouter from './src/routers/project.router.js';
+import commentsRouter from './src/routers/comments.router.js';
 
 const __dirname = fileURLToPath(new URL(".", import.meta.url)); 
 const app = express();
@@ -16,7 +17,7 @@ app.use('/images',express.static(path.join(__dirname + './src/front/images')))
 app.use('/html',express.static(path.join(__dirname + './src/front')))
 app.use('/css',express.static(path.join(__dirname + './src/front/css')))
 app.use('/script',express.static(path.join(__dirname + './src/front/js')))
-app.use('/api',[projectRouter,emailRouter,profileRouter]);
+app.use('/api',[projectRouter,emailRouter, profileRouter, commentsRouter]);
 
 
 
@@ -31,10 +32,7 @@ app.get('/',(req,res)=>{
 app.get('/project-regist',(req,res)=>{
   fs.readFile('./src/front/project-register.html', function(err, data) {
     res.writeHead(200, {'Content-Type': 'text/html; charset=utf-8'});
-    res.write(data);
-    res.end();
-  });
-})
+app.use('/api', [emailRouter, profileRouter, commentsRouter]);
 
 app.listen(port, () => {
   console.log(port, '포트로 서버가 열렸어요!');

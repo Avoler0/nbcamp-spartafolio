@@ -6,7 +6,8 @@ export default class Projects extends Model {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type:DataTypes.INTEGER
+        foreignKey: true,
+        type: DataTypes.INTEGER
       },
       title:{
         type: DataTypes.STRING
@@ -22,10 +23,12 @@ export default class Projects extends Model {
     }, {
       sequelize,
       modelName: 'Projects',
-      tableName: 'projects',
+      tableName: 'Projects',
       timestamps: true,
-			underscored: false,
+      underscored: false,
     })
   }
-  static associate(db) { db.Projects.belongsTo(db.Users, { targetKey:'user_id', foreignKey: "user_id" })};
-}
+  static associate(db) {
+    db.Projects.hasMany(db.Comments, { targetKey: 'project_id', foreignKey: "project_id" });
+  };
+};
