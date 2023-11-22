@@ -12,17 +12,24 @@ module.exports = {
       user_id: {
         allowNull: false,
         type: Sequelize.INTEGER,
-        references: {
-          model: "Users",
-          key: "user_id",
-        },
-        onDelete: 'CASCADE' // Users 모델의 user_id가 삭제되면 Projects 모델의 데이터가 삭제된다ㅏ
+        rehferences: {
+          model: 'users',
+          key: 'user_id',
+        },  
       },
-      like: {
+      name: {
         allowNull: false,
-        type: Sequelize.INTEGER
+        type: Sequelize.STRING
       },
-      title: {
+      email: {
+        allowNull: false,
+        type: Sequelize.STRING
+      },
+      password: {
+        allowNull: false,
+        type: Sequelize.STRING
+      },
+      createdAt: {
         allowNull: false,
         type: Sequelize.STRING
       },

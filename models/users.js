@@ -9,6 +9,18 @@ export default class Users extends Model {
         foreignKey: true,
         type: DataTypes.INTEGER
       },
+      name: {
+        allowNull: false,
+        type: DataTypes.STRING
+      },
+      email: {
+        allowNull: false,
+        type: DataTypes.STRING
+      },
+      password: {
+        allowNull: false,
+        type: DataTypes.STRING
+      },
       createdAt: {
         allowNull: false,
         type: DataTypes.DATE
