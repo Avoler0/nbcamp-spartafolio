@@ -6,7 +6,8 @@ export default class Users extends Model {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type:DataTypes.INTEGER
+        foreignKey: true,
+        type: DataTypes.INTEGER
       },
       name: {
         allowNull: false,
@@ -33,10 +34,11 @@ export default class Users extends Model {
       modelName: 'Users',
       tableName: 'Users',
       timestamps: true,
-			underscored: false,
+      underscored: false,
     })
   }
-  static associate(db)  {
-    db.Users.hasMany(db.Projects, { foreignKey: 'user_id', sourceKey: "user_id"});
+  static associate(db) {
+    db.Users.hasMany(db.Comments, { targetKey: 'user_id', foreignKey: "user_id" });
+    db.Users.hasMany(db.Projects, {targetKey: 'user_id', foreignKey: "user_id"});
   }
 }
