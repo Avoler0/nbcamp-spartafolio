@@ -13,7 +13,7 @@ const readComments = async (req, res) => {
       },
     });
 
-    res.status(200).json(comments);
+    res.status(200).json({ message: "댓글 조회에 성공했습니다.", comments });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: '서버 오류' });
