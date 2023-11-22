@@ -1,5 +1,5 @@
 import { Model, DataTypes } from "sequelize";
-export default class Product extends Model {
+export default class Users extends Model {
   static init(sequelize){
     return super.init({
       user_id: {
@@ -24,4 +24,5 @@ export default class Product extends Model {
 			underscored: false,
     })
   }
+   static associate(db) { db.Users.hasMany(db.Projects, { targetKey: 'user_id', foreignKey: "user_id" }); };
 }
