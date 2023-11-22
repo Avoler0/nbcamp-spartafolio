@@ -5,7 +5,7 @@ import nodemailer from 'nodemailer';
 
 dotenv.config();
 
-const emailRouter = express();
+const emailRouter = express.Router();
 
 emailRouter.post('/email',async (req,res)=>{
   const { authEmail } = req.body;

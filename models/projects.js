@@ -1,5 +1,5 @@
 import { Model, DataTypes } from "sequelize";
-export default class Product extends Model {
+export default class Projects extends Model {
   static init(sequelize){
     return super.init({
       project_id: {
@@ -7,6 +7,22 @@ export default class Product extends Model {
         autoIncrement: true,
         primaryKey: true,
         type:DataTypes.INTEGER
+      },
+      user_id: {
+        allowNull: false,
+        type: DataTypes.INTEGER,
+      },
+      like: {
+        allowNull: false,
+        type: DataTypes.INTEGER
+      },
+      title: {
+        allowNull: false,
+        type: DataTypes.STRING
+      },
+      description: {
+        allowNull: false,
+        type: DataTypes.STRING
       },
       createdAt: {
         allowNull: false,
@@ -23,5 +39,8 @@ export default class Product extends Model {
       timestamps: true,
 			underscored: false,
     })
+  }
+  static associate(db) {
+    db.Projects.belongsTo(db.Users, {foreignKey: 'user_id', sourceKey: "user_id"});
   }
 }
