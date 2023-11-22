@@ -2,13 +2,14 @@ import express from 'express';
 import emailRouter from "./src/routers/emailtest.router.js";
 import fs from 'fs'
 import profileRouter from './src/routers/profiletest.router.js';
+import userRouter from './src/routers/users.router.js';
 
 const app = express();
 const port = process.env.PORT || 3000;
 
 app.use(express.json());
 
-app.use('/api',[emailRouter,profileRouter]);
+app.use('/api',[emailRouter,profileRouter,userRouter]);
 
 app.get('/',(req,res)=>{
   fs.readFile('index.html', function(err, data) {
