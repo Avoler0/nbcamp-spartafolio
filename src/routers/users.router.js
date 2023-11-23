@@ -21,8 +21,8 @@ const userRouter = express.Router();
 
 userRouter.post('/users', async (req, res) => {
   try {
-    const { email, name, password } = req.body;
-    if (!email || !name || !password) {
+    const { email, name, password, passwordConfirm } = req.body;
+    if (!email || !name || !password || !passwordConfirm) {
       return res.status(401).json({
         success: false,
         message: '데이터 형식이 올바르지 않아요.',
@@ -31,15 +31,14 @@ userRouter.post('/users', async (req, res) => {
     const emailExp = new RegExp(
       /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i,
     );
-    //메일 형식을 검사하기 위한 정규표현식 붙여넣기.
-    const emailCheck = emailExp.test(email); //이메일체크라는 변수 줘서 사용자가 입력한 이메일이 정규표현식에 맞는 형식인지 테스트
+    // 메일 형식을 검사하기 위한 정규표현식
+    const emailCheck = emailExp.test(email);
     if (!emailCheck) {
-      // 이메일체크 해봤는데
       return res.status(402).send({
         // 402 : 결제 필요
         success: false,
         message: '이메일 형식이 올바르지 않음',
-      }); //이메일 형식이 잘못되었다면 상태코드, 에러 메시지를 보냄
+      });
     }
 
     if (password.length < 8) {
@@ -48,8 +47,14 @@ userRouter.post('/users', async (req, res) => {
         success: false,
         message: '요즘 세상에 비밀번호 8자리 이상은 해야 하는거 아닌가요',
       });
-    } // 나중에 passwordConfirm 넣기
-
+    }
+    if (password !== passwordConfirm) {
+      return res.status(404).json({
+        //404 코드 : 찾을 수 없음
+        success: false,
+        message: '비밀번호가 비밀번호 확인란과 다를 뻔',
+      });
+    }
     const existsUserEmail = await Users.findOne({ where: { email } });
     if (existsUserEmail) {
       return res.status(405).json({
@@ -103,6 +108,7 @@ userRouter.post('/users/login', async (req, res) => {
     const userObject = await Users.findOne({ where: { email } });
     if (!userObject) {
       return res.status(404).json({
+        //404 코드 : 찾을 수 없음
         success: false,
         message: '해당 이메일을 가진 사용자를 찾을 수 없습니다.',
       });
