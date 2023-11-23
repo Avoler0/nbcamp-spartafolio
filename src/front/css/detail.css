@@ -1,0 +1,72 @@
+.detail-board {
+  width: 1680px;
+  height: 700px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  background-color: gray;
+
+  margin: 0 auto;
+}
+
+.detail-board-left {
+  display: flex;
+  flex-direction: column;
+  width: 60%;
+}
+
+.detail-board-title {
+  display: flex;
+  width: 80%;
+  margin: 150px 0 60px 100px;
+  font-size: 48px;
+}
+
+.detail-board-team {
+  display: flex;
+  width: 50%;
+  margin: 0 0 60px 100px;
+  font-size: 20px;
+}
+
+.detail-board-overview {
+  display: flex;
+  width: 80%;
+  height: 150px;
+  margin: 0 0 70px 100px;
+  font-size: 20px;
+}
+
+.detail-tech-icons {
+  width: 80%;
+  display: flex;
+  flex-direction: row;
+  margin: 10px 0 20px 100px;
+}
+
+.tech-icon {
+  background-color: #eac645;
+  border-radius: 5px;
+  margin-right: 1rem;
+  padding: 0.1rem 1.25rem;
+}
+
+.detail-board-right {
+  display: flex;
+  flex-direction: column-reverse;
+  width: auto;
+}
+
+.go-demo {
+  padding: 10px 45px;
+  background-color: #fff;
+  font-size: 15px;
+  border: 1px solid #eac645;
+  border-radius: 0.4rem;
+  margin: 100px;
+}
+
+.go-demo:hover {
+  background-color: #eac645; /* 호버 시의 배경색 변경 */
+  cursor: pointer;
+}
