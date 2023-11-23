@@ -12,24 +12,16 @@ module.exports = {
       user_id: {
         allowNull: false,
         type: Sequelize.INTEGER,
-        rehferences: {
-          model: 'users',
+        references: {
+          model: 'Users',
           key: 'user_id',
-        },
+        }
       },
       like: {
         allowNull: false,
         type: Sequelize.INTEGER
       },
       title: {
-        allowNull: false,
-        type: Sequelize.STRING
-      },
-      email: {
-        allowNull: false,
-        type: Sequelize.STRING
-      },
-      password: {
         allowNull: false,
         type: Sequelize.STRING
       },
@@ -40,10 +32,6 @@ module.exports = {
       description: {
         allowNull: false,
         type: Sequelize.STRING
-      },
-      createdAt: {
-        allowNull: true,
-        type: Sequelize.DATE
       },
       updatedAt: {
         allowNull: true,
