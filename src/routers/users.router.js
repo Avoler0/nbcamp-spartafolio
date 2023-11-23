@@ -51,7 +51,7 @@ userRouter.post('/users', async (req, res) => {
     }
     if (password !== passwordConfirm) {
       return res.status(404).json({
-        //404 코드 : 찾을 수 없음
+        //404 코드 수정하기
         success: false,
         message: '비밀번호가 비밀번호 확인란과 다를 뻔',
       });
@@ -63,7 +63,6 @@ userRouter.post('/users', async (req, res) => {
         message: '이미 가입 된 이메일',
       });
     }
-
     const hashedPassword = bcrypt.hashSync(password, PASSWORD_HASH_SALT_ROUNDS);
 
     const newUser = await Users.create({
@@ -150,73 +149,72 @@ userRouter.post('/users/login', async (req, res) => {
 
 //비밀번호 수정
 
-userRouter.put('/users', async (req, res) => {
-  try {
-    const { email, password, newPassword } = req.body;
-    if (!email || !password || !newPassword) {
-      return res.status(401).json({
-        success: false,
-        message: '데이터 형식이 올바르지 않음',
-      });
-    }
-    const updatedUser = await Users.findOne({ where: { email } });
-    if (updatedUser && bcrypt.compareSync(password, updatedUser.password)) {
-      await Users.update(
-        { password: bcrypt.hashSync(newPassword, PASSWORD_HASH_SALT_ROUNDS) },
-        { where: { email } },
-      );
-      return res.status(200).json({
-        success: true,
-        message: '비밀번호 변경에 성공했습니다.',
-      });
-    } else {
-      return res.status(400).json({
-        success: false,
-        message: '이메일이나 비밀번호가 올바르지 않습니다.',
-      });
-    }
-  } catch (error) {
-    console.error(error);
-    return res.status(500).json({
-      success: false,
-      message: '예상치 못한 에러입니다. 관리자에게 문의 주세요.',
-    });
-  }
-});
+// userRouter.put('/users', async (req, res) => {
+//   try {
+//     const { email, password, newPassword } = req.body;
+//     if (!email || !password || !newPassword) {
+//       return res.status(401).json({
+//         success: false,
+//         message: '데이터 형식이 올바르지 않음',
+//       });
+//     }
+//     const updatedUser = await Users.findOne({ where: { email } });
+//     if (updatedUser && bcrypt.compareSync(password, updatedUser.password)) {
+//       await Users.update(
+//         { password: bcrypt.hashSync(newPassword, PASSWORD_HASH_SALT_ROUNDS) },
+//         { where: { email } },
+//       );
+//       return res.status(200).json({
+//         success: true,
+//         message: '비밀번호 변경에 성공했습니다.',
+//       });
+//     } else {
+//       return res.status(400).json({
+//         success: false,
+//         message: '이메일이나 비밀번호가 올바르지 않습니다.',
+//       });
+//     }
+//   } catch (error) {
+//     console.error(error);
+//     return res.status(500).json({
+//       success: false,
+//       message: '예상치 못한 에러입니다. 관리자에게 문의 주세요.',
+//     });
+//   }
+// });
 
-// 사용자 ID 이름 조회
-userRouter.get('/users/find', async (req, res) => {
-  try {
-    const { sort } = req.query;
-    let upperCaseSort = sort?.toUpperCase();
+// // 사용자 ID 이름 조회
+// userRouter.get('/users/find', async (req, res) => {
+//   try {
+//     const { sort } = req.query;
+//     let upperCaseSort = sort?.toUpperCase();
 
-    if (upperCaseSort !== 'ASC' && upperCaseSort !== 'DESC') {
-      upperCaseSort = 'DESC';
-    }
+//     if (upperCaseSort !== 'ASC' && upperCaseSort !== 'DESC') {
+//       upperCaseSort = 'DESC';
+//     }
 
-    const userFind = await Users.findAll({
-      order: [['createdAt', upperCaseSort]],
-    });
-    return res.status(200).json({
-      success: true,
-      message: '유저 목록 조회에 성공함',
-      data: userFind,
-    });
-  } catch (error) {
-    console.error(error);
-    return res.status(500).json({
-      success: false,
-      message: '예상치 못한 에러가 발생하였습니다. 관리자에게 문의하세요.',
-    });
-  }
-});
+//     const userFind = await Users.findAll({
+//       order: [['createdAt', upperCaseSort]],
+//     });
+//     return res.status(200).json({
+//       success: true,
+//       message: '유저 목록 조회에 성공함',
+//       data: userFind,
+//     });
+//   } catch (error) {
+//     console.error(error);
+//     return res.status(500).json({
+//       success: false,
+//       message: '예상치 못한 에러가 발생하였습니다. 관리자에게 문의하세요.',
+//     });
+//   }
+// });
 
 //삭제
 
 userRouter.delete('/users', async (req, res) => {
   try {
     const { email, password } = req.body;
-    const deletedUsers = null;
 
     if (!email || !password) {
       return res.status(404).json({
@@ -238,7 +236,6 @@ userRouter.delete('/users', async (req, res) => {
       return res.status(200).json({
         success: true,
         message: '회원 정보 삭제에 성공했습니다.',
-        data: deletedUsers,
       });
     } else {
       res.status(402).json({
