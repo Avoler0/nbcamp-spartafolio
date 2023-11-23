@@ -43,51 +43,51 @@ main{
   cursor: pointer;
 }
 
-#main-community{
+#main-content{
   width: 95%;
   margin: 0 auto;
 }
 
-#main-community nav{
+#main-content nav{
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin: 3rem 0;
 }
 
-#main-community nav ul{
+#main-content nav ul{
   display: flex;
   width: 40%;
   justify-content: space-between;
 }
 
-#main-community nav ul li{
+#main-content nav ul li{
   margin-right: 4rem;
   color: #595959;
   font-size: 18px;
   font-weight: bold;
 }
 
-#main-community nav ul li:hover{
+#main-content nav ul li:hover{
   color: #000;
   cursor: pointer;
 }
 
-#main-community nav .search-input{
+#main-content nav .search-input{
   width: 50%;
   padding: .55rem;
   font-size: 16px;
   border: 1px solid #595959;
 }
 
-#main-community .content{
+#main-content .content{
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
   margin-top: 3rem;
 }
 
-#main-community .content .community-card{
+#main-content .content .community-card{
   position: relative;
   width: 733px;
   height: 722px;
@@ -96,33 +96,37 @@ main{
   border-radius: 5px;
 }
 
-#main-community .content .community-card:hover{
+#main-content .content .community-card:hover{
   transition: all 1s ease;
 }
 
-#main-community .content .community-card .card-thumbnail{
+#main-content .content .community-card .card-thumbnail{
   background-color: #E5E5E5;
   height: 55%;
 }
 
-#main-community .content .community-card .card-description{
+#main-content .content .community-card .card-thumbnail img{
+  object-fit: contain;
+}
+
+#main-content .content .community-card .card-description{
   height: 45%;
 }
 
-#main-community .content .community-card .card-description .card-title{
+#main-content .content .community-card .card-description .card-title{
   font-size: 24px;
   font-weight: bold;
   padding: 2rem 2rem 1rem 2rem;
 }
 
-#main-community .content .community-card .card-description .card-overview{
+#main-content .content .community-card .card-description .card-overview{
   font-size: 18px;
   margin-bottom: 1rem;
   color: #938b8b;
   padding: 1rem 2rem;
 }
 
-#main-community .content .community-card .card-description .card-footer{
+#main-content .content .community-card .card-description .card-footer{
   position: absolute;
   bottom: 0;
   width: 100%;
@@ -130,29 +134,29 @@ main{
   padding: 1rem 2rem;
 }
 
-#main-community .content .community-card .card-description .card-footer .card-tech{
+#main-content .content .community-card .card-description .card-footer .card-tech{
   display: flex;
   align-items: center;
   margin-bottom: 1.5rem
 }
 
-#main-community .content .community-card .card-description .card-footer .card-tech div{
+#main-content .content .community-card .card-description .card-footer .card-tech div{
   background-color: #EAC645;
   border-radius: 5px;
   margin-right: 1rem;
   padding: .1rem 1.25rem;
 }
 
-#main-community .content .community-card .card-description .card-footer .card-info{
+#main-content .content .community-card .card-description .card-footer .card-info{
   display: flex;
   justify-content: space-between;
 }
 
-#main-community .content .community-card .card-description .card-footer .card-info .info-right{
+#main-content .content .community-card .card-description .card-footer .card-info .info-right{
   display: flex;
 }
 
-#main-community .content .community-card .card-description .card-footer .card-image{
+#main-content .content .community-card .card-description .card-footer .card-image{
   display: flex;
   align-items: center;
   font-weight: 500;
@@ -160,7 +164,7 @@ main{
   margin-right: 1.25rem;
 }
 
-#main-community .content .community-card .card-description .card-footer .card-image svg{
+#main-content .content .community-card .card-description .card-footer .card-image svg{
   width: 30px;
   height: 30px;
   object-fit: contain;
