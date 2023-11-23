@@ -18,23 +18,40 @@ module.exports = {
         }
       },
       like: {
-        allowNull: false,
+        defaultValue: 0,
         type: Sequelize.INTEGER
       },
       title: {
         allowNull: false,
         type: Sequelize.STRING
       },
-      createdAt: {
+      over_view:{
+        type: Sequelize.STRING
+      },
+      tech_stack: {
         allowNull: false,
+        type: Sequelize.STRING
+      },
+      github_address:{
+        type: Sequelize.STRING
+      },
+      demo_site:{
+        type: Sequelize.STRING
+      },
+      core_function:{
         type: Sequelize.STRING
       },
       description: {
         allowNull: false,
         type: Sequelize.STRING
       },
+      images_path: {
+        type: Sequelize.STRING
+      },
+      createdAt: {
+        type: Sequelize.DATE
+      },
       updatedAt: {
-        allowNull: true,
         type: Sequelize.DATE
       }
     });

@@ -84,7 +84,11 @@ const initProjectRegister = () => {
   closeTechTab();
 
   $('.submit-btn').on('click',async ()=>{
+    const formData = new FormData();
+    formData.enctype = "multipart/form-data"
+    const fileInput = document.querySelector('.input-wrap .additional')
     const techList = $('.tech-wrap .tech-list').find('.tech-item');
+
     const data = {
       projectTitle: $('input.project-title').val(),
       teamName: $('input.team-name').val(),
@@ -93,27 +97,24 @@ const initProjectRegister = () => {
       githubAddress: $('input.github-address').val(),
       coreFunction: $('input.core-function').val(),
       demoSite: $('input.demo-site').val(),
-      description: $('input.description').val(),
-      additional: new FormData(),
+      description: $('textarea.description').val(),
+    }
+
+    for(let i = 0; i < fileInput.files.length; i++){
+      formData.append('additional', fileInput.files[i]);
     }
 
     for(let i = 0; i < techList.length; i++){
       data.techStack.push(techList[i].innerText);
     }
-    const fileInput = document.querySelector('.input-wrap .additional')
-    const formData = new FormData();
 
-    for(let i = 0; i < fileInput.files.length; i++){
-      data.additional.append('additional', fileInput.files[i]);
-    }
-
-    for (let [key, value] of data.additional) {
-      console.log(key, value);
+    for(let property in data){
+      formData.append(property, data[property]);
     }
     
-    await fetch('http://localhost:3000/api/profile', {
+    await fetch('http://localhost:3000/api/post', {
       method: 'POST',
-      body: data
+      body: formData
     })
   })
 

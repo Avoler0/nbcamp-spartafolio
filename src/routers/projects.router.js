@@ -1,17 +1,32 @@
 import express from 'express';
 import db from '../../models/index.js';
-// import Users from '../../models/users.js'
 import { Op } from 'sequelize';
+import upload from '../multer.js';
 const { Users, Projects } = db;
 const projectRouter = express.Router();
 
 // 게시물 생성 creat
-projectRouter.post('/post', async (req, res) => {
+projectRouter.post('/post',upload.array('additional'), async (req, res) => {
+    const { projectTitle,teamName, overView,techStack,githubAddress,coreFunction,demoSite, description } = req.body;
+    let filePath = [];
+
+    if(req.files !== undefined){
+        req.files.forEach((file)=> filePath.push(file.key))
+    }
 
     try {
-        const { title, like, description } = req.body;
         const existingUser = await Users.findByPk(1);
-        const project = await Projects.create({ title, description, user_id: existingUser.user_id, like });
+        const project = await Projects.create({ 
+            title:projectTitle,
+            teamName:teamName,
+            overView:overView,
+            tech_stack:techStack,
+            github_address:githubAddress,
+            core_function:coreFunction,
+            demo_site:demoSite,
+            description, user_id: existingUser.user_id,
+            images_path:filePath.join(",")
+        });
         res.status(200).json({ message: "게시물 등록 완료", project });
     } catch (error) {
         console.error(error);
