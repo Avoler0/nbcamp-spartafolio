@@ -35,7 +35,7 @@ projectRouter.get('/post', async (req, res) => {
     const { postName } = req.query;
     try {
         const projects = await Projects.findAll({ where: { title: { [Op.like]: `%${postName}%` } } });
-        if(projects){
+        if(projects.length !== 0){
             res.status(200).json({ message: "게시물 검색", projects });
         }else {
             res.status(404).json({message: "게시물이 없습니다"});
@@ -50,11 +50,12 @@ projectRouter.get('/post', async (req, res) => {
 // 게시물 수정
 projectRouter.put('/post/:postId', async (req, res) => {
     const postId = req.params.postId;
+    const { title, description, like } = req.body;
     try {
         if (postId) {
             const project = await Projects.findByPk(postId);
 
-            const { title, description, like } = req.body;
+            
             await project.update({ title, description, like });
 
             res.status(200).json({ massege: "게시물 수정 완료", project });
