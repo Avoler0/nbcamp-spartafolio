@@ -9,6 +9,7 @@
   <link rel="stylesheet" type="text/css" href="/css/project-regist.css" />
   <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
   <script type="module" src="/script/index.js" defer></script>
+  <script type="module" src="/script/project-register.js" defer></script>
   <script type="module" src="/script/header.js" defer></script>
   <script>
     $(document).ready(() => {
@@ -27,42 +28,52 @@
         <span class="form-title">* 기본 정보(썸네일)</span>
         <label class="input-wrap">
           <span>* Project Title</span>
-          <input type="text" />
+          <input type="text" class="project-title"/>
         </label>
         <label class="input-wrap">
           <span>* Team Name</span>
-          <input type="text" />
+          <input type="text" class="team-name" />
         </label>
         <label class="input-wrap">
           <span>* Over View</span>
-          <input type="text" />
+          <input type="text" class="over-view" />
         </label>
-        <label class="input-wrap">
-          <span>* Tech Stack</span>
-          <input type="text" />
-        </label>
+        <div class="tech-wrap">
+          <label class="input-wrap">
+            <span>* Tech Stack</span>
+            <div class="tech-list">
+              <div class="select-tech">기술 선택</div>
+            </div>
+            <input type="button" class="tech-stack" />
+          </label>
+          <div class="tech-tab">
+            <div class="tab-content">
+
+            </div>
+          </div>
+        </div>
         <label class="input-wrap">
           <span>* GitHub Address</span>
-          <input type="text" />
+          <input type="text" class="github-address" />
         </label>
       </div>
       <div>
         <span class="form-title">* 프로젝트 내용</span>
           <label class="input-wrap">
             <span>* Core Function</span>
-            <input type="text" />
+            <input type="text" class="core-function" />
           </label>
           <label class="input-wrap">
             <span>* Demo Site</span>
-            <input type="text" />
+            <input type="text" class="demo-site"/>
           </label>
           <label class="input-wrap">
-            <span>* Contents</span>
-            <textarea type="text" ></textarea>
+            <span>* Description</span>
+            <textarea type="text" class="description" ></textarea>
           </label>
           <label class="input-wrap">
             <span>* Additional</span>
-            <input type="text" />
+            <input type="file" class="additional" multiple />
           </label>
         </div>
         <div class="btn-wrap">

@@ -1,0 +1,22 @@
+
+.input-wrap{
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #D9D9D9;
+  padding: .6rem;
+  margin-top: 1rem;
+  border-radius: 10px;
+}
+
+.input-wrap span{
+  font-size: 15px;
+  color: #9F9F9E;
+  margin-bottom: .5rem;
+}
+
+.input-wrap input{
+  border: none;
+  outline: none;
+  width: 100%;
+  font-size: 18px;
+}

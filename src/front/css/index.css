@@ -38,6 +38,11 @@ main{
   margin-top: 3rem;
 }
 
+#main-title .content .go-project button:hover{
+  background-color: #a45e65;
+  cursor: pointer;
+}
+
 #main-community{
   width: 95%;
   margin: 0 auto;
