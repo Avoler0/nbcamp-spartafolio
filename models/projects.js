@@ -14,23 +14,47 @@ export default class Projects extends Model {
         type: DataTypes.INTEGER,
       },
       like: {
-        allowNull: false,
+        allowNull: true,
         type: DataTypes.INTEGER
       },
       title: {
         allowNull: false,
         type: DataTypes.STRING
       },
+      over_view:{
+        allowNull: true,
+        type: DataTypes.STRING
+      },
+      tech_stack: {
+        allowNull: false,
+        type: DataTypes.STRING
+      },
+      github_address:{
+        allowNull: true,
+        type: DataTypes.STRING
+      },
+      demo_site:{
+        allowNull: true,
+        type: DataTypes.STRING
+      },
+      core_function:{
+        allowNull: true,
+        type: DataTypes.STRING
+      },
       description: {
         allowNull: false,
         type: DataTypes.STRING
       },
-      createdAt: {
+      images_path: {
         allowNull: true,
+        type: DataTypes.STRING
+      },
+      createdAt: {
+        allowNull: false,
         type: DataTypes.DATE
       },
       updatedAt: {
-        allowNull: true,
+        allowNull: false,
         type: DataTypes.DATE
       }
     }, {
