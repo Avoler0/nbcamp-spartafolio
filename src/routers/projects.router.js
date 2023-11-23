@@ -30,18 +30,6 @@ projectRouter.get('/posts', async (req, res) => {
     }
 });
 
-// // 게시물 상세 조회
-// projectRouter.get('/post', async (req, res) => {
-//     const { postId } = req.query;
-//     try {
-//         const projects = await Projects.findByPk(postId);
-//         res.status(200).json({ message: "게시물 상세 조회", projects });
-//     } catch (error) {
-//         console.error(error);
-//         res.status(400).json({ message: "게시물 조회 오류" });
-//     }
-// });
-
 // 게시물 검색
 projectRouter.get('/post', async (req, res) => {
     const { postName } = req.query;
