@@ -6,7 +6,6 @@ const projectRouter = express.Router();
 
 // creat
 projectRouter.post('/post', async (req, res) => {
-    
     try {
         const { title, like, description } = req.body;
         const existingUser = await Users.findByPk(1);

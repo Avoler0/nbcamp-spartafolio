@@ -57,12 +57,15 @@ header{
   border: 1px solid #D64553;
   background-color: #D64553;
   border-radius: .4rem;
-  color: #fff;
 }
 
 .h-right .signup-btn button:hover{
   background-color: #a45e65;
   cursor: pointer;
+}
+
+.h-right .signup-btn button a{
+  color: #fff;
 }
 
 .h-right button{

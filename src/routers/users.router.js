@@ -11,7 +11,7 @@ dotenv.config();
 const userRouter = express.Router();
 
 userRouter.post('/users', async (req, res) => {
-
+    console.log('바디',req.body)
     try {
         const { email, name, password} = req.body;
         if (!email || !name || !password) {
