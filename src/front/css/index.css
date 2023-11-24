@@ -5,9 +5,24 @@ main{
 }
 
 #main-title{
-  background-color: #E5E5E5;
+  position: relative;
   width: 100%;
   padding: 10rem 0;
+}
+
+#main-title::after{
+  content: "";
+  background-image: url("https://nbcamp-bukkit.s3.ap-northeast-2.amazonaws.com/additional/1.png");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: auto;
+  opacity: 0.2;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
+  z-index: -1;
 }
 
 #main-title .content{
@@ -32,7 +47,6 @@ main{
   border: 1px solid #D64553;
   background-color: #D64553;
   border-radius: .4rem;
-  color: #fff;
   padding: 8px 48px;
   font-size: 18px;
   margin-top: 3rem;
@@ -41,6 +55,10 @@ main{
 #main-title .content .go-project button:hover{
   background-color: #a45e65;
   cursor: pointer;
+}
+
+#main-title .content .go-project button a{
+  color: #fff;
 }
 
 #main-content{
@@ -69,8 +87,12 @@ main{
 }
 
 #main-content nav ul li:hover{
-  color: #000;
+  color: #00000093;
   cursor: pointer;
+}
+
+#main-content nav ul li.active{
+  color: #000;
 }
 
 #main-content nav .search-input{
@@ -94,6 +116,7 @@ main{
   border: 1px solid #D9D9D9;
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
   border-radius: 5px;
+  margin-bottom: 2rem;
 }
 
 #main-content .content .community-card:hover{
@@ -117,6 +140,10 @@ main{
   font-size: 24px;
   font-weight: bold;
   padding: 2rem 2rem 1rem 2rem;
+}
+
+#main-content .content .community-card .card-description .card-title a{
+  color: #000;
 }
 
 #main-content .content .community-card .card-description .card-overview{
