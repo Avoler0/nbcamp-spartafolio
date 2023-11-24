@@ -121,6 +121,7 @@
   background-color: #d64553;
   color: #fff;
   font-size: 15px;
+  border: none;
   border-radius: 0.4rem;
   float: right;
 }
@@ -155,7 +156,7 @@
 .comment-btn {
   width: 8%;
   height: 40px;
-  margin-left: 20px;
+  margin-left: 25px;
   font-size: 15px;
   border-radius: 0.4rem;
   border: none;
