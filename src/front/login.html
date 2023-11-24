@@ -17,17 +17,14 @@
     />
   </head>
   <body>
-    <div>
+    <div class="login-container">
+      <div id="gif-box">
+        <div><img src="/images/tree.gif" loop=infinite> </img> </div>
+      </div>
       <form id="login-form">
         <label class="loginInput-wrap1">
-          <h1>
-            <div>
-              Login
-          <div>
-            Sparta-Folio
-          </div>
-          
-        </h1>
+          <h1>Hello, </h1>
+          <h2>Good Developers!</h2>
         </label>
         <label class="loginInput-wrap">
           <span>* Email</span>
@@ -43,13 +40,17 @@
             <button
               type="button"
               class="btn btn-outline-secondary"
-              style="width: 29.5%; height: 40px"
+              style="width: 20%; height: 40px"
               onclick="location.replace('/form.php')"
             >
               Log In
             </button>
           </div>
         </div>
+        <div> 
+          <a href = "http://localhost:3000/login" > Do you want to co-develop with us? </a>
+        </div>
+        </label>
       </form>
     </div>
   </body>
