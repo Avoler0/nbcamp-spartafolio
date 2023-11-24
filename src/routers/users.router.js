@@ -63,7 +63,7 @@ userRouter.post('/users', async (req, res) => {
         message: '이미 가입 된 이메일',
       });
     }
-    const hashedPassword = bcrypt.hashSync(password, PASSWORD_HASH_SALT_ROUNDS);
+    const hashedPassword = bcrypt.hashSync(password, 10);
 
     const newUser = await Users.create({
       email,
@@ -128,9 +128,9 @@ userRouter.post('/users/login', async (req, res) => {
       });
     }
 
-    const accessToken = jwt.sign({ userId: user.id }, JWT_ACCESS_TOKEN_SECRET, {
+    const accessToken = jwt.sign({ userId: user.id }, "secret", {
       //액세스토큰
-      expiresIn: JWT_ACCESS_TOKEN_EXPIRES_IN,
+      expiresIn: "12h",
     });
 
     return res.status(200).json({

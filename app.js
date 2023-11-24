@@ -37,7 +37,7 @@ app.get('/project-regist', (req, res) => {
   });
 })
 
-app.get('/detail', (req, res) => {
+app.get('/detail/:projectId', (req, res) => {
   fs.readFile('./src/front/detail.html', function (err, data) {
     res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
     res.write(data);
