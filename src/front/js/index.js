@@ -1,5 +1,5 @@
 let projectsList = [];
-
+console.log('쿠키', document.cookie);
 function searchProject(){
   $('nav .search-input').on('keypress', async (event) => {
     if(event.key !== 'Enter') return;
