@@ -7,7 +7,7 @@ module.exports = {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
       },
       user_id: {
         allowNull: false,
@@ -15,45 +15,53 @@ module.exports = {
         references: {
           model: 'Users',
           key: 'user_id',
-        }
+        },
       },
       like: {
         defaultValue: 0,
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
       },
       title: {
         allowNull: false,
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
-      over_view:{
-        type: Sequelize.STRING
+      team_name: {
+        allowNull: false,
+        type: Sequelize.STRING,
+      },
+      over_view: {
+        type: Sequelize.STRING,
+      },
+      view: {
+        defaultValue: 0,
+        type: Sequelize.INTEGER,
       },
       tech_stack: {
         allowNull: false,
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
-      github_address:{
-        type: Sequelize.STRING
+      github_address: {
+        type: Sequelize.STRING,
       },
-      demo_site:{
-        type: Sequelize.STRING
+      demo_site: {
+        type: Sequelize.STRING,
       },
-      core_function:{
-        type: Sequelize.STRING
+      core_function: {
+        type: Sequelize.STRING,
       },
       description: {
         allowNull: false,
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       images_path: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       createdAt: {
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
       },
       updatedAt: {
-        type: Sequelize.DATE
-      }
+        type: Sequelize.DATE,
+      },
     });
   },
   async down(queryInterface, Sequelize) {
