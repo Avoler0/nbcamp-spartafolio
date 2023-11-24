@@ -7,6 +7,9 @@ import path from 'path'
 import { fileURLToPath } from "url";   // 👈 추가
 import projectRouter from './src/routers/projects.router.js';
 import commentsRouter from './src/routers/comments.router.js';
+import 'dotenv/config';//
+import {needSignin} from './middlewares/need-signin.middleware.js'
+console.log("needSignin", needSignin);
 
 const __dirname = fileURLToPath(new URL(".", import.meta.url));
 const app = express();
@@ -47,4 +50,5 @@ app.get('/detail', (req, res) => {
 
 app.listen(port, () => {
   console.log(port, '포트로 서버가 열렸어요!');
+  console.log("JWT_ACCESS_TOKEN_SECRET", process.env.JWT_ACCESS_TOKEN_SECRET);
 });

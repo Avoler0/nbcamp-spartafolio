@@ -128,7 +128,7 @@ userRouter.post('/users/login', async (req, res) => {
       });
     }
 
-    const accessToken = jwt.sign({ userId: user.id }, JWT_ACCESS_TOKEN_SECRET, {
+    const accessToken = jwt.sign({ userId: user.user_id }, JWT_ACCESS_TOKEN_SECRET, {
       //액세스토큰
       expiresIn: JWT_ACCESS_TOKEN_EXPIRES_IN,
     });
