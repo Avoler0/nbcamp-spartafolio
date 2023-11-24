@@ -1,6 +1,6 @@
 import { getAccessToken } from '/script/localStorage.js';
 
-if(!getAccessToken){
+if(!getAccessToken()){
   alert('로그인 이후 이용 가능한 페이지입니다.')
   window.location.href = "/"
 }
@@ -125,13 +125,18 @@ const initProjectRegister = () => {
 
     await fetch('http://localhost:3000/api/post', {
       method: 'POST',
+      headers: {
+        Authorization: `Bearer ${getAccessToken()}`,
+      },
       body: formData,
     })
-      .then(() => {
-        alert('프로젝트 등록이 완료 되었습니다.');
-        window.location.href = '/';
+      .then((res) => {
+        console.log(res);
+        // alert('프로젝트 등록이 완료 되었습니다.');
+        // window.location.href = '/';
       })
-      .catch(() => {
+      .catch((err) => {
+        console.log(err);
         alert('프로젝트 등록에 실패하였습니다.');
       });
   });

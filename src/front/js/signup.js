@@ -7,8 +7,8 @@ $('#signup-form').on('submit',async (event)=>{
     email: $('#signup-form .email-input').val(),
     name: $('#signup-form .name-input').val(),
     password: $('#signup-form .password-input').val(),
-    passwordCheck: $('#signup-form .password-check-input').val()
-  }
+    passwordConfirm: $('#signup-form .password-check-input').val(),
+  };
 
   const result = await fetch('http://localhost:3000/api/users',{
     method:'POST',
