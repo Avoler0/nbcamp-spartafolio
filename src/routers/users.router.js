@@ -58,6 +58,95 @@ userRouter.post('/user/refreshToken', async (req, res) => {
   console.log(req.cookies);
 });
 
+userRouter.put('/user', needSignin, async(req, res) => {
+  const user = res.locals.user;
+    console.log(req.body);
+  const { email, name, existPassword, newPassword } = req.body;
+
+  if(!email || !name || !existPassword || !newPassword){
+    throw new Error('data is invalid');
+  }
+  try{
+    const hashedExistPassword = bcrypt.hashSync(existPassword, 10);
+    const hashedNewPassword = bcrypt.hashSync(newPassword, 10);
+
+    const userData = await Users.findByPk(user.user_id);
+
+    if(!userData){
+      throw new Error('not found user');
+    }
+
+    if(userData.password !== hashedExistPassword){
+      throw new Error('not match password');
+    }
+
+    const result = await Users.update(
+      { email, name, password: hashedNewPassword },
+      {
+        where: { user_id: user.user_id, password: hashedExistPassword },
+      },
+    );
+
+    console.log(result);
+    // const isPasswordMatched = bcrypt.compareSync(password, hashedPassword);
+
+    const accessToken = jwt.sign(
+      { userId: result.user_id },
+      JWT_ACCESS_TOKEN_SECRET,
+      {
+        //액세스토큰
+        expiresIn: '30m',
+      },
+    );
+    res.status(200).json({
+      success: true,
+      message: '프로필 수정이 완료 되었습니다.',
+      data: accessToken,
+    });
+  }catch(err){
+    let statusCode;
+    let errMessage;
+    // const errJSON = JSON.parse(err.Error);
+
+    switch (err) {
+      case 'not match password':
+        (statusCode = 400), (errMessage = '기존 비밀번호와 같지 않습니다.');
+        break;
+      case 'not found user':
+        (statusCode = 400), (errMessage = '유저 데이터를 찾을 수 없습니다.');
+        break;
+      case 'data is invalid':
+        (statusCode = 400), (errMessage = '데이터가 유효하지 않습니다.');
+        break;
+      default:
+        (statusCode = 500), (errMessage = '서버에러');
+    }
+
+    return res.status(statusCode).json({
+      success: false,
+      message: errMessage,
+    });
+  }
+});
+
+userRouter.get('/user', needSignin, async (req, res) => {
+  const user = res.locals.user;
+
+
+  if (user){
+    return res.status(200).json({
+      success: true,
+      message: '사용자 데이터를 불러왔습니다.',
+      data: user,
+    });
+  }else{
+    return res.status(200).json({
+      success: false,
+      message: '사용자 데이터를 불러오는데 실패하였습니다.',
+    });
+  }
+});
+
 //회원가입
 userRouter.post('/users', async (req, res) => {
   try {
@@ -179,7 +268,7 @@ userRouter.post('/users/login', async (req, res) => {
     console.log('리프레쉬',refreshToken)
     const accessToken = jwt.sign({ userId: user.user_id }, JWT_ACCESS_TOKEN_SECRET, {
       //액세스토큰
-      expiresIn: "12h",
+      expiresIn: "30m",
     });
 
     res.cookie('refreshToken', refreshToken,{

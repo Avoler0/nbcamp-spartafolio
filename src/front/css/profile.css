@@ -1,0 +1,49 @@
+
+#profile-container{
+  margin: 4rem auto 0 auto;
+  display: flex;
+  width: fit-content;
+  height: 560px;
+  padding: 2rem;
+  border: 1px solid #d9d9d9;
+  margin-top: 8%;
+}
+#content .profile-wrap{
+  display: flex;
+  flex-direction: column;
+  margin-left: 4rem;
+}
+
+#content .profile-wrap label{
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #d9d9d9;
+  padding: 0.6rem;
+  border-radius: 10px;
+  width: 360px;
+  margin-bottom: 2rem;
+}
+
+#content .profile-wrap label input{
+  border: 0;
+  width: 360px;
+  padding: 0;
+  outline: 0;
+}
+
+.row{
+  display: inline-block;
+}
+.footer .profile-btn-wrap{
+  text-align: right;
+}
+
+.profile-btn-wrap .cancel-btn{
+  margin-left: 1rem;
+}
+
+.divisable{
+  margin-bottom: 0;
+  visibility: hidden;
+
+}

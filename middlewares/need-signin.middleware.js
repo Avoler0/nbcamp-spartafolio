@@ -67,9 +67,10 @@ export const needSignin = async (req, res, next) => {
           });
         }
 
-        delete user.password;
-        res.locals.isAccessToken = false;
-        res.locals.user = user.toJSON();
+        const userData = user.toJSON();
+        delete userData.password;
+        res.locals.isAccessToken = true;
+        res.locals.user = userData;
 
         return next();
       }
@@ -87,12 +88,11 @@ export const needSignin = async (req, res, next) => {
         return res.status(400).json({
           success: false,
           message: '존재하지 않는 사용자입니다',
-
         });
       }
 
       const userData = user.toJSON();
-      delete userData.pasword;
+      delete userData.password;
       res.locals.isAccessToken = true;
       res.locals.user = userData;
 
@@ -111,18 +111,14 @@ export const needSignin = async (req, res, next) => {
       case 'jwt expired':
         statusCode = 401;
         errorMessage = '인증 정보 유효기간이 지났습니다';
-        console.log('401 에러');
         break;
       case 'invalid signature':
         statusCode = 401;
         errorMessage = '유효하지 않는 인증 정보입니다.';
-        console.log('401 에러');
         break;
       default:
         statusCode = 500;
-        errorMessage =
-          '예상치 못한 에러가 발생하였습니다. 관리자에게 문의하세요';
-        console.log('500 에러');
+        errorMessage = '예상치 못한 에러가 발생하였습니다. 관리자에게 문의하세요';
         break;
     }
     return res.status(statusCode).json({
