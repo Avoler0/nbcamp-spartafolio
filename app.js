@@ -7,6 +7,9 @@ import path from 'path';
 import { fileURLToPath } from 'url'; // 👈 추가
 import projectRouter from './src/routers/projects.router.js';
 import commentsRouter from './src/routers/comments.router.js';
+import 'dotenv/config';//
+import {needSignin} from './middlewares/need-signin.middleware.js'
+console.log("needSignin", needSignin);
 
 const __dirname = fileURLToPath(new URL('.', import.meta.url));
 const app = express();

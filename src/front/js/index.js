@@ -1,21 +1,79 @@
-// import $ from 'jquery';
-
-// console.log($(document))
-console.log('hi');
 let projectsList = [];
+$('.testBtn').on('click', async () => {
+  console.log('클릭');
+  try{
+    const result = await fetch('http://localhost:3000/api/users/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        // 'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: JSON.stringify({
+        email: 'jys13911@gmail.com',
+        password: 'wjddbstj12',
+      }),
+    })
+      .then((res) => res.json())
+      .catch((err) => err);
+
+  console.log('테스트 레스', result);
+  }catch(err){
+    console.log(err)
+  }
+});
+
+$('.testBtn2').on('click', async () => {
+  console.log('클릭');
+  try {
+    const result = await fetch('http://localhost:3000/api/test', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        // 'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: JSON.stringify({
+        email: 'jys13911@gmail.com',
+        password: 'wjddbstj12',
+      }),
+    })
+      .then((res) => res.json())
+      .catch((err) => err);
+
+    console.log('테스트 레스', result);
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+function searchProject(){
+  $('nav .search-input').on('keypress', async (event) => {
+    if(event.key !== 'Enter') return;
+    
+    const searchValue = $('nav .search-input').val();
+
+    const result = await fetch(
+      `http://localhost:3000/api/post?postName=${searchValue}`,
+      {
+        method: 'GET',
+      },
+    ).then((res)=> res.json()).catch((err)=>err);
+
+    drawProjectsCard(result.projects);
+  });
+  
+}
+
+searchProject();
 
 function mainTitleSelect(){
-  const maxLikeProjecet = projectsList.reduce((prev,next)=>{
+  if(projectsList.length === 0) return;
+  const maxLikeProjecet =  projectsList.reduce((prev, next) => {
     return prev.like > next.like ? prev : next;
-  })
+  });
   const {
     project_id,
-    github_address,
     images_path,
-    like,
-    view,
     over_view,
-    tech_stack,
     team_name,
     title,
   } = maxLikeProjecet;
@@ -46,19 +104,6 @@ function mainTitleSelect(){
   `);
   
 }
-{/* <div class="title">
-          좋아요 수 TOP 프로젝트 타이틀
-        </div>
-        <div class="sub-title">
-          팀 이름
-        </div>
-        <div class="over-view">
-          프로젝트 간략 소개 프로젝트 간략 소개프로젝트 간략 소개프로젝트 간략 소개프로젝트 간략 소개프로젝트 간략 소개프로젝트 간략 소개프로젝트 간략 소개프로젝트 간략 소개프로젝트 간략 소개프로젝트 간략 소개
-          프로젝트 간략 소개프로젝트 간략 소개 프로젝트 간략 소개프로젝트 간략 소개프로젝트 간략 소개프로젝트 간략 소개프로젝트 간략 소개
-        </div>
-        <div class="go-project">
-          <button>프로젝트 구경하기</button>
-        </div> */}
 
 function sortSelect(){
   $('#main-content nav ul').find('li').on('click',(event)=>{
@@ -75,8 +120,6 @@ function sortSelect(){
   })
 }
 
-
-
 const latestSort = () => {
   projectsList.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
   drawProjectsCard(projectsList);
@@ -92,26 +135,30 @@ const viewSort = () => {
 
 async function getProjects() {
   
-  
   const result = await fetch('http://localhost:3000/api/posts', {
     method: 'GET',
   })
   .then((res) => res.json())
   .catch((err) => err);
 
-  projectsList = result.projects;
-  mainTitleSelect();
-  drawProjectsCard(result.projects);
-  sortSelect();
+  if(result.success){
+    projectsList = result.projects;
+    mainTitleSelect();
+    drawProjectsCard(result.projects);
+    sortSelect();
+  }
+  
 }
 
 function drawProjectsCard(projects){
   const contentDiv = $('main #main-content .content');
   
   contentDiv.empty();
-  console.log(projects);
+    console.log(projects);
+
   projects.forEach((project) => {
     const {
+      project_id,
       github_address,
       images_path,
       like,
@@ -119,8 +166,8 @@ function drawProjectsCard(projects){
       over_view,
       tech_stack,
       title,
+      comment_count
     } = project;
-
     const thumbnail = images_path
       ? `https://nbcamp-bukkit.s3.ap-northeast-2.amazonaws.com/${
           images_path.split(',')[0]
@@ -130,11 +177,17 @@ function drawProjectsCard(projects){
     contentDiv.append(`
     <div class="community-card">
       <div class="card-thumbnail">
-        <img
+        <a href="/detail/${project_id}">
+          <img
           src="${thumbnail}" />
+        </a>
       </div>
       <div class="card-description">
-        <div class="card-title">${title}</div>
+        <div class="card-title">
+          <a href="/detail/${project_id}">
+            ${title}
+          </a>
+        </div>
         <div class="card-overview">${
           over_view ? over_view : '소개가 없습니다.'
         }</div>
@@ -166,7 +219,7 @@ function drawProjectsCard(projects){
               </div>
               <div class="card-image comment">
                 <svg viewBox="-2.4 -2.4 28.80 28.80" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M4 1C2.34315 1 1 2.34315 1 4V15C1 16.6569 2.34315 18 4 18H6V22C6 22.388 6.22446 22.741 6.57584 22.9056C6.92723 23.0702 7.3421 23.0166 7.64018 22.7682L13.362 18H20C21.6569 18 23 16.6569 23 15V4C23 2.34315 21.6569 1 20 1H4Z" fill="#000000"></path> </g></svg>
-                <span>1</span>
+                <span>${comment_count}</span>
               </div>
             </div>
           </div>

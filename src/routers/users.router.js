@@ -63,7 +63,7 @@ userRouter.post('/users', async (req, res) => {
         message: '이미 가입 된 이메일',
       });
     }
-    const hashedPassword = bcrypt.hashSync(password, PASSWORD_HASH_SALT_ROUNDS);
+    const hashedPassword = bcrypt.hashSync(password, 10);
 
     const newUser = await Users.create({
       email,
@@ -91,7 +91,7 @@ userRouter.post('/users', async (req, res) => {
 userRouter.post('/users/login', async (req, res) => {
   try {
     const { email, password } = req.body;
-
+    console.log(req.body)
     if (!email) {
       return res.status(400).send({
         success: false,
@@ -116,7 +116,11 @@ userRouter.post('/users/login', async (req, res) => {
     // 사용자 찾고, 사용자 없으면 에러 반환, 사용자가 존재하면 'toJSON' 메소드를 호출하여 사용자 정보를 JSON 형식으로 변환
 
     const user = await (await Users.findOne({ where: { email } })).toJSON();
+
+
+
     const hashedPassword = user?.password; //데이터베이스 안에 있는 패스워드
+
     const isPasswordMatched = bcrypt.compareSync(password, hashedPassword);
 
     const isCorrectUser = user && isPasswordMatched;
@@ -127,16 +131,31 @@ userRouter.post('/users/login', async (req, res) => {
         message: '일치하는 회원 정보가 없습니다.',
       });
     }
+    const refreshToken = jwt.sign({},JWT_ACCESS_TOKEN_SECRET,{ expiresIn: '3d' });
 
-    const accessToken = jwt.sign({ userId: user.id }, JWT_ACCESS_TOKEN_SECRET, {
+    await Users.update({ refresh_token:refreshToken },{
+      where: { email }
+    });
+
+    console.log('리프레쉬',refreshToken)
+    const accessToken = jwt.sign({ userId: user.user_id }, JWT_ACCESS_TOKEN_SECRET, {
       //액세스토큰
-      expiresIn: JWT_ACCESS_TOKEN_EXPIRES_IN,
+      expiresIn: "12h",
+    });
+
+    res.cookie('refreshToken', refreshToken,{
+      httpOnly:true,
+      secure:true
+    });
+
+    res.cookie('accessToken', accessToken, {
+      httpOnly: true,
+      secure: true,
     });
 
     return res.status(200).json({
       success: true,
       message: '로그인에 성공했습니다.',
-      data: { accessToken },
     });
   } catch (err) {
     console.error(err);
