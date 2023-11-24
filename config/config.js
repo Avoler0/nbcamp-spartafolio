@@ -5,8 +5,8 @@ dotenv.config();
 const sequelizeConfig = {
   "username": process.env.DB_ID,
   "password": process.env.DB_PW,
-  "database": "sparta_folio",
-  "host": "express-database.ca9iqludhqox.ap-northeast-2.rds.amazonaws.com",
+  "database": "sparta-folio",
+  "host": "127.0.0.1",
   "dialect": "mysql"
 }
 

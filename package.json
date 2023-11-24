@@ -14,6 +14,7 @@
   "dependencies": {
     "aws-sdk": "^2.1500.0",
     "bcrypt": "^5.1.1",
+    "cookie-parser": "^1.4.6",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
     "jquery": "^3.7.1",
