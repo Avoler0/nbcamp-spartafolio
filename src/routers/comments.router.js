@@ -9,9 +9,10 @@ const { Comments, Users, Projects } = db;
 const commentsRouter = express.Router();
 
 // 댓글 달기 API
-commentsRouter.post("/comment", async (req, res) => {
+commentsRouter.post("/comment/:detailProjectId", async (req, res) => {
   try {
     const { contents } = req.body;
+    const { detailProjectId } = req.params;
 
     if (!contents) {
       return res.status(400).json({ message: "댓글을 입력해주세요" });
@@ -21,7 +22,7 @@ commentsRouter.post("/comment", async (req, res) => {
     const existingUser = await Users.findByPk(1);
 
     await Comments.create({
-      project_id: existingProject.project_id,
+      project_id: detailProjectId,
       contents,
       user_id: existingUser.user_id
     });

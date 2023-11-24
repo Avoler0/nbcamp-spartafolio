@@ -1,8 +1,7 @@
-
 // 특정 프로젝트를 가져오는 함수
-async function getDetailProject() {
+const getDetailProject = async function (detailProjectId) {
   try {
-    const result = await fetch(`http://localhost:3000/api/posts/1`, { method: 'GET' })
+    const result = await fetch(`http://localhost:3000/api/posts/${detailProjectId}`, { method: 'GET' })
       .then((res) => res.json())
       .catch((err) => err);
 
@@ -76,13 +75,12 @@ async function getDetailProject() {
     console.error("Error fetching data:", error);
   }
 }
-getDetailProject();
 
 
 // 특정 프로젝트에 있는 댓글들을 가져오는 함수
-async function getComments() {
+const getComments = async function (detailProjectId) {
   try {
-    const result = await fetch('http://localhost:3000/api/1/comments', { method: 'GET' })
+    const result = await fetch(`http://localhost:3000/api/${detailProjectId}/comments`, { method: 'GET' })
       .then((res) => res.json())
       .catch((err) => err);
 
@@ -107,12 +105,47 @@ async function getComments() {
       `);
     });
 
-
-
   } catch (error) {
     console.error(error);
-  }
-
+  };
 };
 
-getComments();
+// 댓글 생성하는 함수 
+const createComment = async function (detailProjectId) {
+  $('.comment-btn').on('click', async (event) => {
+    event.preventDefault();
+
+    const commentInput = $('.comment-input').val();
+
+    try {
+      await fetch(`http://localhost:3000/api/comment/${detailProjectId}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ contents: commentInput }),
+      });
+
+      $(".comment-input").val('');
+      getComments(detailProjectId);
+
+    } catch (error) {
+      console.error('Error posting comment:', error);
+    };
+  });
+}
+
+// 현재 URL에서 경로 부분을 가져오기
+let path = window.location.pathname;
+
+// 경로에서 숫자 부분 추출
+let match = path.match(/\/detail\/(\d+)/);
+
+if (match) {
+  let detailProjectId = parseInt(match[1]);
+  await getDetailProject(detailProjectId);
+  await getComments(detailProjectId);
+  await createComment(detailProjectId);
+} else {
+  console.error(error);
+}
