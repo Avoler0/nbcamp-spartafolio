@@ -2,12 +2,15 @@ import express from 'express';
 import db from '../../models/index.js';
 import upload from '../multer.js';
 import Sequelize, { Op } from 'sequelize';
-const { Users, Projects, Comments } = db;
+import {needSignin} from '../../middlewares/need-signin.middleware.js'
+
+const { Users, Projects } = db;
 const projectRouter = express.Router();
 
 // 게시물 생성 creat
-projectRouter.post('/post', upload.array('additional'), async (req, res) => {
-    const { projectTitle, teamName, overView, techStack, githubAddress, coreFunction, demoSite, description } = req.body;
+projectRouter.post('/post',  needSignin, upload.array('additional'), async (req, res) => {
+    const { projectTitle,teamName, overView,techStack,githubAddress,coreFunction,demoSite, description } = req.body;
+
     let filePath = [];
 
     if (req.files !== undefined) {
@@ -74,25 +77,37 @@ projectRouter.get('/posts', async (req, res) => {
     }
 });
 
-// 특정 게시물 조회
-projectRouter.get('/posts/:postId', async (req, res) => {
-    console.log("hi")
+// 게시물 상세 조회
+projectRouter.get('/post/:postId', async (req, res) => {
+    const { postId } = req.params;
     try {
-        const { postId } = req.params;
-
-        const project = await Projects.findOne({ where: { project_id: postId } });
-
-        if (!project) {
-            return res.status(404).json({ message: "게시물이 없습니다." });
-        }
-
-        res.status(200).json({ message: "게시물 조회 성공", project });
-
+        const projects = await Projects.findByPk(postId);
+        res.status(200).json({ message: "게시물 상세 조회", projects });
     } catch (error) {
         console.error(error);
-        res.status(500).json({ message: "알 수 없는 오류가 발생했습니다." });
-    };
-})
+        res.status(400).json({ message: "게시물 조회 오류" });
+    }
+});
+
+// // 특정 게시물 조회
+// projectRouter.get('/posts/:postId', async (req, res) => {
+//     console.log("hi")
+//     try {
+//         const { postId } = req.params;
+
+//         const project = await Projects.findOne({ where: { project_id: postId } });
+
+//         if (!project) {
+//             return res.status(404).json({ message: "게시물이 없습니다." });
+//         }
+
+//         res.status(200).json({ message: "게시물 조회 성공", project });
+
+//     } catch (error) {
+//         console.error(error);
+//         res.status(500).json({ message: "알 수 없는 오류가 발생했습니다." });
+//     };
+// })
 
 // 게시물 검색
 projectRouter.get('/post', async (req, res) => {
@@ -112,15 +127,16 @@ projectRouter.get('/post', async (req, res) => {
 });
 
 // 게시물 수정
-projectRouter.put('/post/:postId', async (req, res) => {
+projectRouter.put('/post/:postId', needSignin, async (req, res) => {
     const postId = req.params.postId;
-    const { title, description, like } = req.body;
+    const { projectTitle,teamName, overView,techStack,githubAddress,coreFunction,demoSite, description } = req.body;
     try {
         if (postId) {
             const project = await Projects.findByPk(postId);
 
+            
+            await project.update({ projectTitle,teamName, overView,techStack,githubAddress,coreFunction,demoSite, description });
 
-            await project.update({ title, description, like });
 
             res.status(200).json({ massege: "게시물 수정 완료", project });
         } else {
@@ -134,7 +150,7 @@ projectRouter.put('/post/:postId', async (req, res) => {
 });
 
 // 게시물 삭제
-projectRouter.delete('/post/:postId', async (req, res) => {
+projectRouter.delete('/post/:postId',  needSignin, async (req, res) => {
     const postId = req.params.postId;
     try {
         if (postId) {
