@@ -1,8 +1,8 @@
 import express from 'express';
 import db from '../../models/index.js';
-import { Op } from 'sequelize';
 import upload from '../multer.js';
-const { Users, Projects } = db;
+import Sequelize, { Op } from 'sequelize';
+const { Users, Projects, Comments } = db;
 const projectRouter = express.Router();
 
 // 게시물 생성 creat
@@ -38,24 +38,39 @@ projectRouter.post('/post', upload.array('additional'), async (req, res) => {
 projectRouter.get('/posts', async (req, res) => {
     try {
         const projects = await Projects.findAll({
-            attributes: [
-                'project_id',
-                'title',
-                'team_name',
-                'github_address',
-                'images_path',
-                'tech_stack',
-                'over_view',
-                'like',
-                'view',
-                'createdAt'
+
+          attributes: [
+            'project_id',
+            'title',
+            'team_name',
+            'github_address',
+            'images_path',
+            'tech_stack',
+            'over_view',
+            'like',
+            'view',
+            'createdAt',
+            [
+              Sequelize.fn('COUNT', Sequelize.col('Comments.comment_id')),
+              'comment_count',
             ],
-            order: [['createdAt', 'desc']],
+          ],
+          include: [
+            {
+              model: Comments,
+              attributes: [],
+              where: { project_id: Sequelize.col('Projects.project_id') },
+            },
+          ],
+          group: ['Comments.project_id'],
+          raw: true,
+          //   order: [['createdAt', 'desc']],
+
         });
-        res.status(200).json({ message: "게시물 조회", projects });
+        res.status(200).json({ message: "게시물 조회",success:true, projects });
     } catch (error) {
         console.error(error);
-        res.status(400).json({ message: "게시물 조회 오류" });
+        res.status(400).json({ message: '게시물 조회 오류', success:false });
     }
 });
 
