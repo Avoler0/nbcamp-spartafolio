@@ -1,12 +1,14 @@
 // 특정 프로젝트를 가져오는 함수
 const getDetailProject = async function (detailProjectId) {
   try {
-    const result = await fetch(`http://localhost:3000/api/posts/${detailProjectId}`, { method: 'GET' })
+    const result = await fetch(`http://localhost:3000/api/post/${detailProjectId}`, { method: 'GET' })
       .then((res) => res.json())
       .catch((err) => err);
 
+    console.log("result :", result);
+
     // result.project가 객체인 경우
-    const project = result.project;
+    const project = result.projects;
     console.log('project: ', project);
 
     const {
@@ -130,6 +132,7 @@ const createComment = async function (detailProjectId) {
     const commentInput = $('.comment-input').val();
 
     try {
+      console.log(detailProjectId);
       await fetch(`http://localhost:3000/api/comment/${detailProjectId}`, {
         method: 'POST',
         headers: {

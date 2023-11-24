@@ -5,17 +5,19 @@ const { Comments, Users, Projects } = db;
 const createComments = async (req, res) => {
   try {
     const { contents } = req.body;
+    const { detailProjectId } = req.params
+    const { userId } = res.locals.user
 
     if (!contents) {
       return res.status(400).json({ message: "댓글을 입력해주세요" });
     };
 
-    const existingProject = await Projects.findByPk(1);
-    const existingUser = await Users.findByPk(1);
+    const existingProject = await Projects.findByPk(detailProjectId);
+    const existingUser = await Users.findByPk(userId);
 
 
     await Comments.create({
-      project_id: existingProject.project_id,
+      project_id: existingProject.detailProjectId,
       contents,
       user_id: existingUser.user_id
     });
