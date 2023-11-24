@@ -4,6 +4,7 @@ import db from '../models/index.js';
 const { Users } = db;
 
 export const needSignin = async (req, res, next) => {
+
   const refreshToken = req.cookies.refreshToken;
   console.log(req.headers.authorization);
   try {
@@ -16,6 +17,7 @@ export const needSignin = async (req, res, next) => {
         message: '지원하지 않는 인증 방식',
       });
     }
+
 
     
     if (accessToken && !refreshToken) {
@@ -33,6 +35,7 @@ export const needSignin = async (req, res, next) => {
           where: { refresh_token: refreshToken },
         });
 
+
         if (!user) {
           return res.status(400).json({
             success: false,
@@ -45,6 +48,7 @@ export const needSignin = async (req, res, next) => {
         res.locals.user = user.toJSON();
 
         next();
+
       }
     }
 
@@ -59,6 +63,7 @@ export const needSignin = async (req, res, next) => {
         return res.status(400).json({
           success: false,
           message: '존재하지 않는 사용자입니다',
+
         });
       }
 

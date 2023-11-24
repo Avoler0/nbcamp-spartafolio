@@ -3,26 +3,34 @@ import readComments from '../controller/comments/read.js'; // 댓글 가져오�
 import updateComment from '../controller/comments/update.js'; // 댓글 수정 API
 import deleteComment from '../controller/comments/delete.js'; // 댓글 삭제 API
 
+import { needSignin } from '../../middlewares/need-signin.middleware.js'
+
 import db from '../../models/index.js';
 const { Comments, Users, Projects } = db;
 
 const commentsRouter = express.Router();
 
 // 댓글 달기 API
-commentsRouter.post("/comment/:detailProjectId", async (req, res) => {
+commentsRouter.post("/comment/:detailProjectId", needSignin, async (req, res) => {
   try {
     const { contents } = req.body;
     const { detailProjectId } = req.params;
+    const { userId } = res.locals.user;
+    console.log('res.locals.user: ', res.locals.user);
 
     if (!contents) {
       return res.status(400).json({ message: "댓글을 입력해주세요" });
     };
 
-    const existingProject = await Projects.findByPk(1);
-    const existingUser = await Users.findByPk(1);
+    const existingProject = await Projects.findByPk(detailProjectId);
+    const existingUser = await Users.findByPk(userId);
+
+    if (!existingUser) {
+      return res.status(404).json({ message: "해당하는 프로젝트를 찾을 수 없습니다." })
+    };
 
     await Comments.create({
-      project_id: detailProjectId,
+      project_id: existingProject.project_id,
       contents,
       user_id: existingUser.user_id
     });

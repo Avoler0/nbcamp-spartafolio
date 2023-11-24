@@ -2,12 +2,16 @@ import express from 'express';
 import db from '../../models/index.js';
 import upload from '../multer.js';
 import Sequelize, { Op } from 'sequelize';
-import {needSignin} from '../../middlewares/need-signin.middleware.js'
+import { needSignin } from '../../middlewares/need-signin.middleware.js'
 
 const { Users, Projects, Comments } = db;
 const projectRouter = express.Router();
 
 // 게시물 생성 creat
+
+projectRouter.post('/post', needSignin, upload.array('additional'), async (req, res) => {
+    const { projectTitle, teamName, overView, techStack, githubAddress, coreFunction, demoSite, description } = req.body;
+
 
 projectRouter.post(
   '/post',
@@ -29,6 +33,7 @@ projectRouter.post(
     // console.log('프젝 에러',req.locals.error)
     if (req.files !== undefined) {
       req.files.forEach((file) => filePath.push(file.key));
+
     }
 
     try {
@@ -56,39 +61,39 @@ projectRouter.post(
 projectRouter.get('/posts', async (req, res) => {
     try {
         const projects = await Projects.findAll({
-          attributes: [
-            'project_id',
-            'title',
-            'team_name',
-            'github_address',
-            'images_path',
-            'tech_stack',
-            'over_view',
-            'like',
-            'view',
-            'createdAt',
-            [
-              Sequelize.fn('COUNT', Sequelize.col('Comments.comment_id')),
-              'comment_count',
+            attributes: [
+                'project_id',
+                'title',
+                'team_name',
+                'github_address',
+                'images_path',
+                'tech_stack',
+                'over_view',
+                'like',
+                'view',
+                'createdAt',
+                [
+                    Sequelize.fn('COUNT', Sequelize.col('Comments.comment_id')),
+                    'comment_count',
+                ],
             ],
-          ],
-          include: [
-            {
-              model: Comments,
-              attributes: [],
-              where: { project_id: Sequelize.col('Projects.project_id') },
-              required: false, // LEFT JOIN으로 설정
-            },
-          ],
-          group: ['Projects.project_id'],
-          raw: true,
-          //   order: [['createdAt', 'desc']],
+            include: [
+                {
+                    model: Comments,
+                    attributes: [],
+                    where: { project_id: Sequelize.col('Projects.project_id') },
+                    required: false, // LEFT JOIN으로 설정
+                },
+            ],
+            group: ['Projects.project_id'],
+            raw: true,
+            //   order: [['createdAt', 'desc']],
         });
 
         res.status(200).json({ message: "게시물 조회",success:true, projects });
     } catch (error) {
         console.error(error);
-        res.status(400).json({ message: '게시물 조회 오류', success:false });
+        res.status(400).json({ message: '게시물 조회 오류', success: false });
     }
 });
 
@@ -145,7 +150,7 @@ projectRouter.get('/post', async (req, res) => {
 projectRouter.put('/post/:postId', needSignin, async (req, res) => {
     const user = res.locals.user;
     const postId = req.params.postId;
-    const { projectTitle,teamName, overView,techStack,githubAddress,coreFunction,demoSite, description } = req.body;
+    const { projectTitle, teamName, overView, techStack, githubAddress, coreFunction, demoSite, description } = req.body;
     try {
         if (postId) {
             const project = await Projects.findByPk(postId);
@@ -155,7 +160,6 @@ projectRouter.put('/post/:postId', needSignin, async (req, res) => {
             }
             
             await project.update({ projectTitle,teamName, overView,techStack,githubAddress,coreFunction,demoSite, description });
-
 
             res.status(200).json({ massege: "게시물 수정 완료", project });
         } else {
