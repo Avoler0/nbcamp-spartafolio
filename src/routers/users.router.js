@@ -116,7 +116,9 @@ userRouter.post('/users/login', async (req, res) => {
     // 사용자 찾고, 사용자 없으면 에러 반환, 사용자가 존재하면 'toJSON' 메소드를 호출하여 사용자 정보를 JSON 형식으로 변환
 
     const user = await (await Users.findOne({ where: { email } })).toJSON();
+
     const hashedPassword = user?.password; //데이터베이스 안에 있는 패스워드
+
     const isPasswordMatched = bcrypt.compareSync(password, hashedPassword);
 
     const isCorrectUser = user && isPasswordMatched;
@@ -128,7 +130,7 @@ userRouter.post('/users/login', async (req, res) => {
       });
     }
 
-    const accessToken = jwt.sign({ userId: user.id }, "secret", {
+    const accessToken = jwt.sign({ userId: user.user_id }, JWT_ACCESS_TOKEN_SECRET, {
       //액세스토큰
       expiresIn: "12h",
     });
