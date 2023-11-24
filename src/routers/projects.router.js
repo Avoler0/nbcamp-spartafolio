@@ -13,8 +13,14 @@ projectRouter.post('/post',  needSignin, upload.array('additional'), async (req,
 
     let filePath = [];
 
+<<<<<<< HEAD
+    // console.log('프젝 에러',req.locals.error)
+    if(req.files !== undefined){
+        req.files.forEach((file)=> filePath.push(file.key))
+=======
     if (req.files !== undefined) {
         req.files.forEach((file) => filePath.push(file.key))
+>>>>>>> 3fa3dfc59600fdae6da158f1fe0504032ddd0c82
     }
 
     try {
@@ -41,7 +47,6 @@ projectRouter.post('/post',  needSignin, upload.array('additional'), async (req,
 projectRouter.get('/posts', async (req, res) => {
     try {
         const projects = await Projects.findAll({
-
           attributes: [
             'project_id',
             'title',
@@ -63,13 +68,15 @@ projectRouter.get('/posts', async (req, res) => {
               model: Comments,
               attributes: [],
               where: { project_id: Sequelize.col('Projects.project_id') },
+              required: false, // LEFT JOIN으로 설정
             },
           ],
-          group: ['Comments.project_id'],
+          group: ['Projects.project_id'],
           raw: true,
           //   order: [['createdAt', 'desc']],
-
         });
+
+        console.log('',projects)
         res.status(200).json({ message: "게시물 조회",success:true, projects });
     } catch (error) {
         console.error(error);
