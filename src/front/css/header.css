@@ -1,12 +1,13 @@
-header{
-  width: 1680px;
-  margin: 0 auto;
-}
+/* header{
+  background-color: #fff; 
+} */
 
 #header{
   display: flex;
   justify-content: space-between;
-  padding: 12px 2rem;
+  padding: 12px 0;
+  width: 1680px;
+  margin: 0 auto;
 }
 
 

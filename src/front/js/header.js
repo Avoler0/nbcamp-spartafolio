@@ -30,9 +30,9 @@ function drawHeaderRight(login){
     },
   ];
 
-    $('header #header .h-right').attr('data-login', isLogin);
-    $('header #header .h-right').empty();
-    $('header #header .h-right').append(`
+  $('header #header .h-right').attr('data-login', isLogin);
+  $('header #header .h-right').empty();
+  $('header #header .h-right').append(`
     <div class="l-btn">
       <a href="${isLogin ? isOk[0].url : isNot[0].url}">
         <button>
