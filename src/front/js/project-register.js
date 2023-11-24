@@ -109,12 +109,21 @@ const initProjectRegister = () => {
     }
 
     for(let property in data){
-      formData.append(property, data[property]);
+      if(property === 'techStack'){
+        formData.append(property, data[property].join(","));
+      }else{
+        formData.append(property, data[property]);
+      }
     }
     
     await fetch('http://localhost:3000/api/post', {
       method: 'POST',
       body: formData
+    }).then(()=>{
+      alert('프로젝트 등록이 완료 되었습니다.')
+      window.location.href = "/";
+    }).catch(()=>{
+      alert('프로젝트 등록에 실패하였습니다.')
     })
   })
 

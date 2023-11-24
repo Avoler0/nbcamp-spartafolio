@@ -37,13 +37,21 @@ app.get('/project-regist', (req, res) => {
   });
 })
 
-app.get('/detail', (req, res) => {
+app.get('/detail/:projectId', (req, res) => {
   fs.readFile('./src/front/detail.html', function (err, data) {
     res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
     res.write(data);
     res.end();
   });
 })
+
+app.get('/sign-up', (req, res) => {
+  fs.readFile('./src/front/sign-up.html', function (err, data) {
+    res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
+    res.write(data);
+    res.end();
+  });
+});
 
 app.listen(port, () => {
   console.log(port, '포트로 서버가 열렸어요!');
