@@ -1,12 +1,18 @@
+import { getAccessToken, setAccessToken } from '/script/localStorage.js'
 let projectsList = [];
+
 $('.testBtn').on('click', async () => {
   console.log('클릭');
-  try{
+
+  
+  if (getAccessToken()) return;
+
+  console.log('hi')
+  try {
     const result = await fetch('http://localhost:3000/api/users/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        // 'Content-Type': 'application/x-www-form-urlencoded',
       },
       body: JSON.stringify({
         email: 'jys13911@gmail.com',
@@ -16,9 +22,12 @@ $('.testBtn').on('click', async () => {
       .then((res) => res.json())
       .catch((err) => err);
 
-  console.log('테스트 레스', result);
-  }catch(err){
-    console.log(err)
+    setAccessToken(result.data.accessToken);
+    // window.localStorage.setItem('accessToken',result.data.accessToken)
+
+    console.log('테스트 레스', result);
+  } catch (err) {
+    console.log(err);
   }
 });
 
@@ -29,7 +38,7 @@ $('.testBtn2').on('click', async () => {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        // 'Content-Type': 'application/x-www-form-urlencoded',
+        'Authorization': `Bearer ${window.localStorage.getItem('accessToken')}`,
       },
       body: JSON.stringify({
         email: 'jys13911@gmail.com',
@@ -39,11 +48,35 @@ $('.testBtn2').on('click', async () => {
       .then((res) => res.json())
       .catch((err) => err);
 
-    console.log('테스트 레스', result);
+    console.log('테스트 레스2', result);
   } catch (err) {
     console.log(err);
   }
 });
+
+$('.testBtn3').on('click', async () => {
+  const accessToken = window.localStorage.getItem('accessToken');
+if (accessToken) return;
+
+try {
+  const result = await fetch('http://localhost:3000/api/users/login', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+  })
+    .then((res) => res.json())
+    .catch((err) => err);
+
+  if (result.success) {
+    window.localStorage.setItem('accessToken', accessToken);
+  }
+} catch (err) {
+  window.location.reload();
+}
+});
+
 
 function searchProject(){
   $('nav .search-input').on('keypress', async (event) => {
@@ -67,9 +100,11 @@ searchProject();
 
 function mainTitleSelect(){
   if(projectsList.length === 0) return;
+  
   const maxLikeProjecet =  projectsList.reduce((prev, next) => {
     return prev.like > next.like ? prev : next;
   });
+
   const {
     project_id,
     images_path,
@@ -77,13 +112,13 @@ function mainTitleSelect(){
     team_name,
     title,
   } = maxLikeProjecet;
-  console.log(images_path)
+
   const thumbnail = images_path
     ? `https://nbcamp-bukkit.s3.ap-northeast-2.amazonaws.com/${
         images_path.split(',')[0]
       }`
     : 'https://t1.daumcdn.net/cfile/tistory/171034435043238224';
-  console.log(thumbnail);
+
   $('main #main-title .content').empty();
   $('main #main-title').after().css("background-image",`(url("${thumbnail}"))`)
   $('main #main-title .content').append(`

@@ -4,43 +4,53 @@ import upload from '../multer.js';
 import Sequelize, { Op } from 'sequelize';
 import {needSignin} from '../../middlewares/need-signin.middleware.js'
 
-const { Users, Projects } = db;
+const { Users, Projects, Comments } = db;
 const projectRouter = express.Router();
 
 // 게시물 생성 creat
 
-
-projectRouter.post('/test',(req, res)=>{
-    console.log(req.headers)
-})
-projectRouter.post('/post', upload.array('additional'), async (req, res) => {
-    const { projectTitle, teamName, overView, techStack, githubAddress, coreFunction, demoSite, description } = req.body;
+projectRouter.post(
+  '/post',
+  needSignin,upload.array('additional'),
+  async (req, res) => {
+    const user = res.locals.user;
+    const {
+      projectTitle,
+      teamName,
+      overView,
+      techStack,
+      githubAddress,
+      coreFunction,
+      demoSite,
+      description,
+    } = req.body;
     let filePath = [];
 
     // console.log('프젝 에러',req.locals.error)
-    if(req.files !== undefined){
-        req.files.forEach((file)=> filePath.push(file.key))
+    if (req.files !== undefined) {
+      req.files.forEach((file) => filePath.push(file.key));
     }
 
     try {
-        const existingUser = await Users.findByPk(1);
-        const project = await Projects.create({
-            title: projectTitle,
-            team_name: teamName,
-            over_view: overView,
-            tech_stack: techStack,
-            github_address: githubAddress,
-            core_function: coreFunction,
-            demo_site: demoSite,
-            description, user_id: existingUser.user_id,
-            images_path: filePath.join(",")
-        });
-        res.status(200).json({ message: "게시물 등록 완료", project });
+      const project = await Projects.create({
+        title: projectTitle,
+        team_name: teamName,
+        over_view: overView,
+        tech_stack: techStack,
+        github_address: githubAddress,
+        core_function: coreFunction,
+        demo_site: demoSite,
+        description,
+        user_id: 1,
+        images_path: filePath.join(','),
+      });
+      res.status(200).json({ message: '게시물 등록 완료', project });
     } catch (error) {
-        console.error(error);
-        res.status(400).json({ message: "게시물 생성 중에 오류 발생" });
+      console.error(error);
+      res.status(400).json({ message: '게시물 생성 중에 오류 발생' });
     }
-})
+  },
+);
 
 // 게시물 조회
 projectRouter.get('/posts', async (req, res) => {
@@ -75,7 +85,6 @@ projectRouter.get('/posts', async (req, res) => {
           //   order: [['createdAt', 'desc']],
         });
 
-        console.log('',projects)
         res.status(200).json({ message: "게시물 조회",success:true, projects });
     } catch (error) {
         console.error(error);
@@ -134,12 +143,16 @@ projectRouter.get('/post', async (req, res) => {
 
 // 게시물 수정
 projectRouter.put('/post/:postId', needSignin, async (req, res) => {
+    const user = res.locals.user;
     const postId = req.params.postId;
     const { projectTitle,teamName, overView,techStack,githubAddress,coreFunction,demoSite, description } = req.body;
     try {
         if (postId) {
             const project = await Projects.findByPk(postId);
 
+            if(project.user_id !== user.user_id){
+              return res.status(400).json({ message: '게시물 수정 권한이 없습니다.' });
+            }
             
             await project.update({ projectTitle,teamName, overView,techStack,githubAddress,coreFunction,demoSite, description });
 
@@ -157,10 +170,17 @@ projectRouter.put('/post/:postId', needSignin, async (req, res) => {
 
 // 게시물 삭제
 projectRouter.delete('/post/:postId',  needSignin, async (req, res) => {
+    const user = res.locals.user;
     const postId = req.params.postId;
     try {
         if (postId) {
             const project = await Projects.findByPk(postId);
+
+            if (project.user_id !== user.user_id) {
+              return res
+                .status(400)
+                .json({ message: '게시물 수정 권한이 없습니다.' });
+            }
 
             await project.destroy({ where: { poject_id: postId } });
             res.status(200).json({ message: "게시물 삭제 성공" });
