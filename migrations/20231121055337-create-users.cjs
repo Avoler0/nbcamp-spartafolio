@@ -21,7 +21,7 @@ module.exports = {
         allowNull: false,
         type: Sequelize.STRING,
       },
-      refest_token: {
+      refresh_token: {
         allowNull: true,
         type: Sequelize.STRING,
       },

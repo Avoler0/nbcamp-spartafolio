@@ -8,19 +8,18 @@ const { Users, Projects } = db;
 const projectRouter = express.Router();
 
 // 게시물 생성 creat
-projectRouter.post('/post',  needSignin, upload.array('additional'), async (req, res) => {
-    const { projectTitle,teamName, overView,techStack,githubAddress,coreFunction,demoSite, description } = req.body;
 
+
+projectRouter.post('/test',(req, res)=>{
+    console.log(req.headers)
+})
+projectRouter.post('/post', upload.array('additional'), async (req, res) => {
+    const { projectTitle, teamName, overView, techStack, githubAddress, coreFunction, demoSite, description } = req.body;
     let filePath = [];
 
-<<<<<<< HEAD
     // console.log('프젝 에러',req.locals.error)
     if(req.files !== undefined){
         req.files.forEach((file)=> filePath.push(file.key))
-=======
-    if (req.files !== undefined) {
-        req.files.forEach((file) => filePath.push(file.key))
->>>>>>> 3fa3dfc59600fdae6da158f1fe0504032ddd0c82
     }
 
     try {

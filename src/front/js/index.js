@@ -1,5 +1,50 @@
 let projectsList = [];
-console.log('쿠키', document.cookie);
+$('.testBtn').on('click', async () => {
+  console.log('클릭');
+  try{
+    const result = await fetch('http://localhost:3000/api/users/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        // 'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: JSON.stringify({
+        email: 'jys13911@gmail.com',
+        password: 'wjddbstj12',
+      }),
+    })
+      .then((res) => res.json())
+      .catch((err) => err);
+
+  console.log('테스트 레스', result);
+  }catch(err){
+    console.log(err)
+  }
+});
+
+$('.testBtn2').on('click', async () => {
+  console.log('클릭');
+  try {
+    const result = await fetch('http://localhost:3000/api/test', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        // 'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: JSON.stringify({
+        email: 'jys13911@gmail.com',
+        password: 'wjddbstj12',
+      }),
+    })
+      .then((res) => res.json())
+      .catch((err) => err);
+
+    console.log('테스트 레스', result);
+  } catch (err) {
+    console.log(err);
+  }
+});
+
 function searchProject(){
   $('nav .search-input').on('keypress', async (event) => {
     if(event.key !== 'Enter') return;
