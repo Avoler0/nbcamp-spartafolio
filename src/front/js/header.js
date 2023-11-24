@@ -29,10 +29,7 @@ function drawHeaderRight(login){
       url: '/sign-up',
     },
   ];
-  
-  console.log('데이터', jQuery('header #header .h-right').data('login'));
 
-  setTimeout(()=>{
     $('header #header .h-right').attr('data-login', isLogin);
     $('header #header .h-right').empty();
     $('header #header .h-right').append(`
@@ -52,7 +49,6 @@ function drawHeaderRight(login){
       
     </div>
   `);
-  },3000)
   
 }
 

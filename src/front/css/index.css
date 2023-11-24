@@ -12,7 +12,6 @@ main{
 
 #main-title::after{
   content: "";
-  background-image: url("https://nbcamp-bukkit.s3.ap-northeast-2.amazonaws.com/additional/1.png");
   background-position: center;
   background-repeat: no-repeat;
   background-size: auto;

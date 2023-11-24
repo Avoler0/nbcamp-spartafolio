@@ -19,7 +19,7 @@ dotenv.config();
 const userRouter = express.Router();
 
 
-//회원가입
+
 
 userRouter.post('/user/refreshToken', async (req, res) => {
   const refreshToken = req.cookies.refreshToken;
@@ -58,6 +58,7 @@ userRouter.post('/user/refreshToken', async (req, res) => {
   console.log(req.cookies);
 });
 
+//회원가입
 userRouter.post('/users', async (req, res) => {
   try {
     const { email, name, password, passwordConfirm } = req.body;
