@@ -17,13 +17,13 @@ projectRouter.post('/post', upload.array('additional'), async (req, res) => {
     try {
         const existingUser = await Users.findByPk(1);
         const project = await Projects.create({
-            title:projectTitle,
-            team_name:teamName,
-            over_view:overView,
-            tech_stack:techStack,
-            github_address:githubAddress,
-            core_function:coreFunction,
-            demo_site:demoSite,
+            title: projectTitle,
+            team_name: teamName,
+            over_view: overView,
+            tech_stack: techStack,
+            github_address: githubAddress,
+            core_function: coreFunction,
+            demo_site: demoSite,
             description, user_id: existingUser.user_id,
             images_path: filePath.join(",")
         });
@@ -38,19 +38,19 @@ projectRouter.post('/post', upload.array('additional'), async (req, res) => {
 projectRouter.get('/posts', async (req, res) => {
     try {
         const projects = await Projects.findAll({
-          attributes: [
-            'project_id',
-            'title',
-            'team_name',
-            'github_address',
-            'images_path',
-            'tech_stack',
-            'over_view',
-            'like',
-            'view',
-            'createdAt'
-          ],
-          order: [['createdAt', 'desc']],
+            attributes: [
+                'project_id',
+                'title',
+                'team_name',
+                'github_address',
+                'images_path',
+                'tech_stack',
+                'over_view',
+                'like',
+                'view',
+                'createdAt'
+            ],
+            order: [['createdAt', 'desc']],
         });
         res.status(200).json({ message: "게시물 조회", projects });
     } catch (error) {
