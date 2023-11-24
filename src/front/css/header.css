@@ -37,36 +37,35 @@ header{
   display: flex;
 }
 
-.h-right .login-btn{
+.h-right .l-btn{
   margin-right: 1.2rem;
 }
 
-.h-right .login-btn button{
+.h-right .l-btn button{
   border: 1px solid #D64553;
   border-radius: .4rem;
   color: #D64553;
 }
 
-.h-right .login-btn button:hover{
+.h-right .l-btn button:hover{
   border: 1px solid #c75b66;
   background-color: #f1eaea;
   cursor: pointer;
 }
 
-.h-right .signup-btn button{
+.h-right .r-btn button{
   border: 1px solid #D64553;
   background-color: #D64553;
   border-radius: .4rem;
+  color: #fff;
 }
 
-.h-right .signup-btn button:hover{
+.h-right .r-btn button:hover{
   background-color: #a45e65;
   cursor: pointer;
 }
 
-.h-right .signup-btn button a{
-  color: #fff;
-}
+
 
 .h-right button{
   padding: 10px 45px;
