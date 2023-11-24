@@ -22,7 +22,7 @@ export default class Users extends Model {
           allowNull: false,
           type: DataTypes.STRING,
         },
-        refest_token: {
+        refresh_token: {
           type: DataTypes.STRING,
         },
         createdAt: {
