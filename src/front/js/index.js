@@ -1,39 +1,41 @@
 let projectsList = [];
 
-function searchProject(){
+function searchProject() {
   $('nav .search-input').on('keypress', async (event) => {
-    if(event.key !== 'Enter') return;
-    
+    if (event.key !== 'Enter') return;
+
     const searchValue = $('nav .search-input').val();
 
-    const result = await fetch(
+    await fetch(
       `http://localhost:3000/api/post?postName=${searchValue}`,
       {
         method: 'GET',
       },
-    ).then((res)=> res.json()).catch((err)=>err);
+    )
+    .then((res) => res.json())
+    .then((res) => {
+      if (!res.success) throw new Error(res.message);
+      drawProjectsCard(res.projects);
+    })
+    .catch((err) => {
+      alert(err.message);
+    });
 
-    drawProjectsCard(result.projects);
+    
   });
-  
 }
 
 searchProject();
 
-function mainTitleSelect(){
-  if(projectsList.length === 0) return;
-  
-  const maxLikeProjecet =  projectsList.reduce((prev, next) => {
+function mainTitleSelect() {
+  if (projectsList.length === 0) return;
+
+  const maxLikeProjecet = projectsList.reduce((prev, next) => {
     return prev.like > next.like ? prev : next;
   });
 
-  const {
-    project_id,
-    images_path,
-    over_view,
-    team_name,
-    title,
-  } = maxLikeProjecet;
+  const { project_id, images_path, over_view, team_name, title } =
+    maxLikeProjecet;
 
   const thumbnail = images_path
     ? `https://nbcamp-bukkit.s3.ap-northeast-2.amazonaws.com/${
@@ -42,7 +44,7 @@ function mainTitleSelect(){
     : 'https://t1.daumcdn.net/cfile/tistory/171034435043238224';
 
   $('main #main-title .content').empty();
-  $('main #main-title .back').css("background-image",`url("${thumbnail}")`)
+  $('main #main-title .back').css('background-image', `url("${thumbnail}")`);
   $('main #main-title .content').append(`
     <div class="title">
       ${title}
@@ -59,59 +61,58 @@ function mainTitleSelect(){
       </button>
     </div>
   `);
-  
 }
 
-function sortSelect(){
-  $('#main-content nav ul').find('li').on('click',(event)=>{
-    const readyActive = $('#main-content nav ul').children('.active');
-    readyActive.removeClass('active')
-    event.currentTarget.classList.add('active');
-    const sortOrder = $('#main-content nav ul')
-      .children('.active')[0]
-      .getAttribute('data-sort');
+function sortSelect() {
+  $('#main-content nav ul')
+    .find('li')
+    .on('click', (event) => {
+      const readyActive = $('#main-content nav ul').children('.active');
+      readyActive.removeClass('active');
+      event.currentTarget.classList.add('active');
+      const sortOrder = $('#main-content nav ul')
+        .children('.active')[0]
+        .getAttribute('data-sort');
 
-    if (sortOrder === 'latest') latestSort();
-    if (sortOrder === 'like') likeSort();
-    if (sortOrder === 'view') viewSort();
-  })
+      if (sortOrder === 'latest') latestSort();
+      if (sortOrder === 'like') likeSort();
+      if (sortOrder === 'view') viewSort();
+    });
 }
 
 const latestSort = () => {
   projectsList.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
   drawProjectsCard(projectsList);
-}
+};
 const likeSort = () => {
   projectsList.sort((a, b) => b.like - a.like);
   drawProjectsCard(projectsList);
 };
 const viewSort = () => {
-  projectsList.sort((a, b) => b.view - a.view );
+  projectsList.sort((a, b) => b.view - a.view);
   drawProjectsCard(projectsList);
 };
 
 async function getProjects() {
-  
   const result = await fetch('http://localhost:3000/api/posts', {
     method: 'GET',
   })
-  .then((res) => res.json())
-  .catch((err) => err);
+    .then((res) => res.json())
+    .catch((err) => err);
 
-  if(result.success){
+  if (result.success) {
     projectsList = result.projects;
     mainTitleSelect();
     drawProjectsCard(result.projects);
     sortSelect();
   }
-  
 }
 
-function drawProjectsCard(projects){
+function drawProjectsCard(projects) {
   const contentDiv = $('main #main-content .content');
-  
+
   contentDiv.empty();
-    console.log(projects);
+  console.log(projects);
 
   projects.forEach((project) => {
     const {
@@ -123,7 +124,7 @@ function drawProjectsCard(projects){
       over_view,
       tech_stack,
       title,
-      comment_count
+      comment_count,
     } = project;
     const thumbnail = images_path
       ? `https://nbcamp-bukkit.s3.ap-northeast-2.amazonaws.com/${

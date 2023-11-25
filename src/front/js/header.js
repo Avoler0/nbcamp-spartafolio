@@ -4,7 +4,6 @@ function loginHeader() {
   const accessToken = getAccessToken();
 
   drawHeaderRight(accessToken);
-  
 }
 // '내 정보 보기','프로젝트 등록'
 function drawHeaderRight(login){
@@ -12,7 +11,7 @@ function drawHeaderRight(login){
   const isOk = [
     {
       name: '내 정보 보기',
-      url: '/my-page',
+      url: '/profile',
     },
     {
       name: '프로젝트 등록',
