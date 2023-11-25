@@ -18,17 +18,17 @@ dotenv.config();
 
 const userRouter = express.Router();
 
-
-
-
 userRouter.post('/user/refreshToken', async (req, res) => {
   const refreshToken = req.cookies.refreshToken;
-  console.log('토큰 로그인!!',req.cookies)
-  if (!refreshToken) return res.status(204).json({ message: 'refreshToken이 없습니다.', success: false });
+  console.log('토큰 로그인!!', req.cookies);
+  if (!refreshToken)
+    return res
+      .status(204)
+      .json({ message: 'refreshToken이 없습니다.', success: false });
 
-  try{
+  try {
     jwt.verify(refreshToken, JWT_ACCESS_TOKEN_SECRET);
-  
+
     const user = await Users.findOne({
       where: { refresh_token: refreshToken },
     });
@@ -46,80 +46,91 @@ userRouter.post('/user/refreshToken', async (req, res) => {
       success: true,
       accessToken,
     });
-  }catch(err){
+  } catch (err) {
     res.status(500).json({
       message: '변형된 refresh Token 입니다.',
       success: false,
     });
   }
 
-  
-  
   console.log(req.cookies);
 });
 
-userRouter.put('/user', needSignin, async(req, res) => {
+//내 정보 변경
+
+userRouter.put('/user', needSignin, async (req, res) => {
   const user = res.locals.user;
-    console.log(req.body);
+  console.log(req.body);
   const { email, name, existPassword, newPassword } = req.body;
 
-  if(!email || !name || !existPassword || !newPassword){
-    throw new Error('data is invalid');
-  }
-  try{
-    const hashedExistPassword = bcrypt.hashSync(existPassword, 10);
-    const hashedNewPassword = bcrypt.hashSync(newPassword, 10);
+  try {
+    //let으로 필드를 담을 빈 객체 생성하기
+    let updateFields = {};
 
-    const userData = await Users.findByPk(user.user_id);
-
-    if(!userData){
-      throw new Error('not found user');
+    //만약에 이메일,이름 썼으면 빈 객체 안에 넣기
+    if (email) {
+      updateFields.email = email;
+    }
+    if (name) {
+      updateFields.name = name;
     }
 
-    if(userData.password !== hashedExistPassword){
-      throw new Error('not match password');
+    // 비밀번호
+    if (existPassword && newPassword) {
+      const hashedExistPassword = await bcrypt.hash(existPassword, 10);
+      const userData = await Users.findByPk(user.user_id);
+      //기존,새 비번 모두 입력하면 비밀번호 해싱함
+
+      if (!userData) {
+        throw new Error('not found user');
+      } // 사용자 정보 못 찾을 때
+
+      if (!(await bcrypt.compare(existPassword, userData.password))) {
+        throw new Error('not match password');
+      } // 기존 비번, DB에 저장된 비번 동일 한 지
+
+      const hashedNewPassword = await bcrypt.hash(newPassword, 10);
+      updateFields.password = hashedNewPassword;
+    } // 사용자가 제공한 새 비밀번호를 해싱
+
+    const result = await Users.update(updateFields, {
+      where: { user_id: user.user_id },
+    }); //
+
+    if (!result) {
+      throw new Error('update failed');
     }
-
-    const result = await Users.update(
-      { email, name, password: hashedNewPassword },
-      {
-        where: { user_id: user.user_id, password: hashedExistPassword },
-      },
-    );
-
-    console.log(result);
-    // const isPasswordMatched = bcrypt.compareSync(password, hashedPassword);
 
     const accessToken = jwt.sign(
-      { userId: result.user_id },
+      { userId: user.user_id },
       JWT_ACCESS_TOKEN_SECRET,
-      {
-        //액세스토큰
-        expiresIn: '30m',
-      },
+      { expiresIn: '30m' },
     );
     res.status(200).json({
       success: true,
       message: '프로필 수정이 완료 되었습니다.',
       data: accessToken,
     });
-  }catch(err){
+  } catch (err) {
     let statusCode;
     let errMessage;
-    // const errJSON = JSON.parse(err.Error);
 
-    switch (err) {
+    switch (err.message) {
       case 'not match password':
-        (statusCode = 400), (errMessage = '기존 비밀번호와 같지 않습니다.');
+        statusCode = 400;
+        errMessage = '기존 비밀번호와 같지 않습니다.';
         break;
       case 'not found user':
-        (statusCode = 400), (errMessage = '유저 데이터를 찾을 수 없습니다.');
+        statusCode = 400;
+        errMessage = '유저 데이터를 찾을 수 없습니다.';
         break;
-      case 'data is invalid':
-        (statusCode = 400), (errMessage = '데이터가 유효하지 않습니다.');
+      case 'update failed':
+        statusCode = 500;
+        errMessage = '업데이트에 실패했습니다.';
         break;
       default:
-        (statusCode = 500), (errMessage = '서버에러');
+        statusCode = 500;
+        errMessage = '서버에러';
     }
 
     return res.status(statusCode).json({
@@ -129,25 +140,96 @@ userRouter.put('/user', needSignin, async(req, res) => {
   }
 });
 
-userRouter.get('/user', needSignin, async (req, res) => {
-  const user = res.locals.user;
+// userRouter.put('/user', needSignin, async(req, res) => {
+//   const user = res.locals.user;
+//     console.log(req.body);
+//   const { email, name, existPassword, newPassword } = req.body;
 
+//   if(!email || !name || !existPassword || !newPassword){
+//     throw new Error('data is invalid');
+//   }
+//   try{
+//     const hashedExistPassword = bcrypt.hashSync(existPassword, 10);
+//     const hashedNewPassword = bcrypt.hashSync(newPassword, 10);
 
-  if (user){
-    return res.status(200).json({
-      success: true,
-      message: '사용자 데이터를 불러왔습니다.',
-      data: user,
-    });
-  }else{
-    return res.status(200).json({
-      success: false,
-      message: '사용자 데이터를 불러오는데 실패하였습니다.',
-    });
-  }
-});
+//     const userData = await Users.findByPk(user.user_id);
+
+//     if(!userData){
+//       throw new Error('not found user');
+//     }
+
+//     if(userData.password !== hashedExistPassword){
+//       throw new Error('not match password');
+//     }
+
+//     const result = await Users.update(
+//       { email, name, password: hashedNewPassword },
+//       {
+//         where: { user_id: user.user_id, password: hashedExistPassword },
+//       },
+//     );
+
+//     console.log(result);
+//     // const isPasswordMatched = bcrypt.compareSync(password, hashedPassword);
+
+//     const accessToken = jwt.sign(
+//       { userId: result.user_id },
+//       JWT_ACCESS_TOKEN_SECRET,
+//       {
+//         //액세스토큰
+//         expiresIn: '30m',
+//       },
+//     );
+//     res.status(200).json({
+//       success: true,
+//       message: '프로필 수정이 완료 되었습니다.',
+//       data: accessToken,
+//     });
+//   }catch(err){
+//     let statusCode;
+//     let errMessage;
+//     // const errJSON = JSON.parse(err.Error);
+
+//     switch (err) {
+//       case 'not match password':
+//         (statusCode = 400), (errMessage = '기존 비밀번호와 같지 않습니다.');
+//         break;
+//       case 'not found user':
+//         (statusCode = 400), (errMessage = '유저 데이터를 찾을 수 없습니다.');
+//         break;
+//       case 'data is invalid':
+//         (statusCode = 400), (errMessage = '데이터가 유효하지 않습니다.');
+//         break;
+//       default:
+//         (statusCode = 500), (errMessage = '서버에러');
+//     }
+
+//     return res.status(statusCode).json({
+//       success: false,
+//       message: errMessage,
+//     });
+//   }
+// });
+
+// userRouter.get('/user', needSignin, async (req, res) => {
+//   const user = res.locals.user;
+
+//   if (user){
+//     return res.status(200).json({
+//       success: true,
+//       message: '사용자 데이터를 불러왔습니다.',
+//       data: user,
+//     });
+//   }else{
+//     return res.status(200).json({
+//       success: false,
+//       message: '사용자 데이터를 불러오는데 실패하였습니다.',
+//     });
+//   }
+// });
 
 //회원가입
+
 userRouter.post('/users', async (req, res) => {
   try {
     const { email, name, password, passwordConfirm } = req.body;
@@ -219,7 +301,7 @@ userRouter.post('/users', async (req, res) => {
 userRouter.post('/users/login', async (req, res) => {
   try {
     const { email, password } = req.body;
-    console.log(req.body)
+    console.log(req.body);
     if (!email) {
       return res.status(400).send({
         success: false,
@@ -245,8 +327,6 @@ userRouter.post('/users/login', async (req, res) => {
 
     const user = await (await Users.findOne({ where: { email } })).toJSON();
 
-
-
     const hashedPassword = user?.password; //데이터베이스 안에 있는 패스워드
 
     const isPasswordMatched = bcrypt.compareSync(password, hashedPassword);
@@ -259,21 +339,30 @@ userRouter.post('/users/login', async (req, res) => {
         message: '일치하는 회원 정보가 없습니다.',
       });
     }
-    const refreshToken = jwt.sign({},JWT_ACCESS_TOKEN_SECRET,{ expiresIn: '3d' });
-
-    await Users.update({ refresh_token:refreshToken },{
-      where: { email }
+    const refreshToken = jwt.sign({}, JWT_ACCESS_TOKEN_SECRET, {
+      expiresIn: '3d',
     });
 
-    console.log('리프레쉬',refreshToken)
-    const accessToken = jwt.sign({ userId: user.user_id }, JWT_ACCESS_TOKEN_SECRET, {
-      //액세스토큰
-      expiresIn: "30m",
-    });
+    await Users.update(
+      { refresh_token: refreshToken },
+      {
+        where: { email },
+      },
+    );
 
-    res.cookie('refreshToken', refreshToken,{
-      httpOnly:true,
-      secure:true
+    console.log('리프레쉬', refreshToken);
+    const accessToken = jwt.sign(
+      { userId: user.user_id },
+      JWT_ACCESS_TOKEN_SECRET,
+      {
+        //액세스토큰
+        expiresIn: '30m',
+      },
+    );
+
+    res.cookie('refreshToken', refreshToken, {
+      httpOnly: true,
+      secure: true,
     });
 
     return res.status(200).json({
