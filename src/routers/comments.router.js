@@ -53,6 +53,10 @@ commentsRouter.get('/:projectId/comments', async (req, res) => {
       where: {
         project_id: projectId, // 특정 project에 있는 댓글들을 다 가져온다 !
       },
+      include: [{
+        model: Users,
+        attributes: ["name"]
+      }]
     });
 
     res.status(200).json({ success: false, message: "댓글 조회에 성공했습니다.", comments });
@@ -90,7 +94,9 @@ commentsRouter.put('/comment/:commentId', needSignin, async (req, res) => {
       }
     );
 
-    res.status(200).json({ success: true, message: "댓글 수정에 성공했습니다." })
+    const updatedComment = await Comments.findOne({ where: { comment_id: commentId } });
+
+    res.status(200).json({ success: true, message: "댓글 수정에 성공했습니다.", updatedComment })
   } catch (error) {
     console.error(error);
     res.status(500).json({ success: false, message: "알 수 없는 오류가 발생했습니다." })

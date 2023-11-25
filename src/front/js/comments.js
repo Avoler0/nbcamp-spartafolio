@@ -1,5 +1,39 @@
 import { getAccessToken } from '/script/localStorage.js';
 
+// 로그인 한 사람의 정보를 가져오는 함수 
+export const getUserId = async function () {
+  try {
+    const result = await fetch('http://localhost:3000/api/user', {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${getAccessToken()}`,
+      },
+    })
+      .then((res) => res.json());
+    const userId = result.data.user_id;
+    return userId;
+
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+// 날짜 포멧팅 하는 함수
+// createdAt 포멧팅
+function formatDateTime(dateString) {
+  const date = new Date(dateString);
+
+  const year = date.getFullYear();
+  const month = (date.getMonth() + 1).toString().padStart(2, '0');
+  const day = date.getDate().toString().padStart(2, '0');
+  const hours = date.getHours().toString().padStart(2, '0');
+  const minutes = date.getMinutes().toString().padStart(2, '0');
+  const seconds = date.getSeconds().toString().padStart(2, '0');
+
+  return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+};
+
+
 // 특정 프로젝트에 있는 댓글들을 가져오는 함수
 export const getComments = async function (detailProjectId) {
   try {
@@ -9,41 +43,36 @@ export const getComments = async function (detailProjectId) {
       .then((res) => res.json())
       .catch((err) => err);
 
+    const currentUserId = await getUserId();
+    console.log('currentUserId: ', currentUserId);
+
     result.comments.forEach((comment) => {
+      console.log('comment: ', comment);
       const {
         comment_id,
         user_id,
         contents,
         createdAt,
-        updatedAt
+        updatedAt,
+        User: { name }
       } = comment;
 
-      // createdAt 포멧팅
-      function formatDateTime(dateString) {
-        const date = new Date(dateString);
-
-        const year = date.getFullYear();
-        const month = (date.getMonth() + 1).toString().padStart(2, '0');
-        const day = date.getDate().toString().padStart(2, '0');
-        const hours = date.getHours().toString().padStart(2, '0');
-        const minutes = date.getMinutes().toString().padStart(2, '0');
-        const seconds = date.getSeconds().toString().padStart(2, '0');
-
-        return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
-      };
       const formattedCreatedAt = formatDateTime(createdAt);
+      const formattedUpdatedAt = formatDateTime(updatedAt)
+      console.log('formattedUpdatedAt: ', formattedUpdatedAt);
 
       const commentElement = $(`
-        <li class="comment" data-comment-id="${comment_id}">
-          <h4 class="comment-user">${user_id}</h4>
+        <li class="comment" data-comment-id="${comment_id}" data-updated-at="${formattedUpdatedAt}">
+          <h4 class="comment-user">${name}</h4>
           <div class="comment-box">
             <div class="comment-contents-box">
               <div class="comment-text">${contents}</div>
-              <div class="comment-create-at">${formattedCreatedAt}</div>
+              ${formattedCreatedAt === formattedUpdatedAt ? `<div class="comment-create-at">${formattedCreatedAt}</div>`
+          : `<div class="comment-create-at">${formattedUpdatedAt} 수정됨</div>`}
             </div>
-            <div class="comment-btns-box">
-              <button class="edit-comment-btn">수정</button>
-              <button class="delete-comment-btn">삭제</button>
+            ${user_id === currentUserId ? `<div class="comment-btns-box">
+             <button class="edit-comment-btn">수정</button>
+             <button class="delete-comment-btn">삭제</button>` : ""}
             </div>
           </div>        
         </li>
@@ -101,11 +130,9 @@ export const createComment = async function (detailProjectId) {
 };
 
 
+// 댓글 수정하는 함수
 export const editComment = async function (commentElement, comment_id) {
   const commentText = commentElement.find('.comment-text').text();
-
-  // 수정된 스타일을 적용할 클래스 추가
-  commentElement.addClass('editing');
 
   // 기존의 수정, 삭제 버튼 숨기기
   commentElement.find('.edit-comment-btn, .delete-comment-btn').hide();
@@ -115,63 +142,51 @@ export const editComment = async function (commentElement, comment_id) {
   const cancelBtn = $('<button class="cancel-edit-btn">취소</button>');
 
   commentElement.find('.comment-text').replaceWith(editInput);
-  commentElement.append(confirmBtn);
-  commentElement.append(cancelBtn);
+
+  const editBtnsDiv = $('<div class="edit-btns"></div>');
+  editBtnsDiv.append(confirmBtn);
+  editBtnsDiv.append(cancelBtn);
+
+  commentElement.find('.comment-box').append(editBtnsDiv);
+
+  editInput.on('keydown', async function (event) {
+    if (event.key === 'Enter') {
+      // event.preventDefault();
+      confirmBtn.trigger('click');
+    }
+  });
 
   confirmBtn.on('click', async function () {
-    if (!getAccessToken()) {
-      alert("로그인 후 이용 가능합니다.");
-      window.location.href = "/";
-    }
-
     const editedText = editInput.val();
 
-    try {
-      await fetch(`http://localhost:3000/api/comment/${comment_id}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${getAccessToken()}`,
-        },
-        body: JSON.stringify({ contents: editedText }),
-      });
+    const result = await fetch(`http://localhost:3000/api/comment/${comment_id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${getAccessToken()}`,
+      },
+      body: JSON.stringify({ contents: editedText }),
+    });
 
-      // 수정 입력란 및 확인 버튼을 다시 댓글 내용으로 교체
-      commentElement.find('.edit-comment-input').replaceWith(`<div class="comment-text">${editedText}</div>`);
-      confirmBtn.remove();
-      cancelBtn.remove();
+    const { updatedComment } = await result.json();
 
-      // 수정, 삭제 버튼 다시 보이게 하기
-      commentElement.find('.edit-comment-btn, .delete-comment-btn').show();
+    // 수정 입력란 및 확인 버튼을 다시 댓글 내용으로 교체
+    commentElement.find('.edit-comment-input').replaceWith(`<div class="comment-text">${editedText}</div>`);
+    commentElement.find('.comment-create-at').replaceWith(`<div class="comment-updated-at">${formatDateTime(updatedComment.updatedAt)} 수정됨</div>`);
+    editBtnsDiv.remove();
 
-      // 수정 취소 시에 입력된 내용이 아니라 원래의 댓글 내용으로 복원
-      cancelBtn.on('click', function () {
-        commentElement.find('.edit-comment-input').replaceWith(`<div class="comment-text">${commentText}</div>`);
-        confirmBtn.remove();
-        cancelBtn.remove();
-        commentElement.find('.edit-comment-btn, .delete-comment-btn').show();
-
-        // 수정된 스타일 클래스 제거
-        commentElement.removeClass('editing');
-      });
-
-    } catch (error) {
-      console.error(error);
-    }
+    // 수정, 삭제 버튼 다시 보이게 하기
+    commentElement.find('.edit-comment-btn, .delete-comment-btn').show();
   });
 
   // 수정 취소 시에 입력된 내용이 아니라 원래의 댓글 내용으로 복원
   cancelBtn.on('click', function () {
     commentElement.find('.edit-comment-input').replaceWith(`<div class="comment-text">${commentText}</div>`);
-    confirmBtn.remove();
-    cancelBtn.remove();
-    commentElement.find('.edit-comment-btn, .delete-comment-btn').show();
+    editBtnsDiv.remove();
 
-    // 수정된 스타일 클래스 제거
-    commentElement.removeClass('editing');
+    commentElement.find('.edit-comment-btn, .delete-comment-btn').show();
   });
 };
-
 
 // 댓글 삭제하는 함수
 export const deleteComment = async function (comment_id, commentElement) {
