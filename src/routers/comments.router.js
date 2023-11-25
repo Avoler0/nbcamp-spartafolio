@@ -1,6 +1,7 @@
 import express from 'express';
 
 import { needSignin } from '../../middlewares/need-signin.middleware.js'
+import { Op } from 'sequelize';
 
 import db from '../../models/index.js';
 const { Comments, Users, Projects } = db;
@@ -15,18 +16,18 @@ commentsRouter.post("/comment/:detailProjectId", needSignin, async (req, res) =>
     const { user_id } = res.locals.user;
 
     if (!contents) {
-      return res.status(400).json({ message: "댓글을 입력해주세요" });
+      return res.status(400).json({ success: false, message: "댓글을 입력해주세요" });
     };
 
     const existingProject = await Projects.findByPk(detailProjectId);
     const existingUser = await Users.findByPk(user_id);
 
     if (!existingProject) {
-      return res.status(404).json({ message: "해당하는 유저를 찾을 수 없습니다." })
+      return res.status(404).json({ success: "false", message: "해당하는 프로젝트를 찾을 수 없습니다." })
     }
 
     if (!existingUser) {
-      return res.status(404).json({ message: "해당하는 유저를 찾을 수 없습니다." })
+      return res.status(404).json({ success: false, message: "해당하는 유저를 찾을 수 없습니다." })
     };
 
     await Comments.create({
@@ -35,10 +36,10 @@ commentsRouter.post("/comment/:detailProjectId", needSignin, async (req, res) =>
       user_id: existingUser.user_id
     });
 
-    res.status(201).json({ message: "댓글이 입력되었습니다." });
+    res.status(201).json({ success: true, message: "댓글이 입력되었습니다." });
   } catch (error) {
     console.error(error)
-    res.status(500).send("알 수 없는 오류가 발생하였습니다.");
+    res.status(500).json({ success: false, message: "알 수 없는 오류가 발생하였습니다." });
   }
 });
 
@@ -54,10 +55,10 @@ commentsRouter.get('/:projectId/comments', async (req, res) => {
       },
     });
 
-    res.status(200).json({ message: "댓글 조회에 성공했습니다.", comments });
+    res.status(200).json({ success: false, message: "댓글 조회에 성공했습니다.", comments });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: '서버 오류' });
+    res.status(500).json({ success: false, error: '알 수 없는 오류가 발생하였습니다.' });
   }
 });
 
@@ -66,25 +67,33 @@ commentsRouter.put('/comment/:commentId', needSignin, async (req, res) => {
   try {
     const { commentId } = req.params
     const { contents } = req.body;
+    const { user_id } = res.locals.user;
 
     const existingComment = await Comments.findOne({ where: { comment_id: commentId } });
 
     // 해당하는 댓글이 없을 경우
     if (!existingComment) {
-      return res.status(404).json({ message: "해당하는 댓글이 없습니다." });
+      return res.status(404).json({ success: false, message: "해당하는 댓글이 없습니다." });
     };
 
-    // 본인이 작성한 댓글이 아닐 경우 (추가 예정)
+    // 본인이 작성한 댓글이 아닐 경우
+    if (existingComment.user_id !== user_id) {
+      return res.status(403).json({ success: false, message: "댓글 수정 권한이 없습니다." });
+    }
 
     await Comments.update(
       { contents },
-      { where: { comment_id: commentId } }
+      {
+        where: {
+          [Op.and]: [{ comment_id: commentId }, { user_id }]
+        }
+      }
     );
 
-    res.status(200).json({ message: "댓글 수정에 성공했습니다." })
+    res.status(200).json({ success: true, message: "댓글 수정에 성공했습니다." })
   } catch (error) {
     console.error(error);
-    res.status(500).send("알 수 없는 오류가 발생했습니다.")
+    res.status(500).json({ success: false, message: "알 수 없는 오류가 발생했습니다." })
   };
 });
 
@@ -92,24 +101,32 @@ commentsRouter.put('/comment/:commentId', needSignin, async (req, res) => {
 commentsRouter.delete('/comment/:commentId', needSignin, async (req, res) => {
   try {
     const { commentId } = req.params
+    const { user_id } = res.locals.user;
 
     const existingComment = await Comments.findOne({ where: { comment_id: commentId } });
 
     // 해당하는 댓글이 없을 경우
     if (!existingComment) {
-      return res.status(404).json({ message: "해당하는 댓글이 없습니다." });
+      return res.status(404).json({ success: false, message: "해당하는 댓글이 없습니다." });
     };
 
-    // 본인이 작성한 댓글이 아닐 경우 (추가 예정)
+    // 본인이 작성한 댓글이 아닐 경우 
+
+    if (existingComment.user_id !== user_id) {
+      return res.status(403).json({ success: false, message: "댓글 삭제 권한이 없습니다." });
+    }
 
     await Comments.destroy(
-      { where: { comment_id: commentId } }
+      {
+        where: {
+          [Op.and]: [{ comment_id: commentId }, { user_id }]
+        }
+      }
     );
-
-    res.status(200).json({ message: "댓글 삭제에 성공했습니다." })
+    res.status(200).json({ success: true, message: "댓글 삭제에 성공했습니다." })
   } catch (error) {
     console.error(error);
-    res.status(500).send("알 수 없는 오류가 발생했습니다.")
+    res.status(500).json({ success: false, message: "알 수 없는 오류가 발생했습니다." })
   };
 });
 
