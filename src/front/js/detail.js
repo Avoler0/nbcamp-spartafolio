@@ -1,6 +1,7 @@
 import { createComment } from './comments.js';
 import { getComments } from './comments.js';
 
+
 // 현재 URL에서 경로 부분 가져오는 함수 
 const getDetailProjectId = function () {
   let detailProjectId

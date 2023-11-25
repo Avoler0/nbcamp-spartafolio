@@ -1,8 +1,8 @@
 import { getAccessToken } from '/script/localStorage.js';
 
-if(!getAccessToken()){
-  alert('로그인 이후 이용 가능한 페이지입니다.')
-  window.location.href = "/"
+if (!getAccessToken()) {
+  alert('로그인 이후 이용 가능한 페이지입니다.');
+  window.location.href = '/';
 }
 
 const toggleTechTab = () => {
@@ -127,17 +127,22 @@ const initProjectRegister = () => {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${getAccessToken()}`,
+        'Content-type': 'application/x-www-form-urlencoded',
       },
       body: formData,
     })
+      .then((res) => res.json())
       .then((res) => {
-        console.log(res);
+        console.log('레스', res);
         // alert('프로젝트 등록이 완료 되었습니다.');
         // window.location.href = '/';
+        if (!res.success) throw new Error(res.message);
       })
       .catch((err) => {
-        console.log(err);
-        alert('프로젝트 등록에 실패하였습니다.');
+        if (err.message.indexOf('SyntaxError'))
+          alert('이미지 업로드에 실패하였습니다.');
+        else 
+          alert(err.message);
       });
   });
 

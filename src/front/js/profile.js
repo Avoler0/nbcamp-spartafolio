@@ -78,10 +78,6 @@ function drawModifyProfile(user){
       `);
 
       clickCancelBtn(user);
-
-      // if ($('.cancel-btn').length === 1) {
-      //   return $('.modify-btn').off('click');
-      // }
       
     });
 

@@ -4,17 +4,22 @@ import db from '../models/index.js';
 const { Users } = db;
 
 export const needSignin = async (req, res, next) => {
-
   const refreshToken = req.cookies.refreshToken;
-  console.log(refreshToken);
 
-  /** 
-   * refresh토큰 확인
-   * access토큰 확인
-   * 둘다 있는지 확인
-   * access만 없는것 확인
-   * authorization이 없으면 return O
-  */
+  function userValid(user) {
+    if (user) {
+      const userData = user.toJSON();
+      delete userData.password;
+
+      res.locals.user = userData;
+    } else {
+      return res.status(400).json({
+        success: false,
+        message: '유저 데이터를 찾을 수 없습니다.',
+      });
+    }
+  }
+
   try {
     if (!req.headers.authorization) {
       return res.status(400).json({
@@ -22,7 +27,6 @@ export const needSignin = async (req, res, next) => {
         message: 'Authorization Header가 없습니다.',
       });
     }
-    // console.log('오쏘',req.headers.authorization);
 
     const [tokenType, accessToken] = req.headers.authorization?.split(' ');
 
@@ -48,59 +52,32 @@ export const needSignin = async (req, res, next) => {
       });
     }
 
-    if (refreshToken) {
-      jwt.verify(
-        refreshToken,
-        JWT_ACCESS_TOKEN_SECRET,
-      );
+    if(!accessToken && refreshToken){
+      jwt.verify(refreshToken, JWT_ACCESS_TOKEN_SECRET);
 
-      if (accessToken) {
-        const user = await Users.findOne({
-          where: { refresh_token: refreshToken },
-        });
+      const user = await Users.findOne({
+        where: { refresh_token: refreshToken },
+      });
 
-        if (!user) {
-          console.log('낫유저 400 에러');
-          return res.status(400).json({
-            success: false,
-            message: 'refresh Token이 존재하지 않습니다.',
-          });
-        }
+      userValid(user);
 
-        const userData = user.toJSON();
-        delete userData.password;
-        res.locals.isAccessToken = true;
-        res.locals.user = userData;
-
-        return next();
-      }
+      return next();
     }
 
-    if (accessToken) {
+    if(accessToken && refreshToken){
       const decodedPayload = jwt.verify(accessToken, JWT_ACCESS_TOKEN_SECRET);
       const { userId } = decodedPayload;
 
       const user = await Users.findByPk(userId);
 
-      // 일치 히는 userId가 없는 경우
-      if (!user) {
-        console.log('400 에러');
-        return res.status(400).json({
-          success: false,
-          message: '존재하지 않는 사용자입니다',
-        });
-      }
-
-      const userData = user.toJSON();
-      delete userData.password;
-      res.locals.isAccessToken = true;
-      res.locals.user = userData;
+      userValid(user);
 
       return next();
     }
+
+    
   } catch (error) {
     // 검증에 실패한 경우
-
     console.error(error);
 
     let statusCode = 500;
@@ -121,6 +98,7 @@ export const needSignin = async (req, res, next) => {
         errorMessage = '예상치 못한 에러가 발생하였습니다. 관리자에게 문의하세요';
         break;
     }
+    
     return res.status(statusCode).json({
       success: false,
       message: errorMessage,
