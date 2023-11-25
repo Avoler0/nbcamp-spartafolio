@@ -1,7 +1,6 @@
 import express from 'express';
 import emailRouter from './src/routers/emailtest.router.js';
 import fs from 'fs';
-import profileRouter from './src/routers/profiletest.router.js';
 import userRouter from './src/routers/users.router.js';
 import path from 'path';
 import { fileURLToPath } from 'url'; // 👈 추가
@@ -27,7 +26,6 @@ app.use('/script', express.static(path.join(__dirname + './src/front/js')));
 app.use('/api', [
   projectRouter,
   emailRouter,
-  profileRouter,
   commentsRouter,
   userRouter,
 ]);

@@ -4,17 +4,20 @@ import upload from '../multer.js';
 import Sequelize, { Op } from 'sequelize';
 import {needSignin} from '../../middlewares/need-signin.middleware.js'
 
-const { Users, Projects, Comments } = db;
+const { Projects, Comments } = db;
 const projectRouter = express.Router();
 
 // 게시물 생성 creat
-
 projectRouter.post(
   '/post',
   needSignin,
   upload.array('additional'),
   async (req, res) => {
+res.status(400).json({ message: '게시물 생성 중에 오류 발생', success: false });
+
+    const file = req.files;
     const user = res.locals.user;
+    console.log('게시물 생성',file);
     const {
       projectTitle,
       teamName,
@@ -25,6 +28,7 @@ projectRouter.post(
       demoSite,
       description,
     } = req.body;
+
     let filePath = [];
 
     if (req.files !== undefined) {
@@ -45,11 +49,14 @@ projectRouter.post(
         images_path: filePath.join(','),
       });
 
-      // console.log(project)
-      res.status(200).json({ message: '게시물 등록 완료', project });
+    res
+      .status(200)
+      .json({ message: '게시물 등록 완료', success: true, project });
     } catch (error) {
-      console.log(error.message,'에러 메세지');
-      res.status(400).json({ message: '게시물 생성 중에 오류 발생' });
+    console.log(error.message, '에러 메세지');
+    res
+      .status(400)
+      .json({ message: '게시물 생성 중에 오류 발생', success: false });
     }
   },
 );

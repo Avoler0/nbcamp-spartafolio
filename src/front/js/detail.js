@@ -1,5 +1,4 @@
 
-
 // 특정 프로젝트를 가져오는 함수
 const getDetailProject = async function (detailProjectId) {
   try {
