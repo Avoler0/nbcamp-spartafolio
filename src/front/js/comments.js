@@ -36,10 +36,16 @@ export const getComments = async function (detailProjectId) {
       const commentElement = $(`
         <li class="comment" data-comment-id="${comment_id}">
           <h4 class="comment-user">${user_id}</h4>
-          <div class="comment-text">${contents}</div>
-          <div class="comment-create-at">${formattedCreatedAt}</div>
-          <button class="edit-comment-btn">수정</button>
-          <button class="delete-comment-btn">삭제</button>        
+          <div class="comment-box">
+            <div class="comment-contents-box">
+              <div class="comment-text">${contents}</div>
+              <div class="comment-create-at">${formattedCreatedAt}</div>
+            </div>
+            <div class="comment-btns-box">
+              <button class="edit-comment-btn">수정</button>
+              <button class="delete-comment-btn">삭제</button>
+            </div>
+          </div>        
         </li>
       `);
 
@@ -95,9 +101,11 @@ export const createComment = async function (detailProjectId) {
 };
 
 
-// 댓글 수정하는 함수
 export const editComment = async function (commentElement, comment_id) {
   const commentText = commentElement.find('.comment-text').text();
+
+  // 수정된 스타일을 적용할 클래스 추가
+  commentElement.addClass('editing');
 
   // 기존의 수정, 삭제 버튼 숨기기
   commentElement.find('.edit-comment-btn, .delete-comment-btn').hide();
@@ -142,6 +150,9 @@ export const editComment = async function (commentElement, comment_id) {
         confirmBtn.remove();
         cancelBtn.remove();
         commentElement.find('.edit-comment-btn, .delete-comment-btn').show();
+
+        // 수정된 스타일 클래스 제거
+        commentElement.removeClass('editing');
       });
 
     } catch (error) {
@@ -155,6 +166,9 @@ export const editComment = async function (commentElement, comment_id) {
     confirmBtn.remove();
     cancelBtn.remove();
     commentElement.find('.edit-comment-btn, .delete-comment-btn').show();
+
+    // 수정된 스타일 클래스 제거
+    commentElement.removeClass('editing');
   });
 };
 
