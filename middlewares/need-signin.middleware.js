@@ -21,7 +21,7 @@ export const needSignin = async (req, res, next) => {
   }
 
   try {
-    if(!req.headers.authorization){
+    if (!req.headers.authorization) {
       return res.status(400).json({
         success: false,
         message: 'Authorization Header가 없습니다.',
@@ -31,7 +31,7 @@ export const needSignin = async (req, res, next) => {
     const [tokenType, accessToken] = req.headers.authorization?.split(' ');
 
     if (tokenType !== 'Bearer') {
-      console.log('배어러 400 에러');
+      // console.log('배어러 400 에러');
       return res.status(400).json({
         success: false,
         message: '지원하지 않는 인증 방식',

@@ -10,7 +10,7 @@ import jwt from 'jsonwebtoken';
 const allowedExtensions = ['png', 'jpg', 'jpeg', 'bmp', 'gif'];
 
 const s3 = new aws.S3({
-  accessKeyId:process.env.AWS_S3_ACCESS_KEY,
+  accessKeyId: process.env.AWS_S3_ACCESS_KEY,
   secretAccessKey: process.env.AWS_S3_SECRET_KEY,
   region: 'ap-northeast-2',
 });
@@ -22,6 +22,7 @@ const upload = multer({
     acl: 'public-read',
     contentType: multerS3.AUTO_CONTENT_TYPE,
     key: (req, file, cb) => {
+
       const { authorization } = req.headers;
       console.log('멀터 실행')
       if (!allowedExtensions.includes(file.mimetype.split('/')[1])) {
