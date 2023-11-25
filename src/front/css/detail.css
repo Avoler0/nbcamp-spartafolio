@@ -13,7 +13,7 @@
   z-index: 100;
 }
 
-.detail-board .back{
+.detail-board .back {
   position: absolute;
   background-position: center;
   background-repeat: no-repeat;
@@ -128,15 +128,13 @@
   padding: 0;
 }
 
-
-
 .attachment {
   border-radius: 5px;
   margin-right: 1.5rem;
   color: #c5c5c5;
 }
 
-.attachment img{
+.attachment img {
   width: 150px;
 }
 
@@ -190,6 +188,63 @@
 
 .comment-btn:hover {
   background-color: #f9e18b;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.comment-box {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.comment-btns-box {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.comment-btns-box button {
+  padding: 10px 45px;
+  height: 40px;
+  margin-left: 25px;
+  font-size: 15px;
+  border-radius: 0.4rem;
+  border: 1px solid #eac645;
+}
+
+.comment-btns-box button:hover {
+  background-color: #f9e18b;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.comment.editing {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* 인풋을 왼쪽 끝, 버튼들을 오른쪽 끝으로 정렬 */
+}
+
+.edit-comment-input {
+  flex-grow: 1; /* 인풋이 가능한 최대한의 너비를 가지도록 함 */
+}
+
+.confirm-edit-btn,
+.cancel-edit-btn {
+  padding: 10px 45px;
+  font-size: 15px;
+  border: none;
+  border-radius: 0.4rem;
+  margin-left: 25px;
+  background-color: #d64553;
+  color: #fff;
+
+  align-self: flex-end; /* 각 버튼을 오른쪽 끝으로 정렬 */
+}
+
+.confirm-edit-btn:hover,
+.cancel-edit-btn:hover {
+  background-color: #9d343f;
   cursor: pointer;
   transition: 0.2s;
 }
