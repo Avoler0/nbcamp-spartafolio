@@ -1,5 +1,6 @@
 import { createComment } from './comments.js';
 import { getComments } from './comments.js';
+import { getUserId } from './comments.js';
 
 
 // 현재 URL에서 경로 부분 가져오는 함수 
@@ -106,6 +107,8 @@ const getDetailProject = async function (detailProjectId) {
       </div>
       <!-- 본문 끝 -->
     `);
+
+    getUserId()
 
   } catch (error) {
     console.error("Error fetching data:", error);

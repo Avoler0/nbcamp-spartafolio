@@ -219,14 +219,14 @@
   transition: 0.2s;
 }
 
-.comment.editing {
-  display: flex;
-  align-items: center;
-  justify-content: space-between; /* 인풋을 왼쪽 끝, 버튼들을 오른쪽 끝으로 정렬 */
-}
-
 .edit-comment-input {
-  flex-grow: 1; /* 인풋이 가능한 최대한의 너비를 가지도록 함 */
+  width: 1200px;
+  height: 40px;
+  border: none;
+  border-bottom: 1px solid #d64553;
+  outline: none;
+  font-size: 15px;
+  margin-bottom: 10px;
 }
 
 .confirm-edit-btn,
