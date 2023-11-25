@@ -16,18 +16,18 @@ export const needSignin = async (req, res, next) => {
    * authorization이 없으면 return O
   */
   try {
-    if(!req.headers.authorization){
+    if (!req.headers.authorization) {
       return res.status(400).json({
         success: false,
         message: 'Authorization Header가 없습니다.',
       });
     }
-    console.log('오쏘',req.headers.authorization);
+    // console.log('오쏘',req.headers.authorization);
 
     const [tokenType, accessToken] = req.headers.authorization?.split(' ');
 
     if (tokenType !== 'Bearer') {
-      console.log('배어러 400 에러');
+      // console.log('배어러 400 에러');
       return res.status(400).json({
         success: false,
         message: '지원하지 않는 인증 방식',
@@ -76,7 +76,7 @@ export const needSignin = async (req, res, next) => {
       }
     }
 
-    if(accessToken){
+    if (accessToken) {
       const decodedPayload = jwt.verify(accessToken, JWT_ACCESS_TOKEN_SECRET);
       const { userId } = decodedPayload;
 

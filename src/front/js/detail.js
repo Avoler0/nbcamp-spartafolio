@@ -1,4 +1,4 @@
-
+import { getAccessToken } from '/script/localStorage.js';
 
 // 특정 프로젝트를 가져오는 함수
 const getDetailProject = async function (detailProjectId) {
@@ -42,10 +42,10 @@ const getDetailProject = async function (detailProjectId) {
           <div class="detail-board-overview">${over_view}</div>
           <div class="detail-tech-icons">
             ${techStack
-              .map((tech) => {
-                return `<div class="tech-icon">${tech.replaceAll('"','')}</div>`;
-              })
-              .join('')}
+        .map((tech) => {
+          return `<div class="tech-icon">${tech.replaceAll('"', '')}</div>`;
+        })
+        .join('')}
           </div>
         </div>
         <div class="detail-board-right">
@@ -65,20 +65,20 @@ const getDetailProject = async function (detailProjectId) {
         </div>
         <div class="detail-body-contents">
           <h3 class="detail-body-contents-title">상세 내용</h3>
-          <div class="detail-body-contents-text">${description.replaceAll("\n","<br/>")}</div>
+          <div class="detail-body-contents-text">${description.replaceAll("\n", "<br/>")}</div>
         </div>
         <ul class="attachments">
           ${imagePath
-            .map((path) => {
-              return `
+        .map((path) => {
+          return `
                 <li class="attachment">
                   <a href="https://nbcamp-bukkit.s3.ap-northeast-2.amazonaws.com/${path}" target="_blank">
                     <img src="https://nbcamp-bukkit.s3.ap-northeast-2.amazonaws.com/${path}"></img> 
                   </a>
                 </li>
               `;
-            })
-            .join('')}
+        })
+        .join('')}
         </ul>
         <button class="like-btn">좋아요</button>
       </div>
@@ -142,6 +142,11 @@ const createComment = async function (detailProjectId) {
   $('.comment-btn').on('click', async (event) => {
     event.preventDefault();
 
+    if (!getAccessToken()) {
+      alert("로그인 후 이용 가능합니다.");
+      window.location.href = "/";
+    }
+
     const commentInput = $('.comment-input').val();
 
     try {
@@ -149,6 +154,7 @@ const createComment = async function (detailProjectId) {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          Authorization: `Bearer ${getAccessToken()}`,
         },
         body: JSON.stringify({ contents: commentInput }),
       });
