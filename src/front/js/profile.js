@@ -1,16 +1,18 @@
-import { getAccessToken, setAccessToken } from '/script/localStorage.js';
+import { getAccessToken, setAccessToken } from '/js/localStorage.js';
+// import dotenv from 'dotenv';
 
-// Authorization: `Bearer ${getAccessToken()}`,
+// dotenv.config();
+// // Authorization: `Bearer ${getAccessToken()}`,
+console.log('엔브', process.env);
 
-
-$('#logout-btn').on('click',async ()=>{
+$('#logout-btn').on('click', async () => {
   await fetch('http://localhost:3000/api/user/log-out', {
     method: 'GET',
-  }).then(()=>{
+  }).then(() => {
     window.localStorage.clear();
     window.location.href = '/';
-  })
-})
+  });
+});
 
 function drawInitProfile(user) {
   const { email, name } = user;
@@ -109,7 +111,7 @@ async function getUserData() {
   })
     .then((res) => res.json())
     .then((res) => {
-      console.log(res)
+      console.log(res);
       // setAccessToken(res.data);
       drawInitProfile(res.data);
     });

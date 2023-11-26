@@ -1,20 +1,22 @@
 <html lang="ko">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Sparta Folio</title>
-  <link rel="stylesheet" type="text/css" href="/css/default.css" />
+  <link rel="stylesheet" type="text/css" href="./css/default.css" />
   <link rel="stylesheet" type="text/css" href="/css/header.css" />
   <link rel="stylesheet" type="text/css" href="/css/index.css" />
   <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-  <script type="module" src="/script/index.js" defer ></script>
-  <script type="module" src="/script/login.js" defer></script>
+  <script type="module" src="/js/index.js" defer></script>
+  <script type="module" src="/js/login.js" defer></script>
   <script>
     $(document).ready(() => {
-      $('header').load('/html/header.html')
-    })
+      $('header').load('./header.ejs');
+    });
   </script>
 </head>
+
 <body>
   <header></header>
   <main>
@@ -28,7 +30,7 @@
           팀 이름
         </div>
         <div class="over-view">
-          프로젝트 간략 소개 프로젝트 간략 소개프로젝트 간략 소개프로젝트 간략 소개프로젝트 간략 소개프로젝트 간략 소개프로젝트 간략 소개프로젝트 간략 소개프로젝트 간략 소개프로젝트 간략 소개프로젝트 간략 소개
+          프로젝트 간략 소개 프로젝트 간략 소개프로젝트 간략 소개프로젝트 간략 소개프로젝트 간략 소개프로젝트 간략 소개프로젝트 간략 소개프로젝트 간략 소개프로젝트 간략 소개프로젝트 간략 소개
           프로젝트 간략 소개프로젝트 간략 소개 프로젝트 간략 소개프로젝트 간략 소개프로젝트 간략 소개프로젝트 간략 소개프로젝트 간략 소개
         </div>
         <div class="go-project">
@@ -46,9 +48,10 @@
         <input type="text" placeholder="키워드로 검색해주세요." class="search-input" />
       </nav>
       <div class="content">
-        
+
       </div>
     </section>
   </main>
 </body>
+
 </html>

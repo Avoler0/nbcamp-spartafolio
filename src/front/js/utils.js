@@ -1,4 +1,4 @@
-import { getAccessToken } from '/script/localStorage.js';
+import { getAccessToken, setAccessToken } from '/js/localStorage.js';
 
 function loginCheck(){
   if (!getAccessToken()) {
