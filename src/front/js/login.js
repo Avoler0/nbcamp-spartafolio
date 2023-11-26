@@ -21,9 +21,6 @@ $('#login-form .login-btn').on('click', async (event) => {
     .catch((err) => {
       // alert('로그인 실패!')
     });
-
-    
-
 });
 
 const tokenLogin = async () => {

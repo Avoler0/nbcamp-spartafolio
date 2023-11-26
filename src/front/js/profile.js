@@ -97,7 +97,7 @@ function clickCancelBtn(user) {
     $('.cancel-btn').off('click');
 
     drawInitProfile(user);
-  });
+  })
 }
 
 async function getUserData() {
@@ -109,7 +109,6 @@ async function getUserData() {
   })
     .then((res) => res.json())
     .then((res) => {
-      console.log(res)
       // setAccessToken(res.data);
       drawInitProfile(res.data);
     });

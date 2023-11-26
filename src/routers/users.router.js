@@ -111,37 +111,45 @@ userRouter.post('/user/refreshToken', async (req, res) => {
 });
 
 //내 정보 변경
-
 userRouter.put('/user', needSignin, async (req, res) => {
-  const user = res.locals.user;
-  console.log(req.body);
-  const { email, name, existPassword, newPassword } = req.body;
-
   try {
-    //let으로 필드를 담을 빈 객체 생성하기
-    let updateFields = {};
+    const { user_id } = res.locals.user; // res.locals.user 안에 Password가 없어
+    const { email, name, existPassword, toChangePassword } = req.body; // 이메일 수정은 못하게 하는게 맞을 듯합니다. 
 
-    //만약에 이메일,이름 썼으면 빈 객체 안에 넣기
-    if (email) {
-      updateFields.email = email;
+    const currentUser = await Users.findOne({ where: { user_id } }); // res.locals.user = 현재 로그인된 유저 정보를 가져온다.
+
+    // 유저가 존재하지 않을 경우
+    if (!currentUser) {
+      return res.status(404).json({ success: false, message: "유저가 존재하지 않습니다." });
+    };
+
+    // 입력된 이메일이 기존 회원의 이메일과 다르거나 비밀번호가 다를 경우
+    if (email !== currentUser.email || !await bcrypt.compare(existPassword, currentUser.password)) {
+      return res.status(403).json({ success: false, message: "이메일 또는 비밀번호를 확인해주세요." });
     }
-    if (name) {
-      updateFields.name = name;
+
+    // 변경할 비밀번호를 8자리 미만으로 입력했을 때
+    if (toChangePassword.length < 8) {
+      return res.status(400).json({ success: false, message: "변경할 비밀번호는 8자리 이상 입력하셔야 합니다." });
     }
 
-    // 비밀번호
-    if (existPassword && newPassword) {
-      // const hashedExistPassword = await bcrypt.hash(existPassword, 10);
-      const userData = await Users.findByPk(user.user_id);
-      //기존,새 비번 모두 입력하면 비밀번호 해싱함
+    // 기존 비밀번호와 동일한 비밀번호를 입력했을 때
+    if (toChangePassword === currentUser.password) {
+      return res.status(400).json({ success: false, message: "동일한 비밀번호는 입력할 수 없습니다." });
+    };
 
-      if (!userData) {
-        throw new Error('not found user');
-      } // 사용자 정보 못 찾을 때
+    //유효성 검사 모두 통과 시 
+    const hashedNewPassword = await bcrypt.hash(toChangePassword, 10);
+    const checkedName = !name ? currentUser.name : name;
 
-      if (!(await bcrypt.compare(existPassword, userData.password))) {
-        throw new Error('not match password');
-      } // 기존 비번, DB에 저장된 비번 동일 한 지
+    const updatedUser = await Users.update(
+      {
+        name: checkedName,
+        password: hashedNewPassword
+      },
+      { where: { user_id } }
+    );
+    return res.status(200).json({ success: true, message: "유저 정보를 변경했습니다.", updatedUser });
 
       const hashedNewPassword = await bcrypt.hash(
         newPassword,
@@ -149,64 +157,109 @@ userRouter.put('/user', needSignin, async (req, res) => {
       );
       updateFields.password = hashedNewPassword;
     } // 사용자가 제공한 새 비밀번호를 해싱
-
-    const result = await Users.update(updateFields, {
-      where: { user_id: user.user_id },
-    }); //
-
-    if (!result) {
-      throw new Error('update failed');
-    }
-
-    const accessToken = jwt.sign(
-      { userId: user.user_id },
-      JWT_ACCESS_TOKEN_SECRET,
-      { expiresIn: '30m' },
-    );
-    res.status(200).json({
-      success: true,
-      message: '프로필 수정이 완료 되었습니다.',
-      data: accessToken,
-    });
-  } catch (err) {
-    let statusCode;
-    let errMessage;
-
-    switch (err.message) {
-      case 'not match password':
-        statusCode = 400;
-        errMessage = '기존 비밀번호와 같지 않습니다.';
-        break;
-      case 'not found user':
-        statusCode = 400;
-        errMessage = '유저 데이터를 찾을 수 없습니다.';
-        break;
-      case 'update failed':
-        statusCode = 500;
-        errMessage = '업데이트에 실패했습니다.';
-        break;
-      default:
-        statusCode = 500;
-        errMessage = '서버에러';
-    }
-
-    return res.status(statusCode).json({
-      success: false,
-      message: errMessage,
-    });
-  }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "알 수 없는 오류가 발생하였습니다." });
+  };
 });
 
+// ==============================
+
+// userRouter.put('/user', needSignin, async (req, res) => { 
+//   const user = res.locals.user;
+//   console.log(req.body);
+//   const { email, name, existPassword, newPassword } = req.body;
+
+//   try {
+//     //let으로 필드를 담을 빈 객체 생성하기
+//     let updateFields = {};
+
+//     //만약에 이메일,이름 썼으면 빈 객체 안에 넣기
+//     if (email) {
+//       updateFields.email = email;
+//     }
+//     if (name) {
+//       updateFields.name = name;
+//     }
+
+//     // 비밀번호
+//     if (existPassword && newPassword) {
+//       // const hashedExistPassword = await bcrypt.hash(existPassword, 10);
+//       const userData = await Users.findByPk(user.user_id);
+//       //기존,새 비번 모두 입력하면 비밀번호 해싱함
+
+//       if (!userData) {
+//         throw new Error('not found user');
+//       } // 사용자 정보 못 찾을 때
+
+//       if (!(await bcrypt.compare(existPassword, userData.password))) {
+//         throw new Error('not match password');
+//       } // 기존 비번, DB에 저장된 비번 동일 한 지
+
+//       const hashedNewPassword = await bcrypt.hash(newPassword, 10);
+//       updateFields.password = hashedNewPassword;
+//     } // 사용자가 제공한 새 비밀번호를 해싱
+
+//     const result = await Users.update(updateFields, {
+//       where: { user_id: user.user_id },
+//     }); //
+
+//     if (!result) {
+//       throw new Error('update failed');
+//     }
+
+//     const accessToken = jwt.sign(
+//       { userId: user.user_id },
+//       JWT_ACCESS_TOKEN_SECRET,
+//       { expiresIn: '30m' },
+//     );
+//     res.status(200).json({
+//       success: true,
+//       message: '프로필 수정이 완료 되었습니다.',
+//       data: accessToken,
+//     });
+//   } catch (err) {
+//     let statusCode;
+//     let errMessage;
+
+//     switch (err.message) {
+//       case 'not match password':
+//         statusCode = 400;
+//         errMessage = '기존 비밀번호와 같지 않습니다.';
+//         break;
+//       case 'not found user':
+//         statusCode = 400;
+//         errMessage = '유저 데이터를 찾을 수 없습니다.';
+//         break;
+//       case 'update failed':
+//         statusCode = 500;
+//         errMessage = '업데이트에 실패했습니다.';
+//         break;
+//       default:
+//         statusCode = 500;
+//         errMessage = '서버에러';
+//     }
+
+//     return res.status(statusCode).json({
+//       success: false,
+//       message: errMessage,
+//     });
+//   }
+// });
+
+
+
+// 댓글 comments.js에서 사용합니다..ㅠㅠ (by.junsik)
 userRouter.get('/user', needSignin, async (req, res) => {
   const user = res.locals.user;
 
-  if (user){
+  if (user) {
     return res.status(200).json({
       success: true,
       message: '사용자 데이터를 불러왔습니다.',
       data: user,
     });
-  }else{
+  } else {
     return res.status(200).json({
       success: false,
       message: '사용자 데이터를 불러오는데 실패하였습니다.',
@@ -287,7 +340,7 @@ userRouter.post('/users', async (req, res) => {
 userRouter.post('/users/login', async (req, res) => {
   try {
     const { email, password } = req.body;
-    console.log(req.body);
+    // console.log(req.body);
     if (!email) {
       return res.status(400).send({
         success: false,
