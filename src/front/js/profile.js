@@ -2,6 +2,16 @@ import { getAccessToken, setAccessToken } from '/script/localStorage.js';
 
 // Authorization: `Bearer ${getAccessToken()}`,
 
+
+$('#logout-btn').on('click',async ()=>{
+  await fetch('http://localhost:3000/api/user/log-out', {
+    method: 'GET',
+  }).then(()=>{
+    window.localStorage.clear();
+    window.location.href = '/';
+  })
+})
+
 function drawInitProfile(user) {
   const { email, name } = user;
 
@@ -37,7 +47,6 @@ function drawInitProfile(user) {
   `);
 
   drawModifyProfile(user);
-
 }
 
 function drawModifyProfile(user) {
@@ -78,10 +87,7 @@ function drawModifyProfile(user) {
       `);
 
     clickCancelBtn(user);
-
   });
-
-
 }
 
 function clickCancelBtn(user) {
@@ -92,8 +98,6 @@ function clickCancelBtn(user) {
 
     drawInitProfile(user);
   })
-
-
 }
 
 async function getUserData() {
@@ -102,13 +106,13 @@ async function getUserData() {
     headers: {
       Authorization: `Bearer ${getAccessToken()}`,
     },
-  }).then((res) => res.json())
+  })
+    .then((res) => res.json())
     .then((res) => {
       // setAccessToken(res.data);
       drawInitProfile(res.data);
     });
 }
-
 
 async function postUpdateProfile() {
   const data = {
@@ -129,11 +133,11 @@ async function postUpdateProfile() {
     .then((res) => res.json())
     .then((res) => {
       if (!res.success) throw new Error(res.message);
-      window.location.href = "/profile"
-    }).catch((err) => {
-      alert(err.message)
+      window.location.href = '/profile';
+    })
+    .catch((err) => {
+      alert(err.message);
     });
 }
-
 
 getUserData();

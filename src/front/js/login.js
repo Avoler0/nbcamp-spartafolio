@@ -15,7 +15,6 @@ $('#login-form .login-btn').on('click', async (event) => {
   })
     .then((res) => res.json())
     .then((res) => {
-      console.log(res);
       setAccessToken(res.data.accessToken);
       window.location.href = "/"
     })

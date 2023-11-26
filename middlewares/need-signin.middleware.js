@@ -20,6 +20,7 @@ export const needSignin = async (req, res, next) => {
     }
   }
 
+  console.log(req.headers.authorization);
   try {
     if (!req.headers.authorization) {
       return res.status(400).json({
