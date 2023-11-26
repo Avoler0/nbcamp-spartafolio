@@ -30,6 +30,7 @@ module.exports = {
         type: Sequelize.STRING,
       },
       over_view: {
+        allowNull: true,
         type: Sequelize.STRING,
       },
       view: {
@@ -41,12 +42,15 @@ module.exports = {
         type: Sequelize.STRING,
       },
       github_address: {
+        allowNull: true,
         type: Sequelize.STRING,
       },
       demo_site: {
+        allowNull: true,
         type: Sequelize.STRING,
       },
       core_function: {
+        allowNull: true,
         type: Sequelize.STRING,
       },
       description: {
@@ -54,6 +58,7 @@ module.exports = {
         type: Sequelize.STRING,
       },
       images_path: {
+        allowNull: true,
         type: Sequelize.STRING,
       },
       createdAt: {
