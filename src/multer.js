@@ -24,7 +24,7 @@ const upload = multer({
     key: (req, file, cb) => {
 
       const { authorization } = req.headers;
-      console.log('멀터 실행')
+
       if (!allowedExtensions.includes(file.mimetype.split('/')[1])) {
         return cb(new Error('허용되지 않는 파일 형식입니다'));
       }

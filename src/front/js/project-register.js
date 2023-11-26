@@ -1,9 +1,3 @@
-import { getAccessToken } from '/script/localStorage.js';
-
-if (!getAccessToken()) {
-  alert('로그인 이후 이용 가능한 페이지입니다.');
-  window.location.href = '/';
-}
 
 const toggleTechTab = () => {
   $('.tech-wrap .input-wrap .tech-list').on('click', () => {

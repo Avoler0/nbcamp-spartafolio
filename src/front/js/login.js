@@ -15,9 +15,8 @@ $('#login-form .login-btn').on('click', async (event) => {
   })
     .then((res) => res.json())
     .then((res) => {
-      console.log(res);
       setAccessToken(res.data.accessToken);
-      // window.location.href = "/"
+      window.location.href = "/"
     })
     .catch((err) => {
       // alert('로그인 실패!')

@@ -6,7 +6,7 @@ import nodemailer from 'nodemailer';
 import { needSignin } from '../../middlewares/need-signin.middleware.js';
 import {
   // JWT_ACCESS_TOKEN_EXPIRES_IN,
-  // PASSWORD_HASH_SALT_ROUNDS,
+  PASSWORD_HASH_SALT_ROUNDS,
   JWT_ACCESS_TOKEN_SECRET,
 } from '../../constants/security.constant.js';
 
@@ -62,6 +62,14 @@ userRouter.post('/user/email-check', async(req, res)=>{
       message: '이메일 인증 요청에 실패하였습니다.',
     });
   }
+});
+//리프레쉬 쿠키 삭제
+userRouter.get('/user/log-out', (req, res)=>{
+  res.clearCookie('refreshToken')
+  res.status(200).json({
+    success: true,
+    message: 'refreshToken 쿠키 삭제에 성공하였습니다.'
+  });
 });
 
 userRouter.post('/user/refreshToken', async (req, res) => {
@@ -135,7 +143,10 @@ userRouter.put('/user', needSignin, async (req, res) => {
         throw new Error('not match password');
       } // 기존 비번, DB에 저장된 비번 동일 한 지
 
-      const hashedNewPassword = await bcrypt.hash(newPassword, 10);
+      const hashedNewPassword = await bcrypt.hash(
+        newPassword,
+        PASSWORD_HASH_SALT_ROUNDS,
+      );
       updateFields.password = hashedNewPassword;
     } // 사용자가 제공한 새 비밀번호를 해싱
 
@@ -186,93 +197,22 @@ userRouter.put('/user', needSignin, async (req, res) => {
   }
 });
 
-// userRouter.put('/user', needSignin, async(req, res) => {
-//   const user = res.locals.user;
-//     console.log(req.body);
-//   const { email, name, existPassword, newPassword } = req.body;
+userRouter.get('/user', needSignin, async (req, res) => {
+  const user = res.locals.user;
 
-//   if(!email || !name || !existPassword || !newPassword){
-//     throw new Error('data is invalid');
-//   }
-//   try{
-//     const hashedExistPassword = bcrypt.hashSync(existPassword, 10);
-//     const hashedNewPassword = bcrypt.hashSync(newPassword, 10);
-
-//     const userData = await Users.findByPk(user.user_id);
-
-//     if(!userData){
-//       throw new Error('not found user');
-//     }
-
-//     if(userData.password !== hashedExistPassword){
-//       throw new Error('not match password');
-//     }
-
-//     const result = await Users.update(
-//       { email, name, password: hashedNewPassword },
-//       {
-//         where: { user_id: user.user_id, password: hashedExistPassword },
-//       },
-//     );
-
-//     console.log(result);
-//     // const isPasswordMatched = bcrypt.compareSync(password, hashedPassword);
-
-//     const accessToken = jwt.sign(
-//       { userId: result.user_id },
-//       JWT_ACCESS_TOKEN_SECRET,
-//       {
-//         //액세스토큰
-//         expiresIn: '30m',
-//       },
-//     );
-//     res.status(200).json({
-//       success: true,
-//       message: '프로필 수정이 완료 되었습니다.',
-//       data: accessToken,
-//     });
-//   }catch(err){
-//     let statusCode;
-//     let errMessage;
-//     // const errJSON = JSON.parse(err.Error);
-
-//     switch (err) {
-//       case 'not match password':
-//         (statusCode = 400), (errMessage = '기존 비밀번호와 같지 않습니다.');
-//         break;
-//       case 'not found user':
-//         (statusCode = 400), (errMessage = '유저 데이터를 찾을 수 없습니다.');
-//         break;
-//       case 'data is invalid':
-//         (statusCode = 400), (errMessage = '데이터가 유효하지 않습니다.');
-//         break;
-//       default:
-//         (statusCode = 500), (errMessage = '서버에러');
-//     }
-
-//     return res.status(statusCode).json({
-//       success: false,
-//       message: errMessage,
-//     });
-//   }
-// });
-
-// userRouter.get('/user', needSignin, async (req, res) => {
-//   const user = res.locals.user;
-
-//   if (user){
-//     return res.status(200).json({
-//       success: true,
-//       message: '사용자 데이터를 불러왔습니다.',
-//       data: user,
-//     });
-//   }else{
-//     return res.status(200).json({
-//       success: false,
-//       message: '사용자 데이터를 불러오는데 실패하였습니다.',
-//     });
-//   }
-// });
+  if (user){
+    return res.status(200).json({
+      success: true,
+      message: '사용자 데이터를 불러왔습니다.',
+      data: user,
+    });
+  }else{
+    return res.status(200).json({
+      success: false,
+      message: '사용자 데이터를 불러오는데 실패하였습니다.',
+    });
+  }
+});
 
 //회원가입
 
@@ -362,6 +302,7 @@ userRouter.post('/users/login', async (req, res) => {
       });
     }
     const userObject = await Users.findOne({ where: { email } });
+
     if (!userObject) {
       return res.status(404).json({
         //404 코드 : 찾을 수 없음
