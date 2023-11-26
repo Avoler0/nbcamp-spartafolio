@@ -23,26 +23,26 @@ export default class Projects extends Model {
           type: DataTypes.STRING,
         },
         team_name: {
-          allowNull: true,
+          allowNull: false,
           type: DataTypes.STRING,
         },
         over_view: {
-          allowNull: true,
+          allowNull: false,
           type: DataTypes.STRING,
         },
         view: {
           type: DataTypes.INTEGER,
         },
         tech_stack: {
-          allowNull: true,
+          allowNull: false,
           type: DataTypes.STRING,
         },
         github_address: {
-          allowNull: true,
+          allowNull: false,
           type: DataTypes.STRING,
         },
         demo_site: {
-          allowNull: true,
+          allowNull: false,
           type: DataTypes.STRING,
         },
         core_function: {
@@ -50,7 +50,7 @@ export default class Projects extends Model {
           type: DataTypes.STRING,
         },
         description: {
-          allowNull: true,
+          allowNull: false,
           type: DataTypes.TEXT('long'),
         },
         images_path: {
