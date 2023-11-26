@@ -6,13 +6,12 @@ body {
 }
 
 .sign-up-container {
-  margin: 4rem auto 0 auto;
+  margin: 5% auto 0 auto;
   display: flex;
   width: fit-content;
-  height: 50%;
   padding: 2rem;
   border: 1px solid #d9d9d9;
-  margin-top: 13.5%;
+  height: 620px;
 }
 
 .other-container {
@@ -26,25 +25,74 @@ body {
   padding: 0.8%;
   border-radius: 10px;
   width: 360px;
-  height: 20%;
   max-height: 70px;
+  margin-bottom: 1rem;
 }
 
 .input-wrap span {
   font-size: 11.5px;
   color: #9f9f9e;
+  width: 100%;
 }
 
 .input-wrap input {
   border: none;
   outline: none;
   width: 100%;
-  font-size: 18px;
-  line-height: 40px;
+  font-size: 16px;
 }
 
-#gif-box {
+.input-wrap div{
   display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.input-wrap label{
+  width: 100%;
+}
+
+.input-wrap.email{
+  width: 100%;
+  flex-direction: row;
+  display: flex;
+}
+.input-wrap.email input{
+  width: 260px;
+}
+.input-wrap.email button{
+  width: 60px;
+}
+
+.input-wrap.email-check{
+  width: 100%;
+  flex-direction: row;
+  display: flex;
+}
+.input-wrap.email-check input{
+  width: 260px;
+}
+.input-wrap.email-check button{
+  width: 60px;
+}
+
+.input-wrap.email-check.disabled{
+  border: none;
+  margin: 0;
+  padding: 0;
+  height: 0px;
+}
+
+.input-wrap.email-check.disabled  input{
+  display: none;
+}
+
+.input-wrap.email-check.disabled  span{
+  display: none;
+}
+
+.input-wrap.email-check.disabled button{
+  display: none;
 }
 
 #button_margin {
@@ -55,7 +103,7 @@ body {
   flex: 1;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
   margin-bottom: 0;
   margin-left: 4rem;
+  height: 100%;
 }

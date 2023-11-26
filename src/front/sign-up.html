@@ -19,17 +19,33 @@
   <body>
     <div class="sign-up-container">
       <div id="gif-box">
-        <div><img src="/images/catKey.gif" loop=infinite> </img> </div>
+        <img src="/images/catKey.gif" loop=infinite> </img>
       </div>
       <form id="signup-form">
         <label>
           <h1>World! </h1>
           <h2>" init " your code!</h2>
         </label>
-        <label class="input-wrap">
-          <span>* Email</span>
-          <input type="text" class="email-input" />
-        </label>
+        <div class="email-wrap">
+          <label class="input-wrap email">
+            <div>
+              <span>* Email</span>
+              <input type="text" class="email-input" />
+            </div>
+            <button id="email-auth-btn" class="btn btn-outline-secondary" type="button">인증</button>
+          </label>
+          
+        </div>
+        <div class="email-wrap">
+          <label class="input-wrap email-check disabled">
+            <div>
+              <span>* Email Auth Number</span>
+              <input type="text" class="email-check-input" placeholder="인증번호 4자리를 입력해주세요."/>
+            </div>
+            <button id="email-check-btn" class="btn btn-outline-secondary" type="button">확인</button>
+          </label>
+        </div>
+        
         <label class="input-wrap">
           <span>* Name</span>
           <input type="text" class="name-input" />
