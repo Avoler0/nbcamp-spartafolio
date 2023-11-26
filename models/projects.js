@@ -23,7 +23,7 @@ export default class Projects extends Model {
           type: DataTypes.STRING,
         },
         team_name: {
-          allowNull: false,
+          allowNull: true,
           type: DataTypes.STRING,
         },
         over_view: {
@@ -34,7 +34,7 @@ export default class Projects extends Model {
           type: DataTypes.INTEGER,
         },
         tech_stack: {
-          allowNull: false,
+          allowNull: true,
           type: DataTypes.STRING,
         },
         github_address: {
@@ -50,7 +50,7 @@ export default class Projects extends Model {
           type: DataTypes.STRING,
         },
         description: {
-          allowNull: false,
+          allowNull: true,
           type: DataTypes.STRING,
         },
         images_path: {
