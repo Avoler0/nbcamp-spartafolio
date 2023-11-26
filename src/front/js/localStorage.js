@@ -10,14 +10,16 @@ export const setAccessToken = (value) => {
   window.localStorage.setItem('accessToken', JSON.stringify(obj));
 }
 
+
+
 export const getAccessToken = () => {
   const accessToken = window.localStorage.getItem('accessToken');
 
-  if(!accessToken) return null;
+  if (!accessToken) return null;
 
   const data = JSON.parse(accessToken);
-  
-  if(Date.now() > data.expire){
+
+  if (Date.now() > data.expire) {
     window.localStorage.removeItem('accessToken')
 
     return null;

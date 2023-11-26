@@ -4,11 +4,13 @@ import { getAccessToken } from '/script/localStorage.js';
 export const getUserId = async function () {
   try {
     const result = await fetch('http://localhost:3000/api/user', {
+
       method: 'GET',
       headers: {
         Authorization: `Bearer ${getAccessToken()}`,
       },
     })
+
       .then((res) => res.json());
     const userId = result.data.user_id;
     return userId;
