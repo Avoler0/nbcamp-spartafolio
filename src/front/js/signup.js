@@ -14,7 +14,7 @@ $('#email-auth-btn').on('click',async (event)=>{
 
   event.currentTarget.setAttribute('disabled',true);
 
-  await fetch('http://localhost:3000/api/user/email-check', {
+  await fetch('/api/user/email-check', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -73,7 +73,7 @@ function submitSignup(){
       return; 
     }
 
-    await fetch('http://localhost:3000/api/users', {
+    await fetch('/api/users', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

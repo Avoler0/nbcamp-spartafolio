@@ -3,7 +3,7 @@ import { getAccessToken, setAccessToken } from '/js/localStorage.js';
 // 로그인 한 사람의 정보를 가져오는 함수
 export const getUserId = async function () {
   try {
-    const result = await fetch('http://localhost:3000/api/user', {
+    const result = await fetch('/api/user', {
 
       method: 'GET',
       headers: {
@@ -39,7 +39,7 @@ export const getComments = async function (detailProjectId) {
     $('.detail-comments-lists').empty();
 
     const result = await fetch(
-      `http://localhost:3000/api/${detailProjectId}/comments`,
+      `/api/${detailProjectId}/comments`,
       { method: 'GET' },
     )
       .then((res) => res.json())
@@ -114,7 +114,7 @@ export const createComment = async function (detailProjectId) {
     const commentInput = $('.comment-input').val();
 
     try {
-      await fetch(`http://localhost:3000/api/comment/${detailProjectId}`, {
+      await fetch(`/api/comment/${detailProjectId}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -165,7 +165,7 @@ export const editComment = async function (commentElement, comment_id) {
     const editedText = editInput.val();
 
     const result = await fetch(
-      `http://localhost:3000/api/comment/${comment_id}`,
+      `/api/comment/${comment_id}`,
       {
         method: 'PUT',
         headers: {
@@ -209,7 +209,7 @@ export const editComment = async function (commentElement, comment_id) {
 // 댓글 삭제하는 함수
 export const deleteComment = async function (comment_id, commentElement) {
   try {
-    await fetch(`http://localhost:3000/api/comment/${comment_id}`, {
+    await fetch(`/api/comment/${comment_id}`, {
       method: 'DELETE',
       headers: {
         Authorization: `Bearer ${getAccessToken()}`,

@@ -6,7 +6,7 @@ $('#login-form .login-btn').on('click', async (event) => {
     password: $('#login-form .password-input').val(),
   };
 
-  await fetch('http://localhost:3000/api/users/login', {
+  await fetch('/api/users/login', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -29,7 +29,7 @@ const tokenLogin = async () => {
   if (accessToken) return;
 
   try {
-    const result = await fetch('http://localhost:3000/api/user/refreshToken', {
+    const result = await fetch('/api/user/refreshToken', {
       method: 'POST',
     })
       .then((res) => res.json())
