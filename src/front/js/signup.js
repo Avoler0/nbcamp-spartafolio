@@ -1,6 +1,4 @@
-
-
-$('#signup-form').on('submit',async (event)=>{
+$('#signup-form').on('submit', async (event) => {
   event.preventDefault();
 
   const data = {
@@ -10,14 +8,17 @@ $('#signup-form').on('submit',async (event)=>{
     passwordConfirm: $('#signup-form .password-check-input').val(),
   };
 
-  const result = await fetch('http://localhost:3000/api/users',{
-    method:'POST',
+  const result = await fetch('http://localhost:3000/users', {
+    //const result = await fetch('http://localhost:3000/api/users', {
+    method: 'POST',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     },
-    body:JSON.stringify(data)
-  }).then((res) => res.json()).catch((err)=> err)
-  
+    body: JSON.stringify(data),
+  })
+    .then((res) => res.json())
+    .catch((err) => err);
 
-  console.log(result)
-})
+  console.log(result);
+  return err;
+});

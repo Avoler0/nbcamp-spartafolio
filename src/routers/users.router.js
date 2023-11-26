@@ -1,14 +1,14 @@
-import express, { Router } from 'express'; // 익스프레스 라우터 객체 생성하는 거일 듯.
+import express from 'express';
 import db from '../../models/index.js';
 import dotenv from 'dotenv';
 import jwt from 'jsonwebtoken';
 
-import {
-  JWT_ACCESS_TOKEN_EXPIRES_IN,
-  JWT_ACCESS_TOKEN_SECRET,
-  PASSWORD_HASH_SALT_ROUNDS,
-} from '../../constants/security.constant.js';
 import { needSignin } from '../../middlewares/need-signin.middleware.js';
+import {
+  // JWT_ACCESS_TOKEN_EXPIRES_IN,
+  // PASSWORD_HASH_SALT_ROUNDS,
+  JWT_ACCESS_TOKEN_SECRET,
+} from '../../constants/security.constant.js';
 
 import bcrypt from 'bcrypt';
 
@@ -77,7 +77,7 @@ userRouter.put('/user', needSignin, async (req, res) => {
 
     // 비밀번호
     if (existPassword && newPassword) {
-      const hashedExistPassword = await bcrypt.hash(existPassword, 10);
+      // const hashedExistPassword = await bcrypt.hash(existPassword, 10);
       const userData = await Users.findByPk(user.user_id);
       //기존,새 비번 모두 입력하면 비밀번호 해싱함
 

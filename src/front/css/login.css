@@ -9,7 +9,7 @@ body {
   margin: 4rem auto 0 auto;
   display: flex;
   width: fit-content;
-  height: 50%;
+  height: 45%;
   padding: 2rem;
   border: 1px solid #d9d9d9;
   margin-top: 13.5%;
@@ -27,6 +27,7 @@ body {
   border-radius: 10px;
   width: 360px;
   height: 20%;
+  max-height: 85px;
 }
 
 .input-wrap span {
@@ -45,7 +46,9 @@ body {
   outline: none;
   width: 100%;
   font-size: 18px;
+  line-height: 40px;
 }
+
 #gif-box {
   display: flex;
 }
@@ -60,12 +63,17 @@ body {
   flex-direction: column;
   justify-content: space-between;
   margin-bottom: 0;
-  margin-left: 4rem;
+  margin-left: 2rem;
+}
+
+.login-btn {
+  margin-bottom: 0px;
 }
 
 a {
   text-decoration-line: none;
-  margin: 6% auto 0px 0px;
+  display: block;
+  margin-top: -5%;
   /* text-align: center; */
   /*   text-decoration-line: underline; */
   /*   text-decoration-line: overline; */
