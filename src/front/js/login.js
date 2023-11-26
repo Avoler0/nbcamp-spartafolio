@@ -1,4 +1,4 @@
-import { getAccessToken, setAccessToken } from '/script/localStorage.js';
+import { getAccessToken, setAccessToken } from '/js/localStorage.js';
 
 $('#login-form .login-btn').on('click', async (event) => {
   const data = {
@@ -15,7 +15,6 @@ $('#login-form .login-btn').on('click', async (event) => {
   })
     .then((res) => res.json())
     .then((res) => {
-      console.log(res);
       setAccessToken(res.data.accessToken);
       window.location.href = "/"
     })

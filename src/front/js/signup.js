@@ -1,12 +1,15 @@
 
 $('#signup-form').on('submit',(event)=>{
   event.preventDefault();
-  alert('이메일 인증이 필요합니다.')
+  $('.email-check-wrap .check-message').addClass('error');
+  $('.email-check-wrap .check-message').text('이메일 인증이 필요합니다.');
+
+  return;
 })
 
 $('#email-auth-btn').on('click',async (event)=>{
   const email = $('#signup-form .email-input').val();
-  const checkEmailWrap = $('.input-wrap.email-check.disabled');
+  const checkEmailWrap = $('.email-check-wrap.disabled');
   if(!email) return;
 
   event.currentTarget.setAttribute('disabled',true);
@@ -20,16 +23,26 @@ $('#email-auth-btn').on('click',async (event)=>{
   })
     .then((res) => res.json())
     .then((res) => {
-      console.log(res);
       event.currentTarget.removeAttribute('disabled')
       checkEmailWrap.removeClass('disabled')
 
-      $('#email-check-btn').on('click',()=>{
-        // authNumber;
-        const emailCheck = $('.input-wrap .email-check-input').val();
+      $('#email-check-btn').on('click',(event)=>{
+        const emailCheck = $('.input-wrap .email-check-input');
+        const checkBtn = event.currentTarget;
+        
+        if (Number(emailCheck.val()) === res.authNumber) {
+          emailCheck.attr('disabled', true);
+          checkBtn.setAttribute('disabled', true);
+          $('.input-wrap.email input').attr('disabled', true);
+          $('#email-auth-btn').attr('disabled', true);
 
-        if (emailCheck === authNumber){
+          $('.email-check-wrap .check-message').addClass('success');
+          $('.email-check-wrap .check-message').text('인증에 성공하였습니다.');
+
           submitSignup();
+        } else {
+          $('.email-check-wrap .check-message').addClass('error');
+          $('.email-check-wrap .check-message').text('인증번호가 틀립니다.');
         }
       })
 
@@ -39,12 +52,11 @@ $('#email-auth-btn').on('click',async (event)=>{
       event.currentTarget.removeAttribute('disabled');
       alert('인증번호 전송에 실패하였습니다.');
     });
-  console.log(email)
 })
 
 
 function submitSignup(){
-  $('#signup-form').off('submit');
+  $('#signup-form').off('submit')
   $('#signup-form').on('submit', async (event) => {
     event.preventDefault();
 
@@ -54,6 +66,12 @@ function submitSignup(){
       password: $('#signup-form .password-input').val(),
       passwordConfirm: $('#signup-form .password-check-input').val(),
     };
+
+    if(data.password !== data.passwordConfirm){
+      $('.password-check-wrap .check-message').addClass('error');
+      $('.password-check-wrap .check-message').text('비밀번호를 다시 확인해주세요.');
+      return; 
+    }
 
     await fetch('http://localhost:3000/api/users', {
       method: 'POST',
@@ -70,7 +88,7 @@ function submitSignup(){
         window.location.href = '/login';
       })
       .catch((err) => {
-        alert('회원가입에 실패하였습니다.');
+        alert(err.message);
       });
   });
 }

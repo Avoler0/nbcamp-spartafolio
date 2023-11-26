@@ -1,4 +1,6 @@
-import { getAccessToken } from '/script/localStorage.js';
+console.log('헤더 실행');
+
+import { getAccessToken, setAccessToken } from '/js/localStorage.js';
 
 function loginHeader() {
   const accessToken = getAccessToken();
@@ -6,7 +8,7 @@ function loginHeader() {
   drawHeaderRight(accessToken);
 }
 // '내 정보 보기','프로젝트 등록'
-function drawHeaderRight(login){
+function drawHeaderRight(login) {
   const isLogin = login ? true : false;
   const isOk = [
     {
@@ -48,7 +50,6 @@ function drawHeaderRight(login){
       
     </div>
   `);
-  
 }
 
 loginHeader();

@@ -7,7 +7,7 @@
     <link rel="stylesheet" type="text/css" href="/css/index.css" />
     <link rel="stylesheet" type="text/css" href="/css/signup.css" />
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-    <script type="module" src="/script/signup.js" defer></script>
+    <script type="module" src="/js/signup.js" defer></script>
     <title>Sparta Folio - Sign Up</title>
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
@@ -36,14 +36,17 @@
           </label>
           
         </div>
-        <div class="email-wrap">
-          <label class="input-wrap email-check disabled">
+        <div class="email-check-wrap disabled">
+          <label class="input-wrap email-check">
             <div>
               <span>* Email Auth Number</span>
               <input type="text" class="email-check-input" placeholder="인증번호 4자리를 입력해주세요."/>
             </div>
             <button id="email-check-btn" class="btn btn-outline-secondary" type="button">확인</button>
           </label>
+          <span class="check-message">
+
+          </span>
         </div>
         
         <label class="input-wrap">
@@ -54,17 +57,21 @@
           <span>* Password</span>
           <input type="password" class="password-input" />
         </label>
-        <label class="input-wrap">
-          <span>* Password Check</span>
-          <input type="password" class="password-check-input" />
-        </label>
+        <div class="password-check-wrap disabled">
+          <label class="input-wrap">
+            <span>* Password Check</span>
+            <input type="password" class="password-check-input" />
+          </label>
+          <span class="check-message">
+          
+          </span>
+        </div>
         <div class="row">
           <div class="col text-center" id="button_margin">
             <button
-              type="button"
+              type="submit"
               class="btn btn-outline-secondary"
               style="width: 60%; height: 40px"
-              onclick="location.replace('/sign-up')"
             >
               Sign up
             </button>
