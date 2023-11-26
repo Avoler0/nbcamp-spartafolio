@@ -18,6 +18,8 @@ body {
   margin: 8% auto 0px 0px;
 }
 
+
+
 .input-wrap {
   display: flex;
   flex-direction: column;
@@ -52,6 +54,8 @@ body {
   width: 100%;
 }
 
+
+
 .input-wrap.email{
   width: 100%;
   flex-direction: row;
@@ -68,6 +72,7 @@ body {
   width: 100%;
   flex-direction: row;
   display: flex;
+  margin-bottom: 0;
 }
 .input-wrap.email-check input{
   width: 260px;
@@ -76,23 +81,52 @@ body {
   width: 60px;
 }
 
-.input-wrap.email-check.disabled{
+.email-check-wrap{
+  margin-bottom: 1rem;
+}
+
+.check-message{
+  font-size: 11.5px;
+  margin-top: 0.3rem;
+}
+
+.check-message.error{
+  color: red;
+}
+
+.check-message.success{
+  color: lightblue;
+}
+
+.email-check-wrap.disabled{
+  margin-bottom: 0;
+}
+
+.email-check-wrap.disabled .input-wrap.email-check{
   border: none;
   margin: 0;
   padding: 0;
   height: 0px;
 }
 
-.input-wrap.email-check.disabled  input{
+.email-check-wrap.disabled .input-wrap.email-check  input{
   display: none;
 }
 
-.input-wrap.email-check.disabled  span{
+.email-check-wrap.disabled .input-wrap.email-check  span{
   display: none;
 }
 
-.input-wrap.email-check.disabled button{
+.email-check-wrap.disabled .input-wrap.email-check button{
   display: none;
+}
+
+.password-check-wrap{
+  margin-bottom: 1rem;
+}
+
+.password-check-wrap .input-wrap{
+  margin-bottom: 0;
 }
 
 #button_margin {
