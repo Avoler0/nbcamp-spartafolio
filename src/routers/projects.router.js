@@ -13,10 +13,9 @@ projectRouter.post(
   needSignin,
   upload.array('additional'),
   async (req, res) => {
-
     const file = req.files;
     const user = res.locals.user;
-    console.log('게시물 생성',file);
+    console.log('게시물 생성', file, '게시물 생성');
     const {
       projectTitle,
       teamName,
@@ -28,18 +27,21 @@ projectRouter.post(
       description,
     } = req.body;
 
+    console.log('타이틀', req.body, '타이틀');
     let filePath = [];
 
     if (req.files !== undefined) {
       req.files.forEach((file) => filePath.push(file.key));
     }
 
+    const teckList = Array.isArray(techStack) ? '' : techStack;
+
     try {
       const project = await Projects.create({
         title: projectTitle,
         team_name: teamName,
         over_view: overView,
-        tech_stack: techStack,
+        tech_stack: teckList,
         github_address: githubAddress,
         core_function: coreFunction,
         demo_site: demoSite,
@@ -48,14 +50,14 @@ projectRouter.post(
         images_path: filePath.join(','),
       });
 
-    res
-      .status(200)
-      .json({ message: '게시물 등록 완료', success: true, project });
+      res
+        .status(200)
+        .json({ message: '게시물 등록 완료', success: true, project });
     } catch (error) {
-    console.log(error.message, '에러 메세지');
-    res
-      .status(400)
-      .json({ message: '게시물 생성 중에 오류 발생', success: false });
+      console.log(error.message, '에러 메세지');
+      res
+        .status(400)
+        .json({ message: '게시물 생성 중에 오류 발생', success: false });
     }
   },
 );

@@ -22,25 +22,32 @@ const upload = multer({
     acl: 'public-read',
     contentType: multerS3.AUTO_CONTENT_TYPE,
     key: (req, file, cb) => {
-      const { authorization } = req.headers;
+      console.log(file);
+      cb(null, `${file.fieldname}/${file.originalname}`);
+      // const { authorization } = req.headers;
 
       // if (!allowedExtensions.includes(file.mimetype.split('/')[1])) {
-      //   return cb(new Error('허용되지 않는 파일 형식입니다'));
+      //   cb(new Error('허용되지 않는 파일 형식입니다'));
       // }
+      // // return cb(null, `${file.fieldname}/${file.originalname}`);
+      // if (file.fieldname === 'additional') {
+      //   const { projectTitle } = req.body;
+      //   const accessToken = authorization.split(' ')[1];
+      //   const payloadToken = jwt.verify(accessToken, JWT_ACCESS_TOKEN_SECRET);
 
-      if (file.fieldname === 'additional') {
-        const { projectTitle } = req.body;
-        const accessToken = authorization.split(' ')[1];
-        const payloadToken = jwt.verify(accessToken, JWT_ACCESS_TOKEN_SECRET);
-        return cb(
-          null,
-          `${file.fieldname}/${payloadToken.userId}-${projectTitle}/${file.originalname}`,
-        );
-      } else {
-        return cb(null, `${file.fieldname}/${file.originalname}`);
-      }
-    }
+      //   cb(null, `${file.fieldname}/${file.originalname}`);
+      //   // return cb(
+      //   //   null,
+      //   //   `${file.fieldname}/${payloadToken.userId}-${projectTitle}/${file.originalname}`,
+      //   // );
+      // } else {
+      //   cb(null, `${file.fieldname}/${file.originalname}`);
+      // }
+    },
   }),
+  limits: {
+    fileSize: 50 * 1024 * 1024, // 50MB
+  },
 });
 
 
