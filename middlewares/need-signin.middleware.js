@@ -5,7 +5,7 @@ const { Users } = db;
 
 export const needSignin = async (req, res, next) => {
   const refreshToken = req.cookies.refreshToken;
-
+  console.log('니들')
   function userValid(user) {
     if (user) {
       const userData = user.toJSON();

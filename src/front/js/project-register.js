@@ -134,6 +134,7 @@ const initProjectRegister = () => {
         if (!res.success) throw new Error(res.message);
       })
       .catch((err) => {
+        console.log(err)
         if (err.message.indexOf('SyntaxError'))
           alert('이미지 업로드에 실패하였습니다.');
         else alert(err.message);
