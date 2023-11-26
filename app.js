@@ -28,10 +28,6 @@ app.use('/api', [
   userRouter,
 ]);
 
-app.get('/js/index.js', (req, res) => {
-  res.sendFile(__dirname + './src/front/js');
-});
-
 app.get('/', (req, res) => {
   res.render(path.join(__dirname, 'src', 'front', 'index'));
 });

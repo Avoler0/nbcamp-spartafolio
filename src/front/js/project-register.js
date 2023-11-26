@@ -1,3 +1,4 @@
+import { getAccessToken } from '/js/localStorage.js';
 
 const toggleTechTab = () => {
   $('.tech-wrap .input-wrap .tech-list').on('click', () => {
@@ -135,8 +136,7 @@ const initProjectRegister = () => {
       .catch((err) => {
         if (err.message.indexOf('SyntaxError'))
           alert('이미지 업로드에 실패하였습니다.');
-        else 
-          alert(err.message);
+        else alert(err.message);
       });
   });
 
