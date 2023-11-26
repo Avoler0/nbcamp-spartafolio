@@ -2,7 +2,7 @@ import { getAccessToken, setAccessToken } from '/script/localStorage.js';
 
 // Authorization: `Bearer ${getAccessToken()}`,
 
-function drawInitProfile(user){
+function drawInitProfile(user) {
   const { email, name } = user;
 
   $('#content .profile-wrap').empty();
@@ -37,19 +37,19 @@ function drawInitProfile(user){
   `);
 
   drawModifyProfile(user);
-  
+
 }
 
-function drawModifyProfile(user){
-    const { email, name } = user;
-    $('.modify-btn').on('click', () => {
-      console.log('클릭');
-      if ($('.cancel-btn').length === 1){
-        return postUpdateProfile();
-      }
-      
-      $('#content .profile-wrap').empty();
-      $('#content .profile-wrap').append(`
+function drawModifyProfile(user) {
+  const { email, name } = user;
+  $('.modify-btn').on('click', () => {
+    console.log('클릭');
+    if ($('.cancel-btn').length === 1) {
+      return postUpdateProfile();
+    }
+
+    $('#content .profile-wrap').empty();
+    $('#content .profile-wrap').append(`
         <h2>
           프로필 수정
         </h2>
@@ -70,52 +70,52 @@ function drawModifyProfile(user){
           <input type="password" class="new-password-input" placeholder="********" />
         </label>
       `);
-      $('#content .profile-wrap .name-input').focus();
-      $('#content .footer .profile-btn-wrap').append(`
+    $('#content .profile-wrap .name-input').focus();
+    $('#content .footer .profile-btn-wrap').append(`
         <button type="button" class="btn btn-outline-secondary cancel-btn" style="width: 20%; height: 40px">
           취소
         </button>
       `);
 
-      clickCancelBtn(user);
-      
-    });
+    clickCancelBtn(user);
 
-    
+  });
+
+
 }
 
-function clickCancelBtn(user){
-   $('.cancel-btn').on('click', () => {
-      $('.cancel-btn').remove();
-      $('.modify-btn').off('click');
-      $('.cancel-btn').off('click');
+function clickCancelBtn(user) {
+  $('.cancel-btn').on('click', () => {
+    $('.cancel-btn').remove();
+    $('.modify-btn').off('click');
+    $('.cancel-btn').off('click');
 
-      drawInitProfile(user);
-   })
+    drawInitProfile(user);
+  })
 
-   
+
 }
 
-async function getUserData(){
+async function getUserData() {
   await fetch('http://localhost:3000/api/user', {
     method: 'GET',
     headers: {
       Authorization: `Bearer ${getAccessToken()}`,
     },
   }).then((res) => res.json())
-  .then((res) =>{
-    setAccessToken(res.data);
-    drawInitProfile(res.data);
-  });
+    .then((res) => {
+      // setAccessToken(res.data);
+      drawInitProfile(res.data);
+    });
 }
 
 
-async function postUpdateProfile(){
+async function postUpdateProfile() {
   const data = {
     email: $('input.email-input').val(),
     name: $('input.name-input').val(),
     existPassword: $('input.exist-password-input').val(),
-    newPassword: $('input.new-password-input').val(),
+    toChangePassword: $('input.new-password-input').val(),
   };
 
   await fetch('http://localhost:3000/api/user', {
@@ -126,12 +126,13 @@ async function postUpdateProfile(){
     },
     body: JSON.stringify(data),
   })
-  .then((res) => res.json())
-  .then((res) => {
-    if(!res.success) throw new Error(res.message);
-  }).catch((err)=>{
-    alert(err.message)
-  });
+    .then((res) => res.json())
+    .then((res) => {
+      if (!res.success) throw new Error(res.message);
+      window.location.href = "/profile"
+    }).catch((err) => {
+      alert(err.message)
+    });
 }
 
 
