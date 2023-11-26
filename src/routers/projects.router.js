@@ -13,7 +13,6 @@ projectRouter.post(
   needSignin,
   upload.array('additional'),
   async (req, res) => {
-res.status(400).json({ message: '게시물 생성 중에 오류 발생', success: false });
 
     const file = req.files;
     const user = res.locals.user;

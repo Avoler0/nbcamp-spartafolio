@@ -24,9 +24,9 @@ const upload = multer({
     key: (req, file, cb) => {
       const { authorization } = req.headers;
 
-      if (!allowedExtensions.includes(file.mimetype.split('/')[1])) {
-        return cb(new Error('허용되지 않는 파일 형식입니다'));
-      }
+      // if (!allowedExtensions.includes(file.mimetype.split('/')[1])) {
+      //   return cb(new Error('허용되지 않는 파일 형식입니다'));
+      // }
 
       if (file.fieldname === 'additional') {
         const { projectTitle } = req.body;
@@ -37,11 +37,10 @@ const upload = multer({
           `${file.fieldname}/${payloadToken.userId}-${projectTitle}/${file.originalname}`,
         );
       } else {
-        cb(null, `${file.fieldname}/${file.originalname}`);
+        return cb(null, `${file.fieldname}/${file.originalname}`);
       }
     }
   }),
-  limits: { fileSize: 10 * 1024 * 1024 }
 });
 
 
