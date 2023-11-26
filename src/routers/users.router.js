@@ -18,7 +18,7 @@ dotenv.config();
 
 const userRouter = express.Router();
 
-userRouter.post('/user/email-check', async(req, res)=>{
+userRouter.post('/user/email-check', async (req, res) => {
   const { email } = req.body;
 
   const authNumber = Math.floor(Math.random() * (10000 - 1000)) + 1000;
@@ -106,53 +106,69 @@ userRouter.post('/user/refreshToken', async (req, res) => {
 userRouter.put('/user', needSignin, async (req, res) => {
   try {
     const { user_id } = res.locals.user; // res.locals.user 안에 Password가 없어
-    const { email, name, existPassword, toChangePassword } = req.body; // 이메일 수정은 못하게 하는게 맞을 듯합니다. 
+    const { email, name, existPassword, toChangePassword } = req.body; // 이메일 수정은 못하게 하는게 맞을 듯합니다.
 
     const currentUser = await Users.findOne({ where: { user_id } }); // res.locals.user = 현재 로그인된 유저 정보를 가져온다.
 
     // 유저가 존재하지 않을 경우
     if (!currentUser) {
-      return res.status(404).json({ success: false, message: "유저가 존재하지 않습니다." });
-    };
+      return res
+        .status(404)
+        .json({ success: false, message: '유저가 존재하지 않습니다.' });
+    }
 
     // 입력된 이메일이 기존 회원의 이메일과 다르거나 비밀번호가 다를 경우
-    if (email !== currentUser.email || !await bcrypt.compare(existPassword, currentUser.password)) {
-      return res.status(403).json({ success: false, message: "이메일 또는 비밀번호를 확인해주세요." });
+    if (
+      email !== currentUser.email ||
+      !(await bcrypt.compare(existPassword, currentUser.password))
+    ) {
+      return res.status(403).json({
+        success: false,
+        message: '이메일 또는 비밀번호를 확인해주세요.',
+      });
     }
 
     // 변경할 비밀번호를 8자리 미만으로 입력했을 때
     if (toChangePassword.length < 8) {
-      return res.status(400).json({ success: false, message: "변경할 비밀번호는 8자리 이상 입력하셔야 합니다." });
+      return res.status(400).json({
+        success: false,
+        message: '변경할 비밀번호는 8자리 이상 입력하셔야 합니다.',
+      });
     }
 
     // 기존 비밀번호와 동일한 비밀번호를 입력했을 때
     if (toChangePassword === currentUser.password) {
-      return res.status(400).json({ success: false, message: "동일한 비밀번호는 입력할 수 없습니다." });
-    };
+      return res.status(400).json({
+        success: false,
+        message: '동일한 비밀번호는 입력할 수 없습니다.',
+      });
+    }
 
-    //유효성 검사 모두 통과 시 
+    //유효성 검사 모두 통과 시
     const hashedNewPassword = await bcrypt.hash(toChangePassword, 10);
     const checkedName = !name ? currentUser.name : name;
 
     const updatedUser = await Users.update(
       {
         name: checkedName,
-        password: hashedNewPassword
+        password: hashedNewPassword,
       },
-      { where: { user_id } }
+      { where: { user_id } },
     );
-    return res.status(200).json({ success: true, message: "유저 정보를 변경했습니다.", updatedUser });
-
+    return res.status(200).json({
+      success: true,
+      message: '유저 정보를 변경했습니다.',
+      updatedUser,
+    });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "알 수 없는 오류가 발생하였습니다." });
-  };
+    res.status(500).json({ message: '알 수 없는 오류가 발생하였습니다.' });
+  }
 });
-
 
 // ==============================
 
-// userRouter.put('/user', needSignin, async (req, res) => { 
+// userRouter.put('/user', needSignin, async (req, res) => {
 //   const user = res.locals.user;
 //   console.log(req.body);
 //   const { email, name, existPassword, newPassword } = req.body;
@@ -413,7 +429,7 @@ userRouter.post('/users/login', async (req, res) => {
     const userObject = await Users.findOne({ where: { email } });
     if (!userObject) {
       return res.status(404).json({
-        //404 코드 : 찾을 수 없음
+        //404 코드 : 서버, 요청받은 리소스를 찾을 수 없습니다.
         success: false,
         message: '해당 이메일을 가진 사용자를 찾을 수 없습니다.',
       });
@@ -464,6 +480,49 @@ userRouter.post('/users/login', async (req, res) => {
       success: true,
       message: '로그인에 성공했습니다.',
       data: { accessToken },
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({
+      success: false,
+      message: '예상치 못한 에러입니다. 관리자에게 문의 주세요.',
+    });
+  }
+});
+
+//로그아웃
+
+userRouter.get('/users/logout', async (req, res) => {
+  try {
+    const { email } = req.body;
+    // 서버로 이메일 값 바디로 받아서 로그아웃 할 예정
+
+    if (!email) {
+      return res.status(400).send({
+        success: false,
+        massage: '이메일 입력 해주세요.',
+      });
+    } //빈 값일 때
+
+    const userObject = await Users.findOne({ where: { email } });
+    //db에서 클라이언트가 보낸 이메일 주소를 가진 사용자 찾음
+
+    if (!userObject) {
+      return res.status(404).json({
+        success: false,
+        message: '해당 이메일을 가진 사용자를 찾을 수 없습니다.',
+      });
+    } //이메일 형식 안 맞을 때 or 못 찾을 때
+
+    await Users.update({ refreshToken: null }, { where: { email } });
+    //해당 이메일 주소 사용자 리프레쉬 토큰 null로 만듬
+
+    res.clearCookie('refreshToken');
+    //클라 쿠키에서 리프레시 토큰 삭제
+
+    return res.status(200).json({
+      success: true,
+      massage: '로그아웃에 성공 했습니다.',
     });
   } catch (err) {
     console.error(err);
