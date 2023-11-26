@@ -69,7 +69,7 @@ const getDetailProject = async function (detailProjectId) {
           </div>
         </div>
         <div class="detail-board-right">
-          <button class="go-demo">데모 사이트 보러가기</button>
+          <a href="${demo_site}" target="_blank" class="go-demo">데모 사이트 보러가기</a>
         </div>
       </div>
       <!-- 상단 보드 끝 -->
