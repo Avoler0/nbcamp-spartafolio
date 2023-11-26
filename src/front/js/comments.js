@@ -4,11 +4,13 @@ import { getAccessToken, setAccessToken } from '/js/localStorage.js';
 export const getUserId = async function () {
   try {
     const result = await fetch('http://localhost:3000/api/user', {
+
       method: 'GET',
       headers: {
         Authorization: `Bearer ${getAccessToken()}`,
       },
-    }).then((res) => res.json());
+    })
+  .then((res) => res.json());
     const userId = result.data.user_id;
     return userId;
   } catch (error) {
@@ -44,10 +46,8 @@ export const getComments = async function (detailProjectId) {
       .catch((err) => err);
 
     const currentUserId = await getUserId();
-    console.log('currentUserId: ', currentUserId);
 
     result.comments.forEach((comment) => {
-      console.log('comment: ', comment);
       const {
         comment_id,
         user_id,
@@ -59,7 +59,6 @@ export const getComments = async function (detailProjectId) {
 
       const formattedCreatedAt = formatDateTime(createdAt);
       const formattedUpdatedAt = formatDateTime(updatedAt);
-      console.log('formattedUpdatedAt: ', formattedUpdatedAt);
 
       const commentElement = $(`
         <li class="comment" data-comment-id="${comment_id}" data-updated-at="${formattedUpdatedAt}">
