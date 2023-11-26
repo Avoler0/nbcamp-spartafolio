@@ -30,7 +30,7 @@ module.exports = {
         type: Sequelize.STRING,
       },
       over_view: {
-        allowNull: true,
+        allowNull: false,
         type: Sequelize.STRING,
       },
       view: {
@@ -42,11 +42,11 @@ module.exports = {
         type: Sequelize.STRING,
       },
       github_address: {
-        allowNull: true,
+        allowNull: false,
         type: Sequelize.STRING,
       },
       demo_site: {
-        allowNull: true,
+        allowNull: false,
         type: Sequelize.STRING,
       },
       core_function: {
