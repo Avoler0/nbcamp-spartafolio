@@ -62,7 +62,7 @@ export const needSignin = async (req, res, next) => {
 
       userValid(user);
 
-      return next();
+      
     }
 
     if(accessToken && refreshToken){
@@ -73,10 +73,9 @@ export const needSignin = async (req, res, next) => {
 
       userValid(user);
 
-      return next();
     }
 
-    
+    return next();
   } catch (error) {
     // 검증에 실패한 경우
     console.error(error);
