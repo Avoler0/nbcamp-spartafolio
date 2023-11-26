@@ -1,4 +1,4 @@
-import { getAccessToken, setAccessToken } from '/script/localStorage.js';
+import { getAccessToken, setAccessToken } from '/js/localStorage.js';
 
 $('#login-form .login-btn').on('click', async (event) => {
   const data = {

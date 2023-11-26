@@ -1,7 +1,4 @@
-import { createComment } from './comments.js';
-import { getComments } from './comments.js';
-import { getUserId } from './comments.js';
-
+import { createComment, getComments, getUserId } from '/js/comments.js';
 
 // 현재 URL에서 경로 부분 가져오는 함수 
 const getDetailProjectId = function () {
