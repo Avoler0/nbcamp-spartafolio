@@ -1,9 +1,5 @@
 import { getAccessToken, setAccessToken } from '/js/localStorage.js';
-// import dotenv from 'dotenv';
 
-// dotenv.config();
-// // Authorization: `Bearer ${getAccessToken()}`,
-console.log('엔브', process.env);
 
 $('#logout-btn').on('click', async () => {
   await fetch('/api/user/log-out', {
