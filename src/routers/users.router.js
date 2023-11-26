@@ -264,7 +264,7 @@ userRouter.post('/users', async (req, res) => {
 userRouter.post('/users/login', async (req, res) => {
   try {
     const { email, password } = req.body;
-    // console.log(req.body);
+    console.log(req.body);
     if (!email) {
       return res.status(400).send({
         success: false,

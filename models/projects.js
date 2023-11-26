@@ -51,7 +51,7 @@ export default class Projects extends Model {
         },
         description: {
           allowNull: true,
-          type: DataTypes.STRING,
+          type: DataTypes.TEXT('long'),
         },
         images_path: {
           allowNull: true,

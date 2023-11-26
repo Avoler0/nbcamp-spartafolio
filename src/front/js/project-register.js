@@ -87,7 +87,6 @@ const initProjectRegister = () => {
 
   $('.submit-btn').on('click', async () => {
     const formData = new FormData();
-    formData.enctype = 'multipart/form-data';
     const fileInput = document.querySelector('.input-wrap .additional');
     const techList = $('.tech-wrap .tech-list').find('.tech-item');
 
@@ -106,9 +105,12 @@ const initProjectRegister = () => {
       formData.append('additional', fileInput.files[i]);
     }
 
-    for (let i = 0; i < techList.length; i++) {
-      data.techStack.push(techList[i].innerText);
+    if (fileInput.files.length > 0){
+      for (let i = 0; i < techList.length; i++) {
+        data.techStack.push(techList[i].innerText);
+      }
     }
+      
 
     for (let property in data) {
       if (property === 'techStack') {
@@ -121,20 +123,18 @@ const initProjectRegister = () => {
     await fetch('/api/post', {
       method: 'POST',
       headers: {
-        Authorization: `Bearer ${getAccessToken()}`,
-        'Content-type': 'application/x-www-form-urlencoded',
+        Authorization: `Bearer ${getAccessToken()}`
       },
       body: formData,
     })
       .then((res) => res.json())
       .then((res) => {
-        console.log('레스', res);
-        // alert('프로젝트 등록이 완료 되었습니다.');
-        // window.location.href = '/';
         if (!res.success) throw new Error(res.message);
+        alert('프로젝트 등록이 완료 되었습니다.');
+        window.location.href = '/';
       })
       .catch((err) => {
-        console.log(err)
+        console.log(err);
         if (err.message.indexOf('SyntaxError'))
           alert('이미지 업로드에 실패하였습니다.');
         else alert(err.message);
