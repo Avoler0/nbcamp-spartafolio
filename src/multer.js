@@ -22,7 +22,6 @@ const upload = multer({
     acl: 'public-read',
     contentType: multerS3.AUTO_CONTENT_TYPE,
     key: (req, file, cb) => {
-
       const { authorization } = req.headers;
 
       if (!allowedExtensions.includes(file.mimetype.split('/')[1])) {

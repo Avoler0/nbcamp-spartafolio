@@ -1,27 +1,24 @@
 let projectsList = [];
 
+console.log('<%= process.env.PORT %>');
+
 function searchProject() {
   $('nav .search-input').on('keypress', async (event) => {
     if (event.key !== 'Enter') return;
 
     const searchValue = $('nav .search-input').val();
 
-    await fetch(
-      `http://localhost:3000/api/post?postName=${searchValue}`,
-      {
-        method: 'GET',
-      },
-    )
-    .then((res) => res.json())
-    .then((res) => {
-      if (!res.success) throw new Error(res.message);
-      drawProjectsCard(res.projects);
+    await fetch(`/api/post?postName=${searchValue}`, {
+      method: 'GET',
     })
-    .catch((err) => {
-      alert(err.message);
-    });
-
-    
+      .then((res) => res.json())
+      .then((res) => {
+        if (!res.success) throw new Error(res.message);
+        drawProjectsCard(res.projects);
+      })
+      .catch((err) => {
+        alert(err.message);
+      });
   });
 }
 
@@ -94,7 +91,7 @@ const viewSort = () => {
 };
 
 async function getProjects() {
-  const result = await fetch('http://localhost:3000/api/posts', {
+  const result = await fetch('/api/posts', {
     method: 'GET',
   })
     .then((res) => res.json())

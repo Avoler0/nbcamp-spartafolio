@@ -20,7 +20,7 @@ const getDetailProjectId = function () {
 // 특정 프로젝트를 가져오는 함수
 const getDetailProject = async function (detailProjectId) {
   try {
-    const result = await fetch(`http://localhost:3000/api/post/${detailProjectId}`, { method: 'GET' })
+    const result = await fetch(`/api/post/${detailProjectId}`, { method: 'GET' })
       .then((res) => res.json())
       .catch((err) => err);
 

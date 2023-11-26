@@ -1,6 +1,5 @@
 import express from 'express';
 import emailRouter from './src/routers/emailtest.router.js';
-import fs from 'fs';
 import userRouter from './src/routers/users.router.js';
 import path from 'path';
 import { fileURLToPath } from 'url'; // 👈 추가
@@ -16,6 +15,7 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 app.set('view engine', 'ejs');
+app.set('port', process.env.PORT);
 app.use(express.static(path.join(__dirname, 'src', 'front')));
 app.use(express.json());
 app.use(cookieParser());
@@ -27,6 +27,10 @@ app.use('/api', [
   commentsRouter,
   userRouter,
 ]);
+
+app.get('/js/index.js', (req, res) => {
+  res.sendFile(__dirname + './src/front/js');
+});
 
 app.get('/', (req, res) => {
   res.render(path.join(__dirname, 'src', 'front', 'index'));

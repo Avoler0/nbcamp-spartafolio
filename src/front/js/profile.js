@@ -6,7 +6,7 @@ import { getAccessToken, setAccessToken } from '/js/localStorage.js';
 console.log('엔브', process.env);
 
 $('#logout-btn').on('click', async () => {
-  await fetch('http://localhost:3000/api/user/log-out', {
+  await fetch('/api/user/log-out', {
     method: 'GET',
   }).then(() => {
     window.localStorage.clear();
@@ -103,7 +103,7 @@ function clickCancelBtn(user) {
 }
 
 async function getUserData() {
-  await fetch('http://localhost:3000/api/user', {
+  await fetch('/api/user', {
     method: 'GET',
     headers: {
       Authorization: `Bearer ${getAccessToken()}`,
@@ -124,7 +124,7 @@ async function postUpdateProfile() {
     toChangePassword: $('input.new-password-input').val(),
   };
 
-  await fetch('http://localhost:3000/api/user', {
+  await fetch('/api/user', {
     method: 'PUT',
     headers: {
       Authorization: `Bearer ${getAccessToken()}`,
