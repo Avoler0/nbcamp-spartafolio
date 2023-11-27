@@ -5,7 +5,7 @@ const { Users } = db;
 
 export const needSignin = async (req, res, next) => {
   const refreshToken = req.cookies.refreshToken;
-  console.log('니들')
+  // console.log('니들')
   function userValid(user) {
     if (user) {
       const userData = user.toJSON();
@@ -20,7 +20,7 @@ export const needSignin = async (req, res, next) => {
     }
   }
 
-  console.log(req.headers.authorization);
+  // console.log(req.headers.authorization);
   try {
     if (!req.headers.authorization) {
       return res.status(400).json({
@@ -53,7 +53,7 @@ export const needSignin = async (req, res, next) => {
       });
     }
 
-    if(!accessToken && refreshToken){
+    if (!accessToken && refreshToken) {
       jwt.verify(refreshToken, JWT_ACCESS_TOKEN_SECRET);
 
       const user = await Users.findOne({
@@ -62,10 +62,10 @@ export const needSignin = async (req, res, next) => {
 
       userValid(user);
 
-      
+
     }
 
-    if(accessToken && refreshToken){
+    if (accessToken && refreshToken) {
       const decodedPayload = jwt.verify(accessToken, JWT_ACCESS_TOKEN_SECRET);
       const { userId } = decodedPayload;
 
@@ -98,7 +98,7 @@ export const needSignin = async (req, res, next) => {
         errorMessage = '예상치 못한 에러가 발생하였습니다. 관리자에게 문의하세요';
         break;
     }
-    
+
     return res.status(statusCode).json({
       success: false,
       message: errorMessage,

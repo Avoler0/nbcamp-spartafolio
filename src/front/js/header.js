@@ -1,4 +1,4 @@
-console.log('헤더 실행');
+// console.log('헤더 실행');
 
 import { getAccessToken, setAccessToken } from '/js/localStorage.js';
 
