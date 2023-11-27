@@ -64,11 +64,11 @@ userRouter.post('/user/email-check', async (req, res) => {
   }
 });
 //리프레쉬 쿠키 삭제
-userRouter.get('/user/log-out', (req, res)=>{
-  res.clearCookie('refreshToken')
+userRouter.get('/user/log-out', (req, res) => {
+  res.clearCookie('refreshToken');
   res.status(200).json({
     success: true,
-    message: 'refreshToken 쿠키 삭제에 성공하였습니다.'
+    message: 'refreshToken 쿠키 삭제에 성공하였습니다.',
   });
 });
 
@@ -164,14 +164,18 @@ userRouter.put('/user', needSignin, async (req, res) => {
       { where: { user_id } },
     );
 
-    return res.status(200).json({ success: true, message: "유저 정보를 변경했습니다.", updatedUser });
-
+    return res
+      .status(200)
+      .json({
+        success: true,
+        message: '유저 정보를 변경했습니다.',
+        updatedUser,
+      });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: '알 수 없는 오류가 발생하였습니다.' });
   }
 });
-
 
 // 댓글 comments.js에서 사용합니다..ㅠㅠ (by.junsik)
 userRouter.get('/user', needSignin, async (req, res) => {
@@ -343,53 +347,7 @@ userRouter.post('/users/login', async (req, res) => {
   }
 });
 
-
-//로그아웃
-
-userRouter.get('/users/logout', async (req, res) => {
-  try {
-    const { email } = req.body;
-    // 서버로 이메일 값 바디로 받아서 로그아웃 할 예정
-
-    if (!email) {
-      return res.status(400).send({
-        success: false,
-        massage: '이메일 입력 해주세요.',
-      });
-    } //빈 값일 때
-
-    const userObject = await Users.findOne({ where: { email } });
-    //db에서 클라이언트가 보낸 이메일 주소를 가진 사용자 찾음
-
-    if (!userObject) {
-      return res.status(404).json({
-        success: false,
-        message: '해당 이메일을 가진 사용자를 찾을 수 없습니다.',
-      });
-    } //이메일 형식 안 맞을 때 or 못 찾을 때
-
-    await Users.update({ refreshToken: null }, { where: { email } });
-    //해당 이메일 주소 사용자 리프레쉬 토큰 null로 만듬
-
-    res.clearCookie('refreshToken');
-    //클라 쿠키에서 리프레시 토큰 삭제
-
-    return res.status(200).json({
-      success: true,
-      massage: '로그아웃에 성공 했습니다.',
-    });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({
-      success: false,
-      message: '예상치 못한 에러입니다. 관리자에게 문의 주세요.',
-    });
-  }
-});
-
-
 //삭제
-
 
 userRouter.delete('/users', async (req, res) => {
   try {
