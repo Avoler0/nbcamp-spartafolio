@@ -50,7 +50,7 @@ function drawInitProfile(user) {
 function drawModifyProfile(user) {
   const { email, name } = user;
   $('.modify-btn').on('click', () => {
-    console.log('클릭');
+    // console.log('클릭');
     if ($('.cancel-btn').length === 1) {
       return postUpdateProfile();
     }

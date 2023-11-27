@@ -1,6 +1,6 @@
 let projectsList = [];
 
-console.log('<%= process.env.PORT %>');
+// console.log('<%= process.env.PORT %>');
 
 function searchProject() {
   $('nav .search-input').on('keypress', async (event) => {
@@ -35,9 +35,8 @@ function mainTitleSelect() {
     maxLikeProjecet;
 
   const thumbnail = images_path
-    ? `https://nbcamp-bukkit.s3.ap-northeast-2.amazonaws.com/${
-        images_path.split(',')[0]
-      }`
+    ? `https://nbcamp-bukkit.s3.ap-northeast-2.amazonaws.com/${images_path.split(',')[0]
+    }`
     : 'https://t1.daumcdn.net/cfile/tistory/171034435043238224';
 
   $('main #main-title .content').empty();
@@ -109,7 +108,7 @@ function drawProjectsCard(projects) {
   const contentDiv = $('main #main-content .content');
 
   contentDiv.empty();
-  console.log(projects);
+  // console.log(projects);
 
   projects.forEach((project) => {
     const {
@@ -124,9 +123,8 @@ function drawProjectsCard(projects) {
       comment_count,
     } = project;
     const thumbnail = images_path
-      ? `https://nbcamp-bukkit.s3.ap-northeast-2.amazonaws.com/${
-          images_path.split(',')[0]
-        }`
+      ? `https://nbcamp-bukkit.s3.ap-northeast-2.amazonaws.com/${images_path.split(',')[0]
+      }`
       : 'https://t1.daumcdn.net/cfile/tistory/171034435043238224';
     const techStack = tech_stack ? tech_stack.split(',') : [];
     contentDiv.append(`
@@ -143,18 +141,17 @@ function drawProjectsCard(projects) {
             ${title}
           </a>
         </div>
-        <div class="card-overview">${
-          over_view ? over_view : '소개가 없습니다.'
-        }</div>
+        <div class="card-overview">${over_view ? over_view : '소개가 없습니다.'
+      }</div>
         <div class="card-footer">
           <div class="card-tech">
             ${techStack
-              .map((tech) => {
-                return `
+        .map((tech) => {
+          return `
                 <div>${tech.replaceAll('"', '')}</div>
               `;
-              })
-              .join('')}
+        })
+        .join('')}
           </div>
           <div class="card-info">
             <div class="card-image github">

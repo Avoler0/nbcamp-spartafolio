@@ -47,7 +47,7 @@ commentsRouter.post("/comment/:detailProjectId", needSignin, async (req, res) =>
 commentsRouter.get('/:projectId/comments', async (req, res) => {
   try {
     const { projectId } = req.params;
-    console.log('projectId: ', projectId);
+    // console.log('projectId: ', projectId);
 
     const comments = await Comments.findAll({
       where: {

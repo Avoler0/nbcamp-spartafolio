@@ -74,7 +74,7 @@ userRouter.get('/user/log-out', (req, res) => {
 
 userRouter.post('/user/refreshToken', async (req, res) => {
   const refreshToken = req.cookies.refreshToken;
-  console.log('토큰 로그인!!', req.cookies);
+  // console.log('토큰 로그인!!', req.cookies);
   if (!refreshToken)
     return res
       .status(204)
@@ -107,7 +107,7 @@ userRouter.post('/user/refreshToken', async (req, res) => {
     });
   }
 
-  console.log(req.cookies);
+  // console.log(req.cookies);
 });
 
 //내 정보 변경
@@ -268,7 +268,7 @@ userRouter.post('/users', async (req, res) => {
 userRouter.post('/users/login', async (req, res) => {
   try {
     const { email, password } = req.body;
-    console.log(req.body);
+    // console.log(req.body);
     if (!email) {
       return res.status(400).send({
         success: false,
@@ -318,7 +318,7 @@ userRouter.post('/users/login', async (req, res) => {
       },
     );
 
-    console.log('리프레쉬', refreshToken);
+    // console.log('리프레쉬', refreshToken);
     const accessToken = jwt.sign(
       { userId: user.user_id },
       JWT_ACCESS_TOKEN_SECRET,
