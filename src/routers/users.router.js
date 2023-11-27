@@ -330,7 +330,8 @@ userRouter.post('/users/login', async (req, res) => {
 
     res.cookie('refreshToken', refreshToken, {
       httpOnly: true,
-      secure: true,
+      secure: false,
+      path: '/'
     });
 
     return res.status(200).json({
